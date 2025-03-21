@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useAppSelector } from "@/store";
 
 export default function Hero() {

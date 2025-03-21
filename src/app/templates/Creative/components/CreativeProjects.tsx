@@ -4,43 +4,12 @@ import { ExternalLink } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useAppSelector } from "@/store";
-const projects = [
-  {
-    title: "E-commerce Platform",
-    description: "A modern e-commerce platform built with React and Node.js",
-    image:
-      "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=800&q=80",
-    tech: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Task Management App",
-    description:
-      "A collaborative task management application with real-time updates",
-    image:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80",
-    tech: ["React", "Firebase", "Material-UI"],
-    github: "#",
-    live: "#",
-  },
-  {
-    title: "Weather Dashboard",
-    description: "A weather dashboard with interactive maps and forecasts",
-    image:
-      "https://images.unsplash.com/photo-1592210454359-9043f067919b?auto=format&fit=crop&w=800&q=80",
-    tech: ["React", "OpenWeather API", "Chart.js"],
-    github: "#",
-    live: "#",
-  },
-];
 
 export default function Projects() {
   const { projects } = useAppSelector((state) => state.portfolio);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
   const [isPreview, setIsPreview] = useState(false);
-  const { darkMode } = useDarkMode();
   const [isMobile, setIsMobile] = useState(false);
   const { viewMode } = useAppSelector((state) => state.portfolio);
   useEffect(() => {
@@ -75,11 +44,7 @@ export default function Projects() {
       }
     };
   }, []);
-  // const darkModeClasses = isPreview
-  //   ? darkMode
-  //     ? "bg-black/10"
-  //     : "bg-white"
-  //   : "bg-white text-black dark:bg-black/10 dark:text-white";
+
   const projectLayoutClasses = isPreview
     ? isMobile
       ? "grid grid-cols-1 gap-8"

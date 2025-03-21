@@ -9,7 +9,7 @@ const NETLIFY_BASE_URL = process.env.NETLIFY_BASE_URL;
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { siteId: string } }
+  { params }: { params: Promise<{ siteId: string }> }
 ) {
   try {
     if (!NETLIFY_API_TOKEN) {
@@ -19,7 +19,7 @@ export async function POST(
       );
     }
 
-    const siteId = params.siteId;
+    const { siteId } = await params;
 
     // To properly handle multipart/form-data, we can't just forward the request body
     // We need to get the file from the form data and create a new form data

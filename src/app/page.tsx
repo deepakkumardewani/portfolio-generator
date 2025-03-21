@@ -140,7 +140,7 @@ export default function Home() {
             Ready to showcase your work to the world?
           </h2>
           <p className="text-lg md:text-xl text-stone-300 text-center mb-10 max-w-2xl">
-            Join thousands of professionals who've built stunning portfolios
+            Join thousands of professionals who have built stunning portfolios
             with PortfolioAI
           </p>
           <Link href="/create">

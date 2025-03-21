@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setWorkExperience } from "@/store";
-import { ChevronDown, ChevronUp, Plus, Trash, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react";
 import { WorkExperienceFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import { Checkbox } from "@/components/ui/checkbox";

@@ -1,7 +1,6 @@
 "use client";
 import React, { ReactNode } from "react";
 import { useAppSelector } from "@/store";
-import { TemplateSection } from "@/types";
 
 interface SectionComponent {
   id: string;

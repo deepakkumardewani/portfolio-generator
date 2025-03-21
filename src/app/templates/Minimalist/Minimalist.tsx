@@ -1,5 +1,4 @@
 import React from "react";
-import MinimalistHeader from "./components/MinimalistHeader";
 import CommonHeader from "../shared/CommonHeader";
 import MinimalistHero from "./components/MinimalistHero";
 import MinimalistAbout from "./components/MinimalistAbout";

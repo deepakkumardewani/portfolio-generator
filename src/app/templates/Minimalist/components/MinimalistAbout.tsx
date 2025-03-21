@@ -1,19 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 
 export default function MinimalistAbout() {
   const { bio } = useAppSelector((state) => state.portfolio);
-  const [isPreview, setIsPreview] = useState(false);
-  // const { darkMode } = useDarkMode();
-  useEffect(() => {
-    const isInPreview = document.getElementById("preview-pane") !== null;
-    setIsPreview(isInPreview);
-  }, []);
-  // Split the about text into paragraphs
-  // const paragraphs = bio.about
-  //   ? bio.about.split("\n").filter((p) => p.trim())
-  //   : [];
 
   const darkModeClasses = "bg-white text-black dark:bg-black dark:text-white";
   return (

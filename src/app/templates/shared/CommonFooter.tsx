@@ -1,6 +1,5 @@
 import React from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 
 export default function MinimalistFooter() {
   const { bio } = useAppSelector((state) => state.portfolio);

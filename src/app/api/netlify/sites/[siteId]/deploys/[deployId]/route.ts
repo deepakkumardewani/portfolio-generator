@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Environment variable for Netlify API token
 const NETLIFY_API_TOKEN = process.env.NETLIFY_API_TOKEN;
@@ -8,9 +8,9 @@ const NETLIFY_BASE_URL = process.env.NETLIFY_BASE_URL;
  * GET handler for checking the status of a deployment
  */
 export async function GET(
-  request: Request,
-  { params }: { params: { siteId: string; deployId: string } }
-) {
+  request: NextRequest,
+  { params }: { params: Promise<{ siteId: string; deployId: string }> }
+): Promise<NextResponse> {
   try {
     if (!NETLIFY_API_TOKEN) {
       return NextResponse.json(

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -50,7 +49,7 @@ export default function FormStep5({ onBack }: FormStep5Props) {
     try {
       new URL(value);
       return true;
-    } catch (e) {
+    } catch (_) {
       return "Please enter a valid URL";
     }
   };

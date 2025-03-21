@@ -28,8 +28,6 @@ import {
 export default function PreviewHeader() {
   const dispatch = useAppDispatch();
   const { viewMode } = useAppSelector((state) => state.portfolio);
-  const [isExporting, setIsExporting] = useState(false);
-  const [isDeploying, setIsDeploying] = useState(false);
   const [deploymentStatus, setDeploymentStatus] =
     useState<DeploymentStatus>("preparing");
   const [deploymentProgress, setDeploymentProgress] = useState(0);
@@ -44,9 +42,6 @@ export default function PreviewHeader() {
   const handleExport = async (type: "static" | "netlify") => {
     try {
       if (type === "static") {
-        setIsExporting(true);
-        console.log("Exporting static");
-
         // Convert portfolio state to export format
         const exportData = convertStateToExportData(portfolioData);
         await exportToStatic(exportData);
@@ -59,9 +54,6 @@ export default function PreviewHeader() {
 
         // Show the deployment dialog
         setShowDeployDialog(true);
-
-        // Start the deployment process
-        setIsDeploying(true);
 
         // Define a progress callback to update the UI
         const progressCallback = (
@@ -99,21 +91,11 @@ export default function PreviewHeader() {
       } else {
         alert("Failed to export. Please try again.");
       }
-    } finally {
-      if (type === "static") {
-        setIsExporting(false);
-      } else {
-        setIsDeploying(false);
-      }
     }
   };
 
   const closeDeployDialog = () => {
     setShowDeployDialog(false);
-  };
-
-  const toggleTemplateEditor = () => {
-    setShowTemplateEditor(!showTemplateEditor);
   };
 
   return (

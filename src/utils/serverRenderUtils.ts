@@ -1,7 +1,6 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { PortfolioData } from "@/types";
-import Basic from "@/app/templates/Basic/Basic";
 import Minimalist from "@/app/templates/Minimalist/Minimalist";
 import Creative from "@/app/templates/Creative/Creative";
 /**
@@ -52,16 +51,6 @@ export function renderTemplateToString(data: PortfolioData): string {
   const { selectedTemplate } = data;
 
   switch (selectedTemplate) {
-    case "Basic":
-      return renderComponentToString(Basic, {
-        bio: data.bio,
-        skills: data.skills,
-        experience: data.workExperience,
-        projects: data.projects,
-        theme: data.theme,
-        selectedTemplate: data.selectedTemplate,
-        contact: data.contact,
-      });
     case "Minimalist":
       // In the future, you can add other templates here
       // return renderComponentToString(Minimalist, data);
@@ -85,14 +74,6 @@ export function renderTemplateToString(data: PortfolioData): string {
         contact: data.contact,
       });
     default:
-      return renderComponentToString(Basic, {
-        bio: data.bio,
-        skills: data.skills,
-        experience: data.workExperience,
-        projects: data.projects,
-        theme: data.theme,
-        selectedTemplate: data.selectedTemplate,
-        contact: data.contact,
-      });
+      return "";
   }
 }

@@ -69,7 +69,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
     try {
       new URL(value);
       return true;
-    } catch (e) {
+    } catch (_) {
       return "Please enter a valid URL";
     }
   };

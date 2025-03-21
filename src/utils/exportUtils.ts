@@ -1,6 +1,6 @@
 import { saveAs } from "file-saver";
 import JSZip from "jszip";
-import { PortfolioData, PortfolioState, Skill } from "@/types";
+import { PortfolioData, PortfolioState } from "@/types";
 import {
   renderTemplateToString,
   generateHTMLDocument,

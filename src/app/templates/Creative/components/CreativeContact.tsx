@@ -52,7 +52,7 @@ export default function Contact() {
             Get in Touch
           </h2>
           <p className="text-black dark:text-white text-lg mb-8">
-            I'm always open to new opportunities and interesting projects. Feel
+            I am always open to new opportunities and interesting projects. Feel
             free to reach out!
           </p>
           <div className="flex justify-center space-x-8">

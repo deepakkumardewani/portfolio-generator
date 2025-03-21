@@ -3,8 +3,6 @@ import { Menu, X } from "lucide-react";
 import { useAppSelector } from "@/store";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useDarkMode } from "@/contexts/DarkModeContext";
-import { DarkModeProvider } from "@/contexts/DarkModeContext";
-import { Providers } from "@/app/providers";
 
 // Map section IDs to nav item labels
 const sectionToNavItem = {
@@ -140,7 +138,7 @@ export default function Header({ templateId }: HeaderProps) {
           id="mobile-menu"
           className={`${mobileNavigationClasses} pt-4 pb-6`}
         >
-          {navItems.map((item, index) => (
+          {navItems.map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase()}`}

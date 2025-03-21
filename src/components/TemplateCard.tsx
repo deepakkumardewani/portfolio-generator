@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { useUpdateTemplate } from "@/hooks/useTemplateSync";
 
 // Dynamically import hero components
-const Hero = lazy(() => import("@/app/templates/Basic/components/BasicHero"));
 const MinimalistHero = lazy(
   () => import("@/app/templates/Minimalist/components/MinimalistHero")
 );
@@ -50,13 +49,10 @@ export default function TemplateCard({
   // Function to render the appropriate hero component based on template name
   const renderHeroComponent = () => {
     switch (name) {
-      case "Basic":
-        return <Hero />;
       case "Minimalist":
         return <MinimalistHero />;
       case "Creative":
         return <CreativeHero />;
-      case "Professional":
       default:
         // Fallback to image for templates without hero components
         return (

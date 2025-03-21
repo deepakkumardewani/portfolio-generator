@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Environment variable for Netlify API token
 // This should be set in .env.local file
@@ -8,7 +8,7 @@ const NETLIFY_BASE_URL = process.env.NETLIFY_BASE_URL;
 /**
  * POST handler for creating a new Netlify site
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     if (!NETLIFY_API_TOKEN) {
       return NextResponse.json(

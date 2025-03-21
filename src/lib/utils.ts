@@ -11,7 +11,7 @@ export const formatDate = (dateString: string) => {
   try {
     const date = new Date(dateString);
     return format(date, "dd MMM, yyyy");
-  } catch (error) {
+  } catch (_) {
     return dateString;
   }
 };

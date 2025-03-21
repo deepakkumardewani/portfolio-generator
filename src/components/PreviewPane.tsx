@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Minimalist from "@/app/templates/Minimalist/Minimalist";
@@ -34,17 +34,19 @@ export default function PreviewPane() {
   }
 
   return (
-    <div
-      className="w-full h-full flex justify-center overflow-auto shadow-lg"
-      id="preview-pane"
-    >
+    <Suspense fallback={<div>Loading...</div>}>
       <div
-        className={`transition-all duration-200  ${
-          viewMode === "mobile" ? "max-w-[375px]" : "w-full"
-        }`}
+        className="w-full h-full flex justify-center overflow-auto shadow-lg"
+        id="preview-pane"
       >
-        {renderTemplate()}
+        <div
+          className={`transition-all duration-200  ${
+            viewMode === "mobile" ? "max-w-[375px]" : "w-full"
+          }`}
+        >
+          {renderTemplate()}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

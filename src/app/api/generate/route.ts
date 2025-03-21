@@ -13,8 +13,6 @@ export async function POST(request: NextRequest) {
     const body: RequestBody = await request.json();
     const { bio, projects, theme, selectedTemplate } = body;
 
-    // In a real implementation, we would use a server-side rendering approach
-    // For now, we'll return the data and let the client handle the rendering
     return NextResponse.json({
       data: {
         bio,
