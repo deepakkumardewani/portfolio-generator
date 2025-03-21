@@ -1,0 +1,5 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#f0f9ff" stroke="#0369a1" stroke-width="2" />
+  <text x="300" y="180" font-family="Arial" font-size="32" font-weight="bold" text-anchor="middle" fill="#0369a1">Professional Template</text>
+  <text x="300" y="220" font-family="Arial" font-size="20" text-anchor="middle" fill="#0369a1">Preview</text>
+</svg> 
