@@ -49,9 +49,11 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
   };
 
   return (
-    <Card>
+    <Card className="dark:bg-stone-800 dark:border-stone-700">
       <CardHeader>
-        <CardTitle className="text-2xl">Technical Skills</CardTitle>
+        <CardTitle className="text-2xl dark:text-stone-100">
+          Technical Skills
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -63,10 +65,20 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
             />
 
             <div className="flex gap-2 justify-end">
-              <Button type="button" variant="outline" onClick={onBack}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onBack}
+                className="dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-700"
+              >
                 Back
               </Button>
-              <Button type="submit">Next</Button>
+              <Button
+                type="submit"
+                className="dark:bg-stone-100 dark:text-stone-800 dark:hover:bg-white"
+              >
+                Next
+              </Button>
             </div>
           </form>
         </Form>

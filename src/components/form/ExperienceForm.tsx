@@ -25,6 +25,7 @@ import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react";
 import { WorkExperienceFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import { Checkbox } from "@/components/ui/checkbox";
+import { darkModeClasses } from "@/lib/utils";
 
 interface FormStep3Props {
   onNext: () => void;
@@ -99,38 +100,46 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   };
 
   return (
-    <Card>
+    <Card className={darkModeClasses.card}>
       <CardHeader>
-        <CardTitle className="text-2xl">Work Experience</CardTitle>
-        <CardDescription>
-          Add your work experience to showcase in your portfolio.
+        <CardTitle className={`text-2xl ${darkModeClasses.cardTitle}`}>
+          Work Experience
+        </CardTitle>
+        <CardDescription className={darkModeClasses.cardDescription}>
+          Add your professional work history
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-6 flex items-center space-x-2">
-          <Checkbox
-            id="student"
-            checked={isStudent}
-            onCheckedChange={handleStudentCheckboxChange}
-          />
-          <label
-            htmlFor="student"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            I am a student with no work experience
-          </label>
+        <div className="mb-4">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="student"
+              checked={isStudent}
+              onCheckedChange={handleStudentCheckboxChange}
+              className="data-[state=checked]:bg-stone-800 data-[state=checked]:dark:bg-stone-600"
+            />
+            <label
+              htmlFor="student"
+              className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${darkModeClasses.text}`}
+            >
+              I don't have work experience yet (Student/Fresh Graduate)
+            </label>
+          </div>
         </div>
 
         {!isStudent ? (
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               {fields.map((field, index) => (
-                <div key={field.id} className="p-4 border rounded-md relative">
+                <div
+                  key={field.id}
+                  className="border rounded-lg p-4 border-border dark:border-stone-700"
+                >
                   <div
                     className="flex justify-between items-center cursor-pointer"
                     onClick={() => toggleExpand(index)}
                   >
-                    <h3 className="font-medium">
+                    <h3 className={`font-medium ${darkModeClasses.heading}`}>
                       {form.watch(`workExperience.${index}.company`) ||
                         form.watch(`workExperience.${index}.jobTitle`) ||
                         `Work Experience ${index + 1}`}
@@ -141,7 +150,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8"
+                          className="h-8 w-8 hover:bg-stone-100 dark:hover:bg-stone-700"
                           onClick={(e) => {
                             e.stopPropagation();
                             remove(index);
@@ -154,9 +163,13 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         </Button>
                       )}
                       {expandedIndex === index ? (
-                        <ChevronUp className="h-5 w-5" />
+                        <ChevronUp
+                          className={`h-5 w-5 ${darkModeClasses.text}`}
+                        />
                       ) : (
-                        <ChevronDown className="h-5 w-5" />
+                        <ChevronDown
+                          className={`h-5 w-5 ${darkModeClasses.text}`}
+                        />
                       )}
                     </div>
                   </div>
@@ -177,9 +190,15 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         }}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Company</FormLabel>
+                            <FormLabel className={darkModeClasses.formLabel}>
+                              Company
+                            </FormLabel>
                             <FormControl>
-                              <Input placeholder="Company Name" {...field} />
+                              <Input
+                                placeholder="Company Name"
+                                {...field}
+                                className={darkModeClasses.input}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -194,11 +213,14 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         }}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Job Title</FormLabel>
+                            <FormLabel className={darkModeClasses.formLabel}>
+                              Job Title
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Software Engineer"
                                 {...field}
+                                className={darkModeClasses.input}
                               />
                             </FormControl>
                             <FormMessage />
@@ -216,9 +238,15 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         }}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>From</FormLabel>
+                            <FormLabel className={darkModeClasses.formLabel}>
+                              From
+                            </FormLabel>
                             <FormControl>
-                              <Input type="date" {...field} />
+                              <Input
+                                type="date"
+                                {...field}
+                                className={darkModeClasses.input}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -230,17 +258,17 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         name={`workExperience.${index}.toDate`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>To</FormLabel>
+                            <FormLabel className={darkModeClasses.formLabel}>
+                              To
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 type="date"
                                 placeholder="Present"
                                 {...field}
+                                className={darkModeClasses.input}
                               />
                             </FormControl>
-                            {/* <FormDescription>
-                              Leave empty for current position
-                            </FormDescription> */}
                             <FormMessage />
                           </FormItem>
                         )}
@@ -264,11 +292,13 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                       }}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Description</FormLabel>
+                          <FormLabel className={darkModeClasses.formLabel}>
+                            Description
+                          </FormLabel>
                           <FormControl>
                             <Textarea
                               placeholder="Describe your responsibilities and achievements"
-                              className="min-h-24"
+                              className={`min-h-24 ${darkModeClasses.textarea}`}
                               {...field}
                             />
                           </FormControl>
@@ -293,27 +323,40 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                     description: "",
                   })
                 }
-                className="w-full"
+                className={`w-full ${darkModeClasses.buttonOutline}`}
               >
                 <Plus className="mr-2 h-4 w-4" /> Add Another Work Experience
               </Button>
 
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="outline" onClick={onBack}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onBack}
+                  className={darkModeClasses.buttonOutline}
+                >
                   Back
                 </Button>
-                <Button type="submit">Next</Button>
+                <Button type="submit" className={darkModeClasses.buttonPrimary}>
+                  Next
+                </Button>
               </div>
             </form>
           </Form>
         ) : (
           <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" onClick={onBack}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onBack}
+              className={darkModeClasses.buttonOutline}
+            >
               Back
             </Button>
             <Button
               type="button"
               onClick={() => onSubmit({ workExperience: [] })}
+              className={darkModeClasses.buttonPrimary}
             >
               Next
             </Button>

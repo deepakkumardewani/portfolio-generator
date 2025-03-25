@@ -7,6 +7,7 @@ import SkillsForm from "./SkillsForm";
 import ExperienceForm from "./ExperienceForm";
 import ProjectsForm from "./ProjectsForm";
 import ContactForm from "./ContactForm";
+import LinkedInImportButton from "./LinkedInImportButton";
 
 // Define component types
 type StepComponent = {
@@ -72,17 +73,34 @@ export default function FormStepper() {
 
   return (
     <div className="container max-w-4xl py-12">
+      {/* LinkedIn Import Banner */}
+      <div className="mb-8 p-4 bg-stone-50 dark:bg-stone-800 rounded-lg border border-stone-200 dark:border-stone-700">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-medium text-stone-900 dark:text-stone-100">
+              Quick Import
+            </h3>
+            <p className="text-sm text-stone-500 dark:text-stone-400">
+              Save time by importing your profile from LinkedIn
+            </p>
+          </div>
+          <LinkedInImportButton />
+        </div>
+      </div>
+
       {/* Progress Header */}
       <div className="mb-8 space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">{STEPS[currentStep].name}</h2>
+          <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
+            {STEPS[currentStep].name}
+          </h2>
           <span className="text-sm text-muted-foreground">
             Step {currentStep + 1}/{STEPS.length}
           </span>
         </div>
 
         {/* Progress Bar */}
-        <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-muted dark:bg-stone-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary transition-all duration-300 ease-in-out"
             style={{

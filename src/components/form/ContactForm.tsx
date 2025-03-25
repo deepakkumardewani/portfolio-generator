@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setContact } from "@/store";
 import { ContactFormValues } from "@/types";
+import { darkModeClasses } from "@/lib/utils";
 
 interface FormStep5Props {
   onBack: () => void;
@@ -67,10 +68,12 @@ export default function FormStep5({ onBack }: FormStep5Props) {
   };
 
   return (
-    <Card>
+    <Card className={darkModeClasses.card}>
       <CardHeader>
-        <CardTitle className="text-2xl">Contact Information</CardTitle>
-        <CardDescription>
+        <CardTitle className={`text-2xl ${darkModeClasses.cardTitle}`}>
+          Contact Information
+        </CardTitle>
+        <CardDescription className={darkModeClasses.cardDescription}>
           Add your contact details so people can reach out to you.
         </CardDescription>
       </CardHeader>
@@ -86,9 +89,15 @@ export default function FormStep5({ onBack }: FormStep5Props) {
                 }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      Phone Number
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="+1 (123) 456-7890" {...field} />
+                      <Input
+                        placeholder="+1 (123) 456-7890"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -103,9 +112,15 @@ export default function FormStep5({ onBack }: FormStep5Props) {
                 }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email*</FormLabel>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      Email*
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="you@example.com" {...field} />
+                      <Input
+                        placeholder="you@example.com"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,10 +136,13 @@ export default function FormStep5({ onBack }: FormStep5Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>LinkedIn</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    LinkedIn
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://linkedin.com/in/yourprofile"
+                      className={darkModeClasses.input}
                       {...field}
                     />
                   </FormControl>
@@ -141,10 +159,13 @@ export default function FormStep5({ onBack }: FormStep5Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>GitHub</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    GitHub
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://github.com/yourusername"
+                      className={darkModeClasses.input}
                       {...field}
                     />
                   </FormControl>
@@ -161,10 +182,13 @@ export default function FormStep5({ onBack }: FormStep5Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Dribbble</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    Dribbble
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://dribbble.com/yourusername"
+                      className={darkModeClasses.input}
                       {...field}
                     />
                   </FormControl>
@@ -181,10 +205,13 @@ export default function FormStep5({ onBack }: FormStep5Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Twitter</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    Twitter
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://twitter.com/yourusername"
+                      className={darkModeClasses.input}
                       {...field}
                     />
                   </FormControl>
@@ -194,10 +221,17 @@ export default function FormStep5({ onBack }: FormStep5Props) {
             />
 
             <div className="flex gap-2 justify-end">
-              <Button type="button" variant="outline" onClick={onBack}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onBack}
+                className={darkModeClasses.buttonOutline}
+              >
                 Back
               </Button>
-              <Button type="submit">Finish</Button>
+              <Button type="submit" className={darkModeClasses.buttonPrimary}>
+                Finish
+              </Button>
             </div>
           </form>
         </Form>

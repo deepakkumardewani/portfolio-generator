@@ -25,6 +25,7 @@ import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react";
 import { ProjectsFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import ImageUpload from "@/components/shared/ImageUpload";
+import { darkModeClasses } from "@/lib/utils";
 
 interface FormStep4Props {
   onNext: () => void;
@@ -105,11 +106,13 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
   };
 
   return (
-    <Card>
+    <Card className={darkModeClasses.card}>
       <CardHeader>
-        <CardTitle className="text-2xl">Your Projects</CardTitle>
-        <CardDescription>
-          Add the projects you want to showcase in your portfolio.
+        <CardTitle className={`text-2xl ${darkModeClasses.cardTitle}`}>
+          Projects
+        </CardTitle>
+        <CardDescription className={darkModeClasses.cardDescription}>
+          Showcase your best projects and portfolio pieces
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -121,7 +124,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                   className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleExpand(index)}
                 >
-                  <h3 className="font-medium">
+                  <h3 className={`font-medium ${darkModeClasses.heading}`}>
                     {form.watch(`projects.${index}.title`) ||
                       `Project ${index + 1}`}
                   </h3>
@@ -131,7 +134,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-8 w-8 hover:bg-stone-100 dark:hover:bg-stone-700"
                         onClick={(e) => {
                           e.stopPropagation();
                           remove(index);
@@ -144,9 +147,13 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                       </Button>
                     )}
                     {expandedIndex === index ? (
-                      <ChevronUp className="h-5 w-5" />
+                      <ChevronUp
+                        className={`h-5 w-5 ${darkModeClasses.text}`}
+                      />
                     ) : (
-                      <ChevronDown className="h-5 w-5" />
+                      <ChevronDown
+                        className={`h-5 w-5 ${darkModeClasses.text}`}
+                      />
                     )}
                   </div>
                 </div>
@@ -162,17 +169,19 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     control={form.control}
                     name={`projects.${index}.title`}
                     rules={{
-                      required: "Title is required",
-                      maxLength: {
-                        value: 50,
-                        message: "Title must be less than 50 characters",
-                      },
+                      required: "Project title is required",
                     }}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Title</FormLabel>
+                        <FormLabel className={darkModeClasses.formLabel}>
+                          Project Title
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="E-commerce Website" {...field} />
+                          <Input
+                            placeholder="My Awesome Project"
+                            {...field}
+                            className={darkModeClasses.input}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -183,18 +192,17 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     control={form.control}
                     name={`projects.${index}.description`}
                     rules={{
-                      required: "Description is required",
-                      maxLength: {
-                        value: 150,
-                        message: "Description must be less than 150 characters",
-                      },
+                      required: "Project description is required",
                     }}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Description</FormLabel>
+                        <FormLabel className={darkModeClasses.formLabel}>
+                          Description
+                        </FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="A responsive e-commerce website built with React and Node.js"
+                            placeholder="A brief description of your project"
+                            className={`min-h-24 ${darkModeClasses.textarea}`}
                             {...field}
                           />
                         </FormControl>
@@ -203,41 +211,19 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     )}
                   />
 
-                  <SkillSelector
-                    selectedSkills={
-                      form.watch(`projects.${index}.technologies`) || []
-                    }
-                    onSkillAdd={(skill) => addSkill(index, skill)}
-                    onSkillRemove={(skill) => removeSkill(index, skill)}
-                    label="Technologies Used"
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name={`projects.${index}.imageUrl`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Project Image</FormLabel>
-                        <FormControl>
-                          <div>
-                            <ImageUpload
-                              currentImageUrl={field.value}
-                              onImageUrlChange={(url) =>
-                                handleImageUrlChange(index, url)
-                              }
-                            />
-                            <div className="mt-2">
-                              <Input
-                                placeholder="Or enter image URL manually"
-                                {...field}
-                              />
-                            </div>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="space-y-4">
+                    <h3
+                      className={`text-sm font-medium ${darkModeClasses.formLabel}`}
+                    >
+                      Project Image
+                    </h3>
+                    <ImageUpload
+                      currentImageUrl={form.watch(`projects.${index}.imageUrl`)}
+                      onImageUrlChange={(url: string) =>
+                        handleImageUrlChange(index, url)
+                      }
+                    />
+                  </div>
 
                   <FormField
                     control={form.control}
@@ -247,9 +233,15 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     }}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Link</FormLabel>
+                        <FormLabel className={darkModeClasses.formLabel}>
+                          Live Demo URL
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="https://example.com" {...field} />
+                          <Input
+                            placeholder="https://myproject.com"
+                            {...field}
+                            className={darkModeClasses.input}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -264,17 +256,31 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     }}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>GitHub Repository URL</FormLabel>
+                        <FormLabel className={darkModeClasses.formLabel}>
+                          GitHub Repository (optional)
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="https://github.com/username/repo"
+                            placeholder="https://github.com/yourusername/project"
                             {...field}
+                            className={darkModeClasses.input}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+                  <div className={`space-y-4 ${darkModeClasses.formLabel}`}>
+                    <SkillSelector
+                      selectedSkills={
+                        form.watch(`projects.${index}.technologies`) || []
+                      }
+                      onSkillAdd={(skill) => addSkill(index, skill)}
+                      onSkillRemove={(skill) => removeSkill(index, skill)}
+                      label="Technologies Used"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -292,16 +298,23 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                   technologies: [],
                 })
               }
-              className="w-full"
+              className={`w-full ${darkModeClasses.buttonOutline}`}
             >
               <Plus className="mr-2 h-4 w-4" /> Add Another Project
             </Button>
 
             <div className="flex gap-2 justify-end">
-              <Button type="button" variant="outline" onClick={onBack}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onBack}
+                className={darkModeClasses.buttonOutline}
+              >
                 Back
               </Button>
-              <Button type="submit">Next</Button>
+              <Button type="submit" className={darkModeClasses.buttonPrimary}>
+                Next
+              </Button>
             </div>
           </form>
         </Form>
