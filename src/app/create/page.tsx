@@ -1,10 +1,11 @@
 import FormStepper from "@/components/form/FormStepper";
+import LoadingScreen from "@/components/LoadingScreen";
 import { Suspense } from "react";
 
 export default function CreatePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <main className="min-h-screen bg-stone-50 pt-12">
+    <Suspense fallback={<LoadingScreen />}>
+      <main className="min-h-screen bg-stone-50 dark:bg-stone-900 pt-12 pb-24">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-50">

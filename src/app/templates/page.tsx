@@ -4,8 +4,10 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TemplateCard from "@/components/TemplateCard";
+import LoadingScreen from "@/components/LoadingScreen";
 import { TemplateType } from "@/types";
 import { Suspense } from "react";
+import { darkModeClasses } from "@/lib/utils";
 
 interface TemplateInfo {
   name: TemplateType;
@@ -30,11 +32,18 @@ export default function TemplatesPage() {
         "Vibrant and expressive design for artists, designers, and creative professionals to showcase their work.",
       supportsDarkMode: true,
     },
+    {
+      name: "Modern",
+      imageSrc: "/templates/modern.svg",
+      description:
+        "A sleek, dark-themed design with vibrant gradients and smooth animations. Perfect for tech professionals and developers.",
+      supportsDarkMode: true,
+    },
   ];
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <main className="min-h-screen bg-stone-50 pt-12">
+    <Suspense fallback={<LoadingScreen />}>
+      <main className="min-h-screen bg-stone-50 dark:bg-stone-900 pt-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-50">
@@ -48,7 +57,10 @@ export default function TemplatesPage() {
 
           <div className="flex justify-center mb-8">
             <Link href="/create" className="mr-auto">
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                className={darkModeClasses.buttonOutline}
+              >
                 <ArrowLeft className="h-4 w-4" />
                 Form
               </Button>

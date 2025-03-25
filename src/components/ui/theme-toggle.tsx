@@ -1,23 +1,25 @@
+"use client";
+
 import React from "react";
 import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
 interface ThemeToggleProps {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
   variant?: "icon" | "button";
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
 export function ThemeToggle({
-  darkMode,
-  toggleDarkMode,
   variant = "icon",
   size = "md",
   className,
 }: ThemeToggleProps) {
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
+
   const sizeClasses = {
     sm: { icon: 16, button: "h-8 w-8" },
     md: { icon: 18, button: "h-10 w-10" },
@@ -27,24 +29,29 @@ export function ThemeToggle({
   const iconSize = sizeClasses[size].icon;
   const buttonSize = sizeClasses[size].button;
 
+  const toggleTheme = () => {
+    setTheme(isDark ? "light" : "dark");
+  };
+
+  console.log("variant", variant);
+
   if (variant === "icon") {
+    console.log("icon");
     return (
       <Button
-        id="dark-mode-toggle"
+        id="theme-toggle"
         variant="ghost"
         size="icon"
-        onClick={toggleDarkMode}
+        onClick={toggleTheme}
         className={cn(
           buttonSize,
           "rounded-full transition-colors",
-          darkMode
-            ? "text-yellow-300 hover:bg-gray-800"
-            : "text-gray-600 hover:bg-gray-100",
+          isDark ? "text-yellow-300" : "text-gray-600",
           className
         )}
-        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+        aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       >
-        {darkMode ? (
+        {isDark ? (
           <Sun size={iconSize} className="text-yellow-300" />
         ) : (
           <Moon size={iconSize} />
@@ -56,24 +63,24 @@ export function ThemeToggle({
   return (
     <Button
       variant="ghost"
-      onClick={toggleDarkMode}
+      onClick={toggleTheme}
       className={cn(
         "flex items-center gap-2 transition-colors",
-        darkMode
+        isDark
           ? "text-gray-300 hover:text-white hover:bg-gray-800"
           : "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
         className
       )}
-      aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <span>
-        {darkMode ? (
+        {isDark ? (
           <Sun size={iconSize} className="text-yellow-300" />
         ) : (
           <Moon size={iconSize} />
         )}
       </span>
-      {darkMode ? "Light Mode" : "Dark Mode"}
+      {isDark ? "Light Mode" : "Dark Mode"}
     </Button>
   );
 }

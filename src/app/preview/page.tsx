@@ -2,6 +2,7 @@
 
 import PreviewPane from "@/components/PreviewPane";
 import PreviewHeader from "./components/PreviewHeader";
+import LoadingScreen from "@/components/LoadingScreen";
 import { useAppSelector } from "@/store";
 import { Suspense } from "react";
 
@@ -9,8 +10,8 @@ export default function PreviewPage() {
   const { viewMode } = useAppSelector((state) => state.portfolio);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="flex flex-col h-screen">
+    <Suspense fallback={<LoadingScreen />}>
+      <div className="min-h-screen bg-stone-50 dark:bg-stone-900">
         <PreviewHeader />
 
         {/* Main Content */}
@@ -37,11 +38,6 @@ export default function PreviewPage() {
             </div>
           )}
         </div>
-
-        {/* Right side panel - commented out for now */}
-        {/* <div className="fixed right-0 top-16 bottom-0 w-72 bg-white border-l p-4 overflow-y-auto">
-        <ThemeSelector />
-      </div> */}
       </div>
     </Suspense>
   );

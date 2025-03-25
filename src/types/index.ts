@@ -90,7 +90,12 @@ export interface Theme {
   layout: "single" | "grid";
 }
 
-export type TemplateType = "Minimalist" | "Creative" | "Basic" | "Professional";
+export type TemplateType =
+  | "Minimalist"
+  | "Creative"
+  | "Basic"
+  | "Professional"
+  | "Modern";
 
 export interface TemplateSectionConfig {
   sections: TemplateSection[];

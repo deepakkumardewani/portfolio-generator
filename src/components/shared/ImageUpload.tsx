@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Loader2 } from "lucide-react";
+import { darkModeClasses } from "@/lib/utils";
 
 interface ImageUploadProps {
   currentImageUrl: string;
@@ -100,17 +101,17 @@ export default function ImageUpload({
           </Button>
         </div>
       ) : (
-        <div className="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md p-6 h-[200px]">
+        <div className="flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-6 h-[200px]">
           <div className="text-center">
-            <Upload className="mx-auto h-12 w-12 text-gray-400" />
-            <div className="mt-2 text-sm text-gray-600">
+            <Upload className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+            <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               {isUploading ? (
                 <div className="flex items-center">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Uploading...
                 </div>
               ) : (
-                <label className="cursor-pointer hover:text-gray-800">
+                <label className="cursor-pointer hover:text-gray-800 dark:hover:text-gray-300">
                   <span>Upload an image</span>
                   <input
                     type="file"

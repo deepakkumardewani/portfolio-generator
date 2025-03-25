@@ -69,7 +69,9 @@ const DraggableSection = ({
     <div
       ref={ref}
       className={`flex items-center p-3 rounded-md border ${
-        !section.visible ? "bg-gray-100 text-gray-500" : "bg-white"
+        !section.visible
+          ? "bg-gray-100 text-gray-500 dark:bg-neutral-800 dark:text-neutral-400"
+          : "bg-white dark:bg-neutral-900"
       } ${isDragging ? "opacity-50" : "opacity-100"}`}
       style={{ cursor: section.isFixed ? "default" : "move" }}
     >
@@ -140,12 +142,12 @@ export default function TemplateSectionEditor({
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="w-full space-y-4">
-        <div className="p-4 border-b">
+      <div className="w-full">
+        <div className="p-4 border-b bg-neutral-50 dark:bg-neutral-950">
           <h3 className="text-lg font-medium">Edit Template Sections</h3>
         </div>
 
-        <div className="p-4 space-y-2 max-h-[400px] overflow-y-auto">
+        <div className="p-4 space-y-2 max-h-[400px] overflow-y-auto bg-neutral-50 dark:bg-neutral-950">
           {sections.map((section, index) => (
             <DraggableSection
               key={section.id}
@@ -157,11 +159,11 @@ export default function TemplateSectionEditor({
           ))}
         </div>
 
-        <div className="p-4 border-t bg-gray-50">
+        <div className="p-4 border-t bg-neutral-50 dark:bg-neutral-950">
           <Button
             onClick={saveChanges}
             disabled={!hasChanges}
-            className="w-full flex items-center justify-center"
+            className="w-full flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white"
           >
             <Save className="mr-2 h-4 w-4" />
             Save Changes

@@ -11,15 +11,15 @@ import {
   PortfolioState,
   Skill,
   TemplateSection,
-  TemplateSectionConfig,
 } from "./types";
 
-const initialState: PortfolioState = {
+// Development data with detailed lorem ipsum
+const devData: PortfolioState = {
   bio: {
     name: "John Doe",
-    tagline: "Full Stack Developer",
+    tagline: "Full Stack Developer & UI/UX Enthusiast",
     about:
-      "I'm a passionate developer with experience in building web applications using modern technologies.",
+      "As a seasoned full-stack developer with over 8 years of experience, I specialize in crafting robust and scalable web applications.",
   },
   skills: [
     {
@@ -55,7 +55,7 @@ const initialState: PortfolioState = {
       fromDate: "2020-01-01",
       toDate: "2024-01-01",
       description:
-        "Developed and maintained modern web applications using React and TypeScript. Implemented state management with Redux and improved performance across the application.",
+        "Led a team of 5 developers in redesigning and implementing the company's flagship SaaS platform, resulting in a 40% improvement in user engagement metrics. Architected and implemented a new state management system using Redux Toolkit and TypeScript, reducing bug reports by 60%. Established coding standards and review processes that improved team productivity by 25%. Mentored junior developers and conducted weekly knowledge sharing sessions on best practices in modern web development. Optimized application performance through code splitting and lazy loading, achieving a 30% reduction in initial load time.",
     },
     {
       company: "Digital Innovations",
@@ -64,23 +64,25 @@ const initialState: PortfolioState = {
       fromDate: "2020-01-01",
       toDate: "2024-01-01",
       description:
-        "Built responsive user interfaces and implemented new features for client websites. Collaborated with designers to ensure pixel-perfect implementations.",
+        "Spearheaded the development of responsive web applications for Fortune 500 clients, ensuring cross-browser compatibility and optimal performance. Implemented advanced CSS animations and transitions that enhanced user experience and increased client satisfaction scores by 45%. Collaborated with UX designers to create and maintain a comprehensive component library, reducing development time for new features by 35%. Integrated third-party APIs and services, including payment gateways and social media platforms, expanding platform functionality.",
     },
   ],
   projects: [
     {
-      title: "E-commerce Platform",
+      title: "E-commerce Platform Revolution",
       description:
-        "A full-featured e-commerce platform with product listings, cart functionality, and payment processing.",
+        "Engineered a cutting-edge e-commerce platform utilizing microservices architecture and React.js. Implemented features including real-time inventory management, AI-powered product recommendations, and seamless payment processing integration. The platform handles over 10,000 daily active users and processes 1,000+ transactions daily. Key achievements include a 99.9% uptime, 2-second average page load time, and a 25% increase in conversion rates through optimized user flows and performance improvements.",
       imageUrl: "https://placehold.co/600x400",
       link: "https://github.com/johndoe/ecommerce",
+      githubUrl: "https://github.com/johndoe/ecommerce",
     },
     {
-      title: "Task Management App",
+      title: "Enterprise Task Management System",
       description:
-        "A productivity application for managing tasks, projects, and deadlines with team collaboration features.",
+        "Developed a comprehensive task management solution for enterprise teams using Next.js and GraphQL. The system features real-time collaboration tools, automated workflow management, and detailed analytics dashboards. Integrated with popular project management tools through custom APIs, enabling seamless data synchronization. The platform currently serves 50+ enterprise clients, managing over 100,000 tasks monthly with advanced features like resource allocation, time tracking, and predictive task completion estimates.",
       imageUrl: "https://placehold.co/600x400",
       link: "https://github.com/johndoe/taskmanager",
+      githubUrl: "https://github.com/johndoe/taskmanager",
     },
   ],
   contact: {
@@ -106,7 +108,7 @@ const initialState: PortfolioState = {
     ],
   },
   theme: {
-    primaryColor: "#3b82f6", // Default blue color
+    primaryColor: "#3b82f6",
     layout: "single",
   },
   selectedTemplate: "Basic",
@@ -124,6 +126,45 @@ const initialState: PortfolioState = {
     ],
   },
 };
+
+// Production data with empty fields
+const prodData: PortfolioState = {
+  bio: {
+    name: "",
+    tagline: "",
+    about: "",
+  },
+  skills: [],
+  workExperience: [],
+  projects: [],
+  contact: {
+    phone: "",
+    email: "",
+    links: [],
+  },
+  theme: {
+    primaryColor: "#3b82f6",
+    layout: "single",
+  },
+  selectedTemplate: "Basic",
+  viewMode: "desktop",
+  templateSections: {
+    sections: [
+      { id: "header", title: "Header", visible: true, isFixed: true },
+      { id: "hero", title: "Hero", visible: true, isFixed: true },
+      { id: "about", title: "About", visible: true, isFixed: false },
+      { id: "experience", title: "Experience", visible: true, isFixed: false },
+      { id: "projects", title: "Projects", visible: true, isFixed: false },
+      { id: "skills", title: "Skills", visible: true, isFixed: false },
+      { id: "contact", title: "Contact", visible: true, isFixed: false },
+      { id: "footer", title: "Footer", visible: true, isFixed: true },
+    ],
+  },
+};
+
+// Select initial state based on environment
+const initialState =
+  process.env.NODE_ENV === "development" ? devData : prodData;
 
 // Create portfolio slice
 const portfolioSlice = createSlice({

@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Minimalist from "@/app/templates/Minimalist/Minimalist";
 import Creative from "@/app/templates/Creative/Creative";
-// import Basic from "@/app/templates/Basic/Basic";
+import Modern from "@/app/templates/Modern/Modern";
 import { useTemplateSync } from "@/hooks/useTemplateSync";
 import { useAppSelector } from "@/store";
 
@@ -20,6 +20,8 @@ export default function PreviewPane() {
         return <Minimalist />;
       case "Creative":
         return <Creative />;
+      case "Modern":
+        return <Modern />;
       default:
         return "";
     }

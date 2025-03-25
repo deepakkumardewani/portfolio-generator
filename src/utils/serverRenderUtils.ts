@@ -52,8 +52,6 @@ export function renderTemplateToString(data: PortfolioData): string {
 
   switch (selectedTemplate) {
     case "Minimalist":
-      // In the future, you can add other templates here
-      // return renderComponentToString(Minimalist, data);
       return renderComponentToString(Minimalist, {
         bio: data.bio,
         skills: data.skills,

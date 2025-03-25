@@ -19,7 +19,7 @@ import {
 import { FormLabel } from "@/components/ui/form";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { TECHNICAL_SKILLS } from "@/utils/constants";
-import { cn } from "@/lib/utils";
+import { cn, darkModeClasses } from "@/lib/utils";
 
 interface SkillSelectorProps {
   selectedSkills: string[];
@@ -50,7 +50,9 @@ export default function SkillSelector({
 
   return (
     <div className="space-y-4">
-      {label && <FormLabel>{label}</FormLabel>}
+      {label && (
+        <FormLabel className={darkModeClasses.formLabel}>{label}</FormLabel>
+      )}
       <div className="flex gap-2">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
@@ -58,7 +60,7 @@ export default function SkillSelector({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-full justify-between"
+              className={`w-full justify-between ${darkModeClasses.buttonOutline}`}
             >
               {selectedSkill
                 ? TECHNICAL_SKILLS.find(
@@ -121,11 +123,13 @@ export default function SkillSelector({
                 addSkill(customSkill);
               }
             }}
+            className={darkModeClasses.input}
           />
           <Button
             type="button"
             onClick={() => addSkill(customSkill)}
             disabled={!customSkill}
+            className={darkModeClasses.buttonPrimary}
           >
             Add
           </Button>
@@ -138,14 +142,14 @@ export default function SkillSelector({
           return (
             <div
               key={skill}
-              className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full"
+              className="flex items-center gap-2 px-3 py-1 bg-primary/10 dark:bg-stone-700 rounded-full"
             >
               {skillObj?.image && (
                 <div className="h-4 w-4 relative">
                   <img src={skillObj.image} alt={skill} />
                 </div>
               )}
-              <span>{skill}</span>
+              <span className={darkModeClasses.text}>{skill}</span>
               <Button
                 type="button"
                 variant="ghost"

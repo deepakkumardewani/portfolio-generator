@@ -21,7 +21,7 @@ export function useTemplateSync() {
 
     if (
       templateFromUrl &&
-      ["Minimalist", "Creative", "Professional"].includes(templateFromUrl)
+      ["Minimalist", "Creative", "Modern"].includes(templateFromUrl)
     ) {
       if (templateFromUrl !== selectedTemplate) {
         dispatch(setTemplate(templateFromUrl as TemplateType));

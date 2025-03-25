@@ -125,12 +125,7 @@ export default function Header({ templateId }: HeaderProps) {
           </button>
           {/* Dark Mode Toggle */}
           <div className="flex flex-1 items-center justify-end ml-4">
-            <ThemeToggle
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
-              size="md"
-              className={darkMode ? "hover:bg-gray-700" : "hover:bg-stone-100"}
-            />
+            <ThemeToggle size="md" />
           </div>
         </div>
         {/* Mobile Navigation */}
