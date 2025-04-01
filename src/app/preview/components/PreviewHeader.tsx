@@ -108,7 +108,13 @@ export default function PreviewHeader() {
       <div className="mx-auto py-3 px-4">
         {/* Desktop layout (hidden on small screens) */}
         <div className="hidden md:flex justify-between items-center">
-          <div className="flex-1">
+          <div className="flex-1 flex items-center gap-4">
+            <Link href="/create">
+              <Button variant="outline">
+                <ArrowLeft className="h-4 w-4" />
+                Edit
+              </Button>
+            </Link>
             <Link href="/" className="transition-transform hover:scale-105">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-stone-900 to-stone-600 dark:from-stone-100 dark:to-stone-300 bg-clip-text text-transparent">
                 PortfolioGen
@@ -145,12 +151,6 @@ export default function PreviewHeader() {
           </div>
 
           <div className="flex-1 flex justify-end items-center space-x-4">
-            <Link href="/create">
-              <Button variant="outline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Edit Info
-              </Button>
-            </Link>
             <Link href="/templates">
               <Button variant="outline">Change Template</Button>
             </Link>
@@ -168,7 +168,11 @@ export default function PreviewHeader() {
                 <TemplateSectionEditor onClose={() => {}} />
               </PopoverContent>
             </Popover>
-            <Button variant="outline" onClick={() => handleExport("static")}>
+            <Button
+              variant="outline"
+              onClick={() => handleExport("static")}
+              className="rounded-full"
+            >
               <Download className="h-4 w-4" />
             </Button>
             <ShimmerButton
