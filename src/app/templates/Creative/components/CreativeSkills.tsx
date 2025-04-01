@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "@/store";
+import { Skill } from "@/types";
 
 export default function Skills() {
   const { skills } = useAppSelector((state) => state.portfolio);
-  const [groupedSkills, setGroupedSkills] = useState<Record<string, string[]>>(
+  const [groupedSkills, setGroupedSkills] = useState<Record<string, Skill[]>>(
     {}
   );
   const [isVisible, setIsVisible] = useState(false);
@@ -21,13 +22,13 @@ export default function Skills() {
     checkMobile();
 
     // Group skills by category and remove duplicates
-    const grouped = skills.reduce<Record<string, string[]>>((acc, skill) => {
+    const grouped = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
       const category = skill.category || "Other";
       if (!acc[category]) {
         acc[category] = [];
       }
-      if (!acc[category].includes(skill.value)) {
-        acc[category].push(skill.value);
+      if (!acc[category].some((s) => s.value === skill.value)) {
+        acc[category].push(skill);
       }
       return acc;
     }, {});
@@ -85,11 +86,17 @@ export default function Skills() {
               <ul className="space-y-2">
                 {items?.map((skill) => (
                   <li
-                    key={skill}
+                    key={skill.value}
                     className="text-black/50 dark:text-white flex items-center space-x-2"
                   >
-                    <span className="w-2 h-2 bg-purple-500 rounded-full" />
-                    <span>{skill}</span>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={skill.image}
+                        alt={skill.value}
+                        className="w-5 h-5 object-contain"
+                      />
+                      <span>{skill.value}</span>
+                    </div>
                   </li>
                 ))}
               </ul>

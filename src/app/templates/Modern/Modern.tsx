@@ -12,6 +12,7 @@ import ModernFooter from "./components/ModernFooter";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import { Providers } from "@/app/providers";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
+import CommonFooter from "../shared/CommonFooter";
 
 export default function Modern() {
   // Define the sections with their IDs
@@ -26,7 +27,7 @@ export default function Modern() {
     { id: "projects", component: <ModernProjects /> },
     { id: "skills", component: <ModernSkills /> },
     { id: "contact", component: <ModernContact /> },
-    { id: "footer", component: <ModernFooter /> },
+    { id: "footer", component: <CommonFooter /> },
   ];
 
   return (

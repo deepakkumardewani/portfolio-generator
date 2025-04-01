@@ -10,6 +10,7 @@ import MinimalistFooter from "./components/MinimalistFooter";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import { Providers } from "@/app/providers";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
+import CommonFooter from "../shared/CommonFooter";
 
 function Minimalist() {
   // Define the sections with their IDs
@@ -24,7 +25,7 @@ function Minimalist() {
     { id: "projects", component: <MinimalistProjects /> },
     { id: "skills", component: <MinimalistSkills /> },
     { id: "contact", component: <MinimalistContact /> },
-    { id: "footer", component: <MinimalistFooter /> },
+    { id: "footer", component: <CommonFooter /> },
   ];
 
   return (

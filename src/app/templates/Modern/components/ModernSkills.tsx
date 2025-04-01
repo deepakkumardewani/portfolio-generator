@@ -1,100 +1,60 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import { CodeIcon, PencilRulerIcon, BrainIcon } from "lucide-react";
+import { CodeIcon, BrainIcon, WrenchIcon } from "lucide-react";
+import { Skill } from "@/types";
 
 export default function ModernSkills() {
-  const portfolioState = useAppSelector((state) => state.portfolio);
-  const skillsArray = portfolioState.skills.map((skill) => skill.value);
+  const { skills } = useAppSelector((state) => state.portfolio);
+  const [groupedSkills, setGroupedSkills] = useState<Record<string, Skill[]>>(
+    {}
+  );
 
-  // Group skills into categories
-  const categorizedSkills = {
-    frontend: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "TypeScript",
-      "React",
-      "Vue",
-      "Angular",
-      "Tailwind",
-      "Bootstrap",
-    ],
-    backend: [
-      "Node.js",
-      "Express",
-      "Python",
-      "Django",
-      "Flask",
-      "Ruby",
-      "Rails",
-      "PHP",
-      "Laravel",
-      "Java",
-      "Spring",
-      "C#",
-      ".NET",
-      "GraphQL",
-      "REST",
-    ],
-    design: [
-      "Figma",
-      "Sketch",
-      "Adobe XD",
-      "Photoshop",
-      "Illustrator",
-      "UI/UX",
-      "Wireframing",
-      "Prototyping",
-    ],
-    other: [
-      "Git",
-      "GitHub",
-      "GitLab",
-      "Docker",
-      "Kubernetes",
-      "AWS",
-      "Azure",
-      "GCP",
-      "Firebase",
-      "MongoDB",
-      "MySQL",
-      "PostgreSQL",
-      "SQL",
-      "NoSQL",
-      "Redux",
-      "MobX",
-      "Zustand",
-      "Jest",
-      "Testing",
-      "CI/CD",
-      "Agile",
-      "Scrum",
-    ],
+  useEffect(() => {
+    // Group skills by category and remove duplicates
+    const grouped = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
+      const category = skill.category || "other";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      if (!acc[category].some((s) => s.value === skill.value)) {
+        acc[category].push(skill);
+      }
+      return acc;
+    }, {});
+
+    setGroupedSkills(grouped);
+  }, [skills]);
+
+  // Category-specific styling
+  const categoryStyles = {
+    frontend: {
+      icon: <CodeIcon className="h-6 w-6 text-blue-400" />,
+      bgColor: "bg-blue-900/20",
+      borderColor: "border-blue-800/30",
+      textColor: "text-blue-300",
+    },
+    backend: {
+      icon: <BrainIcon className="h-6 w-6 text-purple-400" />,
+      bgColor: "bg-purple-900/20",
+      borderColor: "border-purple-800/30",
+      textColor: "text-purple-300",
+    },
+    tool: {
+      icon: <WrenchIcon className="h-6 w-6 text-green-400" />,
+      bgColor: "bg-green-900/20",
+      borderColor: "border-green-800/30",
+      textColor: "text-green-300",
+    },
+    other: {
+      icon: <CodeIcon className="h-6 w-6 text-green-400" />,
+      bgColor: "bg-green-900/20",
+      borderColor: "border-green-800/30",
+      textColor: "text-green-300",
+    },
   };
-
-  // Filter user skills by categories
-  const frontendSkills = skillsArray.filter((skill) =>
-    categorizedSkills.frontend.includes(skill)
-  );
-
-  const backendSkills = skillsArray.filter((skill) =>
-    categorizedSkills.backend.includes(skill)
-  );
-
-  const designSkills = skillsArray.filter((skill) =>
-    categorizedSkills.design.includes(skill)
-  );
-
-  // Any skill not in the above categories
-  const otherSkills = skillsArray.filter(
-    (skill) =>
-      !categorizedSkills.frontend.includes(skill) &&
-      !categorizedSkills.backend.includes(skill) &&
-      !categorizedSkills.design.includes(skill)
-  );
 
   return (
     <section id="skills" className="py-24 px-4 relative">
@@ -118,111 +78,52 @@ export default function ModernSkills() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Frontend Skills */}
-          {frontendSkills.length > 0 && (
+          {Object.entries(groupedSkills).map(([category, skills], index) => (
             <motion.div
+              key={category}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
               className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
             >
               <div className="flex items-center gap-3 mb-4">
-                <CodeIcon className="h-6 w-6 text-blue-400" />
-                <h3 className="text-xl font-bold text-zinc-100">Frontend</h3>
+                {categoryStyles[category as keyof typeof categoryStyles]
+                  ?.icon || categoryStyles.other.icon}
+                <h3 className="text-xl font-bold text-zinc-100">
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </h3>
               </div>
               <div className="flex flex-wrap gap-2">
-                {frontendSkills.map((skill, index) => (
+                {skills.map((skill) => (
                   <span
-                    key={index}
-                    className="px-3 py-1 bg-blue-900/20 border border-blue-800/30 text-blue-300 text-sm rounded-full"
+                    key={skill.value}
+                    className={`flex items-center gap-2 px-3 py-1 ${
+                      categoryStyles[category as keyof typeof categoryStyles]
+                        ?.bgColor || categoryStyles.other.bgColor
+                    } ${
+                      categoryStyles[category as keyof typeof categoryStyles]
+                        ?.borderColor || categoryStyles.other.borderColor
+                    } ${
+                      categoryStyles[category as keyof typeof categoryStyles]
+                        ?.textColor || categoryStyles.other.textColor
+                    } text-sm rounded-full border`}
                   >
-                    {skill}
+                    {skill.image && (
+                      <img
+                        src={skill.image}
+                        alt={skill.value}
+                        className="w-4 h-4 object-contain"
+                      />
+                    )}
+                    {skill.value}
                   </span>
                 ))}
               </div>
             </motion.div>
-          )}
+          ))}
 
-          {/* Backend Skills */}
-          {backendSkills.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <BrainIcon className="h-6 w-6 text-purple-400" />
-                <h3 className="text-xl font-bold text-zinc-100">Backend</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {backendSkills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-purple-900/20 border border-purple-800/30 text-purple-300 text-sm rounded-full"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Design Skills */}
-          {designSkills.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <PencilRulerIcon className="h-6 w-6 text-pink-400" />
-                <h3 className="text-xl font-bold text-zinc-100">Design</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {designSkills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-pink-900/20 border border-pink-800/30 text-pink-300 text-sm rounded-full"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Other Skills */}
-          {otherSkills.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <CodeIcon className="h-6 w-6 text-green-400" />
-                <h3 className="text-xl font-bold text-zinc-100">Other</h3>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {otherSkills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-green-900/20 border border-green-800/30 text-green-300 text-sm rounded-full"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {skillsArray.length === 0 && (
+          {Object.keys(groupedSkills).length === 0 && (
             <div className="col-span-2 text-center p-8 border border-dashed border-zinc-800 rounded-lg">
               <CodeIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
               <p className="text-zinc-400">No skills added yet.</p>

@@ -10,7 +10,7 @@ import CreativeContact from "./components/CreativeContact";
 import { Providers } from "@/app/providers";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
-
+import CommonFooter from "../shared/CommonFooter";
 export default function Creative() {
   // Define the sections with their IDs
   const templateSections = [
@@ -26,11 +26,7 @@ export default function Creative() {
     { id: "contact", component: <CreativeContact /> },
     {
       id: "footer",
-      component: (
-        <div className="py-4 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} All rights reserved.
-        </div>
-      ),
+      component: <CommonFooter />,
     },
   ];
 

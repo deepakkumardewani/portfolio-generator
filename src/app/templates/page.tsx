@@ -1,13 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// import Link from "next/link";
+// import { ArrowLeft } from "lucide-react";
+// import { Button } from "@/components/ui/button";
 import TemplateCard from "@/components/TemplateCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TemplateType } from "@/types";
 import { Suspense } from "react";
 import { darkModeClasses } from "@/lib/utils";
+import TemplateHeader from "./components/TemplateHeader";
 
 interface TemplateInfo {
   name: TemplateType;
@@ -43,31 +44,11 @@ export default function TemplatesPage() {
 
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <main className="min-h-screen bg-stone-50 dark:bg-stone-900 pt-12">
+      <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-12">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-stone-900 dark:text-stone-50">
-              Choose Your Template
-            </h1>
-            <p className="text-stone-600 dark:text-stone-300 mt-2">
-              Select a template that best represents your style and professional
-              identity
-            </p>
-          </div>
+          <TemplateHeader />
 
-          <div className="flex justify-center mb-8">
-            <Link href="/create" className="mr-auto">
-              <Button
-                variant="outline"
-                className={darkModeClasses.buttonOutline}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Form
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
             {templates.map((template) => (
               <TemplateCard
                 key={template.name}

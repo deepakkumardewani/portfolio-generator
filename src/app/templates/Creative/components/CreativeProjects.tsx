@@ -48,8 +48,8 @@ export default function Projects() {
   const projectLayoutClasses = isPreview
     ? isMobile
       ? "grid grid-cols-1 gap-8"
-      : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-    : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
+      : "grid grid-cols-1 md:grid-cols-2 gap-8"
+    : "grid grid-cols-1 md:grid-cols-2 gap-8";
   return (
     <section id="projects" className={`py-20 bg-white dark:bg-black`}>
       <div className="container mx-auto px-6">
@@ -65,7 +65,7 @@ export default function Projects() {
             <div
               id="project-card"
               key={index}
-              className={`bg-white dark:bg-black/10 rounded-lg overflow-hidden backdrop-blur-lg transition-all duration-500 transform ${
+              className={`bg-white dark:bg-black/10 w-full rounded-lg overflow-hidden backdrop-blur-lg transition-all duration-500 transform ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"

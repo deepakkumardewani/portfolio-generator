@@ -11,13 +11,13 @@ export default function ModernHero() {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-center items-center relative px-4 py-20 overflow-hidden"
+      className="min-h-screen flex flex-col justify-center items-center relative px-4 py-20 overflow-hidden bg-gray-50 dark:bg-black"
     >
       {/* Background gradient */}
-      {/* <div className="absolute h-screen w-full inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950"></div> */}
+      <div className="absolute h-screen w-full inset-0 bg-gradient-to-b dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950"></div>
 
       {/* Grid pattern */}
-      {/* <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div> */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
 
       {/* Content */}
       <div className="container mx-auto max-w-4xl relative">
