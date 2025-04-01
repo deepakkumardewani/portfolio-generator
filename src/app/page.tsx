@@ -5,6 +5,7 @@ import Steps from "@/components/landing/Steps";
 import CTA from "@/components/landing/CTA";
 import Footer from "@/components/landing/Footer";
 import Features from "@/components/landing/Features";
+import Templates from "@/components/landing/Templates";
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col relative">
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <Steps />
         <Features />
+        <Templates />
         <CTA />
       </div>
       <Footer />

@@ -13,6 +13,8 @@ import {
   TemplateSection,
 } from "./types";
 
+const iconBaseUrl = "https://skillicons.dev/icons?i=";
+
 // Development data with detailed lorem ipsum
 const devData: PortfolioState = {
   bio: {
@@ -25,26 +27,86 @@ const devData: PortfolioState = {
     {
       value: "JavaScript",
       label: "JavaScript",
-      image: "https://skillicons.dev/icons?i=js",
+      image: `${iconBaseUrl}js`,
       category: "frontend",
     },
     {
       value: "React",
       label: "React",
-      image: "https://skillicons.dev/icons?i=react",
+      image: `${iconBaseUrl}react`,
       category: "frontend",
     },
     {
       value: "Node.js",
       label: "Node.js",
-      image: "https://skillicons.dev/icons?i=nodejs",
+      image: `${iconBaseUrl}nodejs`,
       category: "backend",
     },
     {
       value: "TypeScript",
       label: "TypeScript",
-      image: "https://skillicons.dev/icons?i=ts",
+      image: `${iconBaseUrl}ts`,
       category: "frontend",
+    },
+    {
+      value: "Next.js",
+      label: "Next.js",
+      image: `${iconBaseUrl}nextjs`,
+      category: "frontend",
+    },
+    {
+      value: "Tailwind CSS",
+      label: "Tailwind CSS",
+      image: `${iconBaseUrl}tailwind`,
+      category: "frontend",
+    },
+    {
+      value: "CSS",
+      label: "CSS",
+      image: `${iconBaseUrl}css`,
+      category: "frontend",
+    },
+    {
+      value: "HTML",
+      label: "HTML",
+      image: `${iconBaseUrl}html`,
+      category: "frontend",
+    },
+    {
+      value: "Laravel",
+      label: "Laravel",
+      image: `${iconBaseUrl}laravel`,
+      category: "backend",
+    },
+    {
+      value: "Ruby",
+      label: "Ruby",
+      image: `${iconBaseUrl}ruby`,
+      category: "backend",
+    },
+    {
+      value: "Ruby on Rails",
+      label: "Ruby on Rails",
+      image: `${iconBaseUrl}rails`,
+      category: "backend",
+    },
+    {
+      value: "AWS",
+      label: "AWS",
+      image: `${iconBaseUrl}aws`,
+      category: "tool",
+    },
+    {
+      value: "Azure",
+      label: "Azure",
+      image: `${iconBaseUrl}azure`,
+      category: "tool",
+    },
+    {
+      value: "Google Cloud",
+      label: "Google Cloud",
+      image: `${iconBaseUrl}gcp`,
+      category: "tool",
     },
   ],
   workExperience: [
@@ -111,7 +173,7 @@ const devData: PortfolioState = {
     primaryColor: "#3b82f6",
     layout: "single",
   },
-  selectedTemplate: "Basic",
+  selectedTemplate: "Minimalist",
   viewMode: "desktop",
   templateSections: {
     sections: [
@@ -146,7 +208,7 @@ const prodData: PortfolioState = {
     primaryColor: "#3b82f6",
     layout: "single",
   },
-  selectedTemplate: "Basic",
+  selectedTemplate: "Minimalist",
   viewMode: "desktop",
   templateSections: {
     sections: [

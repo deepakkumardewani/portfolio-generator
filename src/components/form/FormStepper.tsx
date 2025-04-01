@@ -7,7 +7,7 @@ import SkillsForm from "./SkillsForm";
 import ExperienceForm from "./ExperienceForm";
 import ProjectsForm from "./ProjectsForm";
 import ContactForm from "./ContactForm";
-import LinkedInImportButton from "./LinkedInImportButton";
+// import LinkedInImportButton from "./LinkedInImportButton";
 
 // Define component types
 type StepComponent = {
@@ -74,7 +74,7 @@ export default function FormStepper() {
   return (
     <div className="container max-w-4xl py-12">
       {/* LinkedIn Import Banner */}
-      <div className="mb-8 p-4 bg-stone-50 dark:bg-stone-800 rounded-lg border border-stone-200 dark:border-stone-700">
+      {/* <div className="mb-8 p-4 bg-stone-50 dark:bg-stone-800 rounded-lg border border-stone-200 dark:border-stone-700">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h3 className="text-lg font-medium text-stone-900 dark:text-stone-100">
@@ -86,7 +86,7 @@ export default function FormStepper() {
           </div>
           <LinkedInImportButton />
         </div>
-      </div>
+      </div> */}
 
       {/* Progress Header */}
       <div className="mb-8 space-y-4">
@@ -100,7 +100,7 @@ export default function FormStepper() {
         </div>
 
         {/* Progress Bar */}
-        <div className="h-2 w-full bg-muted dark:bg-stone-700 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-muted dark:bg-neutral-900 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary transition-all duration-300 ease-in-out"
             style={{

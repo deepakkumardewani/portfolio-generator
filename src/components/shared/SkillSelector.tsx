@@ -142,7 +142,7 @@ export default function SkillSelector({
           return (
             <div
               key={skill}
-              className="flex items-center gap-2 px-3 py-1 bg-primary/10 dark:bg-stone-700 rounded-full"
+              className="flex items-center gap-2 px-3 py-1 bg-primary/10 dark:bg-neutral-900 rounded-full"
             >
               {skillObj?.image && (
                 <div className="h-4 w-4 relative">

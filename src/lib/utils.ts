@@ -22,16 +22,17 @@ export const formatDate = (dateString: string) => {
 
 // Dark mode utility classes
 export const darkModeClasses = {
-  card: "dark:bg-stone-800 dark:border-stone-700",
-  cardTitle: "dark:text-stone-100",
-  cardDescription: "dark:text-stone-400",
-  formLabel: "dark:text-stone-200",
-  formDescription: "dark:text-stone-400",
-  input: "dark:bg-stone-700 dark:border-stone-600 dark:text-stone-100",
-  textarea: "dark:bg-stone-700 dark:border-stone-600 dark:text-stone-100",
-  buttonPrimary: "dark:bg-stone-100 dark:text-stone-800 dark:hover:bg-white",
+  card: "dark:bg-neutral-950 dark:border-neutral-800",
+  cardTitle: "dark:text-neutral-50",
+  cardDescription: "dark:text-neutral-500",
+  formLabel: "dark:text-neutral-50",
+  formDescription: "dark:text-neutral-500",
+  input: "dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50",
+  textarea: "dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50",
+  buttonPrimary:
+    "dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-100",
   buttonOutline:
-    "dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-700",
-  text: "dark:text-stone-300",
-  heading: "dark:text-stone-100",
+    "dark:border-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800",
+  text: "dark:text-neutral-50",
+  heading: "dark:text-neutral-50",
 };

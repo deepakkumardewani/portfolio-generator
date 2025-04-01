@@ -45,12 +45,12 @@ export default function FormStep1({ onNext }: FormStep1Props) {
   };
 
   return (
-    <Card className="dark:bg-stone-800 dark:border-stone-700">
+    <Card className="dark:bg-neutral-950 dark:border-neutral-800">
       <CardHeader>
-        <CardTitle className="text-2xl dark:text-stone-100">
+        <CardTitle className="text-2xl dark:text-neutral-50">
           Personal Information
         </CardTitle>
-        <CardDescription className="dark:text-stone-400">
+        <CardDescription className="dark:text-neutral-500">
           Tell us about yourself. This information will be displayed on your
           portfolio.
         </CardDescription>
@@ -70,15 +70,15 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-stone-200">Name</FormLabel>
+                  <FormLabel className="dark:text-neutral-50">Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="John Doe"
                       {...field}
-                      className="dark:bg-stone-700 dark:border-stone-600 dark:text-stone-100"
+                      className="dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-stone-400">
+                  <FormDescription className="dark:text-neutral-500">
                     Your full name as you want it to appear on your portfolio.
                   </FormDescription>
                   <FormMessage />
@@ -97,15 +97,17 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-stone-200">Tagline</FormLabel>
+                  <FormLabel className="dark:text-neutral-50">
+                    Tagline
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Frontend Developer | UI/UX Designer"
                       {...field}
-                      className="dark:bg-stone-700 dark:border-stone-600 dark:text-stone-100"
+                      className="dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-stone-400">
+                  <FormDescription className="dark:text-neutral-500">
                     A short phrase that describes what you do (optional).
                   </FormDescription>
                   <FormMessage />
@@ -125,15 +127,15 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-stone-200">About</FormLabel>
+                  <FormLabel className="dark:text-neutral-50">About</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="I'm a passionate developer with 5 years of experience..."
-                      className="min-h-32 dark:bg-stone-700 dark:border-stone-600 dark:text-stone-100"
+                      className="min-h-32 dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-stone-400">
+                  <FormDescription className="dark:text-neutral-500">
                     A brief description about yourself.
                   </FormDescription>
                   <FormMessage />

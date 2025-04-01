@@ -49,9 +49,9 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
   };
 
   return (
-    <Card className="dark:bg-stone-800 dark:border-stone-700">
+    <Card className="dark:bg-neutral-950 dark:border-neutral-800">
       <CardHeader>
-        <CardTitle className="text-2xl dark:text-stone-100">
+        <CardTitle className="text-2xl dark:text-neutral-50">
           Technical Skills
         </CardTitle>
       </CardHeader>
@@ -69,13 +69,13 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
                 type="button"
                 variant="outline"
                 onClick={onBack}
-                className="dark:border-stone-600 dark:text-stone-200 dark:hover:bg-stone-700"
+                className="dark:border-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800"
               >
                 Back
               </Button>
               <Button
                 type="submit"
-                className="dark:bg-stone-100 dark:text-stone-800 dark:hover:bg-white"
+                className="dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-100"
               >
                 Next
               </Button>

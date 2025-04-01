@@ -4,87 +4,31 @@
 import { TextShimmer } from "@/components/ui/text-shimmer";
 // import { ShiningBorder } from "@/components/ui/shining-border";
 import { GlowingEffect } from "../ui/glowing-effect";
-
+import { Smartphone, Check, HashIcon, ChartBar } from "lucide-react";
 const features = [
   {
     title: "Responsive Design",
     description:
       "All templates are fully responsive and look great on any device, from desktops to smartphones.",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-        />
-      </svg>
-    ),
+    icon: <Smartphone className="h-6 w-6" />,
   },
   {
     title: "SEO Optimized",
     description:
       "Get discovered online with built-in SEO optimization that helps your portfolio rank higher in search results.",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-        />
-      </svg>
-    ),
+    icon: <HashIcon className="h-6 w-6" />,
   },
   {
     title: "One-Click Deploy",
     description:
-      "Publish your portfolio instantly with our one-click deployment to a custom domain or our free hosting.",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 13l4 4L19 7"
-        />
-      </svg>
-    ),
+      "Publish your portfolio instantly with our one-click deployment to our free hosting.",
+    icon: <Check className="h-6 w-6" />,
   },
   {
-    title: "Analytics Dashboard",
+    title: "SEO Optimized",
     description:
-      "Track visitor engagement with built-in analytics to see who's viewing your portfolio and which sections they engage with most.",
-    icon: (
-      <svg
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-      </svg>
-    ),
+      "Get discovered online with built-in SEO optimization that helps your portfolio rank higher in search results.",
+    icon: <ChartBar className="h-6 w-6" />,
   },
 ];
 

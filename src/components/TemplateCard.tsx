@@ -14,6 +14,7 @@ import { Sun, Moon, Check } from "lucide-react";
 import { useState, lazy, Suspense, createContext } from "react";
 import { cn } from "@/lib/utils";
 import { useUpdateTemplate } from "@/hooks/useTemplateSync";
+import ModernHero from "@/app/templates/Modern/components/ModernHero";
 
 // Dynamically import hero components
 const MinimalistHero = lazy(
@@ -53,6 +54,8 @@ export default function TemplateCard({
         return <MinimalistHero />;
       case "Creative":
         return <CreativeHero />;
+      case "Modern":
+        return <ModernHero />;
       default:
         // Fallback to image for templates without hero components
         return (
@@ -86,7 +89,7 @@ export default function TemplateCard({
             </div>
           }
         >
-          {name === "Basic" || name === "Minimalist" || name === "Creative" ? (
+          {name === "Minimalist" || name === "Creative" || name === "Modern" ? (
             <div className="h-full w-full overflow-hidden">
               <div className="transform scale-[0.25] origin-top-left h-[400%] w-[400%]">
                 {renderHeroComponent()}

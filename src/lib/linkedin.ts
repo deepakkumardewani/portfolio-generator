@@ -11,7 +11,7 @@ const LINKEDIN_EXPERIENCE_URL = "https://api.linkedin.com/v2/positions";
 //   "https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams))";
 
 // LinkedIn scope for permissions
-const SCOPE = "profile email";
+const SCOPE = "profile email openid";
 
 // Environment variables
 const CLIENT_ID = process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || "";
@@ -131,13 +131,14 @@ export async function fetchLinkedInProfile(accessToken: string) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        endpoint: "/me",
+        endpoint: "/userinfo",
         accessToken,
       }),
     });
 
     const profileData = await profileResponse.json();
 
+    console.log("profileData=======", profileData);
     // If we get an error response, return empty data structure instead of null
     if (!profileResponse.ok) {
       console.error("LinkedIn profile fetch error:", profileData);
@@ -149,24 +150,24 @@ export async function fetchLinkedInProfile(accessToken: string) {
       };
     }
 
-    // Email using proxy - only if profile fetch was successful
-    const emailResponse = await fetch(`${baseUrl}/api/linkedin/proxy`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        endpoint: "/emailAddress?q=members&projection=(elements*(handle~))",
-        accessToken,
-      }),
-    });
+    // // Email using proxy - only if profile fetch was successful
+    // const emailResponse = await fetch(`${baseUrl}/api/linkedin/proxy`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     endpoint: "/emailAddress?q=members&projection=(elements*(handle~))",
+    //     accessToken,
+    //   }),
+    // });
 
     let email = { elements: [] };
-    if (emailResponse.ok) {
-      email = await emailResponse.json();
-    } else {
-      console.warn(
-        "Could not fetch LinkedIn email. This may be due to scope limitations."
-      );
-    }
+    // if (emailResponse.ok) {
+    //   email = await emailResponse.json();
+    // } else {
+    //   console.warn(
+    //     "Could not fetch LinkedIn email. This may be due to scope limitations."
+    //   );
+    // }
 
     return {
       profile: profileData,

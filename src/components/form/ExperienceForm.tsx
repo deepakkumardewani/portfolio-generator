@@ -116,7 +116,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
               id="student"
               checked={isStudent}
               onCheckedChange={handleStudentCheckboxChange}
-              className="data-[state=checked]:bg-stone-800 data-[state=checked]:dark:bg-stone-600"
+              className="data-[state=checked]:bg-neutral-800 data-[state=checked]:dark:bg-neutral-600"
             />
             <label
               htmlFor="student"
@@ -133,7 +133,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="border rounded-lg p-4 border-border dark:border-stone-700"
+                  className="border rounded-lg p-4 border-border dark:border-neutral-800"
                 >
                   <div
                     className="flex justify-between items-center cursor-pointer"
@@ -150,7 +150,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 hover:bg-stone-100 dark:hover:bg-stone-700"
+                          className="h-8 w-8 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                           onClick={(e) => {
                             e.stopPropagation();
                             remove(index);

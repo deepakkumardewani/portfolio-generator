@@ -39,6 +39,8 @@ export async function POST(request: Request) {
       data = await response.text();
     }
 
+    // console.log("data=======", data);
+
     if (!response.ok) {
       console.error("LinkedIn API error:", data);
       return NextResponse.json(

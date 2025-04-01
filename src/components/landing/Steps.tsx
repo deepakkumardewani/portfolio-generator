@@ -69,7 +69,7 @@ export default function Steps() {
               />
               <Card className="p-8 text-center bg-white dark:bg-neutral-950 border-stone-100 dark:border-stone-700 shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl overflow-hidden group">
                 <CardContent className="pt-6 p-0">
-                  <div className="w-16 h-16 rounded-2xl bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-300 flex items-center justify-center text-xl font-semibold mx-auto mb-6 group-hover:bg-stone-800 group-hover:text-white dark:group-hover:bg-stone-600 transition-all duration-300">
+                  <div className="w-16 h-16 rounded-2xl bg-stone-100 dark:bg-neutral-700 text-stone-700 dark:text-stone-300 flex items-center justify-center text-xl font-semibold mx-auto mb-6 group-hover:bg-stone-800 group-hover:text-white dark:group-hover:bg-stone-600 transition-all duration-300">
                     <step.icon className="h-8 w-8" />
                   </div>
                   <h3 className="text-2xl font-semibold mt-5 text-stone-900 dark:text-stone-100">
