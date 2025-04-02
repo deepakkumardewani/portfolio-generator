@@ -33,10 +33,7 @@ export function ThemeToggle({
     setTheme(isDark ? "light" : "dark");
   };
 
-  console.log("variant", variant);
-
   if (variant === "icon") {
-    console.log("icon");
     return (
       <Button
         id="theme-toggle"
