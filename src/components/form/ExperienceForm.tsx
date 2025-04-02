@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,6 +57,15 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
             ],
     },
   });
+
+  // Update form values when savedWorkExperience changes
+  useEffect(() => {
+    if (savedWorkExperience.length > 0) {
+      form.reset({
+        workExperience: savedWorkExperience,
+      });
+    }
+  }, [savedWorkExperience, form]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
