@@ -15,7 +15,7 @@ import {
 import { Badge } from "../ui/badge";
 
 export default function Header() {
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
 
   // Function to get user's initials
   const getUserInitials = () => {
@@ -51,7 +51,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-10 bg-neutral-50 dark:bg-neutral-950 backdrop-blur-md border-b border-border/40 shadow-sm h-[72px]">
+    <header className="fixed top-0 w-full z-50 bg-neutral-50 dark:bg-neutral-950 backdrop-blur-md border-b border-border/40 shadow-sm h-[72px]">
       <div className="flex justify-between items-center px-6 py-4 w-full mx-auto">
         <Link href="/" className="transition-transform hover:scale-105">
           <h1 className="text-2xl font-bold text-black/90 dark:text-white bg-clip-text">
@@ -100,7 +100,7 @@ export default function Header() {
                   <DropdownMenuItem
                     className="cursor-pointer"
                     variant="destructive"
-                    onClick={() => signOut()}
+                    onClick={() => logout()}
                   >
                     Sign out
                   </DropdownMenuItem>
@@ -111,7 +111,7 @@ export default function Header() {
             <Link href="/auth/signup">
               <ShimmerButton className="shadow-2xl" shimmerColor="#9E7AFF">
                 <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:text-stone-300 text-md">
-                  Sign Up
+                  Get Started
                 </span>
               </ShimmerButton>
             </Link>
