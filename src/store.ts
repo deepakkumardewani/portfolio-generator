@@ -1,5 +1,12 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createSlice,
+  PayloadAction,
+  Middleware,
+} from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { appwriteMiddleware } from "./lib/appwriteMiddleware";
+import { loadPortfolio } from "./lib/appwriteService";
 
 import {
   Bio,
@@ -225,10 +232,10 @@ const prodData: PortfolioState = {
 };
 
 // Select initial state based on environment
-const initialState =
-  process.env.NODE_ENV === "development" ? devData : prodData;
+// const initialState =
+//   process.env.NODE_ENV === "development" ? devData : prodData;
 
-// Create portfolio slice
+const initialState = prodData;
 const portfolioSlice = createSlice({
   name: "portfolio",
   initialState,
@@ -271,6 +278,69 @@ const portfolioSlice = createSlice({
     ) => {
       state.templateSections.sections = action.payload;
     },
+    setPortfolioData: (
+      state,
+      action: PayloadAction<Partial<PortfolioState>>
+    ) => {
+      const result = { ...state };
+
+      // Only merge bio if it exists in payload
+      if (action.payload.bio) {
+        result.bio = {
+          ...state.bio,
+          ...action.payload.bio,
+        };
+      }
+
+      // Only update arrays if they exist in payload
+      if (action.payload.skills) {
+        result.skills = action.payload.skills;
+      }
+
+      if (action.payload.workExperience) {
+        result.workExperience = action.payload.workExperience;
+      }
+
+      if (action.payload.projects) {
+        result.projects = action.payload.projects;
+      }
+
+      // Only merge contact if it exists in payload
+      if (action.payload.contact) {
+        result.contact = {
+          ...state.contact,
+          ...action.payload.contact,
+        };
+      }
+
+      // Only merge theme if it exists in payload
+      if (action.payload.theme) {
+        result.theme = {
+          ...state.theme,
+          ...action.payload.theme,
+        };
+      }
+
+      // Only update template if it exists in payload
+      if (action.payload.selectedTemplate) {
+        result.selectedTemplate = action.payload.selectedTemplate;
+      }
+
+      // Only update viewMode if it exists in payload
+      if (action.payload.viewMode) {
+        result.viewMode = action.payload.viewMode;
+      }
+
+      // Only merge templateSections if it exists in payload
+      if (action.payload.templateSections) {
+        result.templateSections = {
+          ...state.templateSections,
+          ...action.payload.templateSections,
+        };
+      }
+
+      return result;
+    },
   },
 });
 
@@ -286,19 +356,51 @@ export const {
   setViewMode,
   updateTemplateSection,
   updateTemplateSections,
+  setPortfolioData,
 } = portfolioSlice.actions;
 
-// Create store
-export const store = configureStore({
+// Create store with middleware
+const storeWithMiddleware = configureStore({
   reducer: {
     portfolio: portfolioSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(appwriteMiddleware as Middleware),
 });
 
 // Define types for RootState and AppDispatch
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof storeWithMiddleware.getState>;
+export type AppDispatch = typeof storeWithMiddleware.dispatch;
+
+// Export the store
+export const store = storeWithMiddleware;
 
 // Create typed hooks
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+/**
+ * Initialize Appwrite database and load data
+ * @param userId The user ID to load data for
+ */
+export const initializeAppwrite = async (userId: string): Promise<void> => {
+  try {
+    // Initialize the database and collections if they don't exist
+    // await initializeDatabase();
+
+    // Load portfolio data from Appwrite
+    const portfolioData = await loadPortfolio(userId);
+    console.log("portfolioData", portfolioData);
+
+    // Update the Redux store with the loaded data
+    if (Object.keys(portfolioData).length > 0) {
+      console.log("Dispatching portfolio data to store:", portfolioData);
+      store.dispatch(setPortfolioData(portfolioData));
+      console.log("Store state after dispatch:", store.getState().portfolio);
+    } else {
+      console.log("No portfolio data found to load");
+    }
+  } catch (error) {
+    console.error("Error initializing Appwrite:", error);
+  }
+};
