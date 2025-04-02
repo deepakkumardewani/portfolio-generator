@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,15 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
       skills: savedSkills || [],
     },
   });
+
+  // Update form values when savedSkills changes
+  useEffect(() => {
+    if (savedSkills.length > 0) {
+      form.reset({
+        skills: savedSkills,
+      });
+    }
+  }, [savedSkills, form]);
 
   const { setValue, watch } = form;
   const skills = watch("skills");
