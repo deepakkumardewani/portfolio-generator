@@ -1,12 +1,13 @@
-import { Client, Account, ID, Models, OAuthProvider } from "appwrite";
+import { Client, Account, ID } from "appwrite";
 
 // Initialize Appwrite client
 const client = new Client()
-  .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT as string)
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID as string);
+  .setEndpoint(
+    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1"
+  )
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "your-project-id");
 
-// Initialize Appwrite account
+// Export initialized services
 export const account = new Account(client);
 
-// Export the ID utility for generating unique IDs
-export { ID, OAuthProvider };
+export { client, ID };
