@@ -17,7 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { FormLabel } from "@/components/ui/form";
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { TECHNICAL_SKILLS } from "@/utils/constants";
 import { cn, darkModeClasses } from "@/lib/utils";
 
@@ -67,7 +67,7 @@ export default function SkillSelector({
                     (skill) => skill.value === selectedSkill
                   )?.label
                 : "Select a skill..."}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <Icons.chevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-full p-0">
@@ -94,7 +94,7 @@ export default function SkillSelector({
                         </div>
                         {skill.label}
                       </div>
-                      <Check
+                      <Icons.checkIcon
                         className={cn(
                           "ml-auto h-4 w-4",
                           selectedSkill === skill.value
@@ -157,7 +157,7 @@ export default function SkillSelector({
                 className="h-5 w-5"
                 onClick={() => onSkillRemove(skill)}
               >
-                <X className="h-3 w-3" />
+                <Icons.x className="h-3 w-3" />
               </Button>
             </div>
           );
