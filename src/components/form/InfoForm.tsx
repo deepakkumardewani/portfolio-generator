@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setBio } from "@/store";
 import { BioFormValues } from "@/types";
+import { useEffect } from "react";
 
 interface FormStep1Props {
   onNext: () => void;
@@ -38,6 +39,17 @@ export default function FormStep1({ onNext }: FormStep1Props) {
       about: bioData.about || "",
     },
   });
+
+  // Update form values when bioData changes (after loading from DB)
+  useEffect(() => {
+    if (bioData.name || bioData.tagline || bioData.about) {
+      form.reset({
+        name: bioData.name || "",
+        tagline: bioData.tagline || "",
+        about: bioData.about || "",
+      });
+    }
+  }, [bioData, form]);
 
   const onSubmit = (data: BioFormValues) => {
     dispatch(setBio(data));
