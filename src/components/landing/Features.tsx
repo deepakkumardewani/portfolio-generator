@@ -4,31 +4,36 @@
 import { TextShimmer } from "@/components/ui/text-shimmer";
 // import { ShiningBorder } from "@/components/ui/shining-border";
 import { GlowingEffect } from "../ui/glowing-effect";
-import { Smartphone, Check, HashIcon, ChartBar } from "lucide-react";
+import { Smartphone, Check, ChartBar } from "lucide-react";
+import { Badge } from "../ui/badge";
 const features = [
   {
     title: "Responsive Design",
     description:
       "All templates are fully responsive and look great on any device, from desktops to smartphones.",
     icon: <Smartphone className="h-6 w-6" />,
-  },
-  {
-    title: "SEO Optimized",
-    description:
-      "Get discovered online with built-in SEO optimization that helps your portfolio rank higher in search results.",
-    icon: <HashIcon className="h-6 w-6" />,
+    completed: true,
   },
   {
     title: "One-Click Deploy",
     description:
       "Publish your portfolio instantly with our one-click deployment to our free hosting.",
     icon: <Check className="h-6 w-6" />,
+    completed: true,
   },
   {
     title: "SEO Optimized",
     description:
       "Get discovered online with built-in SEO optimization that helps your portfolio rank higher in search results.",
     icon: <ChartBar className="h-6 w-6" />,
+    completed: true,
+  },
+  {
+    title: "Analytics",
+    description:
+      "Track your portfolio's performance with built-in analytics tools.",
+    icon: <ChartBar className="h-6 w-6" />,
+    completed: false,
   },
 ];
 
@@ -47,10 +52,10 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 p-6 gap-8 ">
           {features.map((feature, index) => (
             <div
-              className="relative h-full rounded-2.5xl border p-2 md:rounded-3xl md:p-3"
+              className="relative h-full rounded-xl border md:rounded-3xl md:p-3"
               key={index}
             >
               <GlowingEffect
@@ -62,12 +67,17 @@ export default function Features() {
                 proximity={64}
                 inactiveZone={0.01}
               />
-              <div className="p-6 h-full rounded-lg">
-                <div className="bg-primary/10 p-3 rounded-lg w-fit mb-4 text-primary">
+              <div className="p-6 text-center h-full rounded-lg">
+                <div className="bg-primary/10 mx-auto p-3 rounded-lg w-fit mb-4 text-primary">
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
+                {!feature.completed && (
+                  <Badge variant="outline" className="mt-2">
+                    Soon
+                  </Badge>
+                )}
               </div>
             </div>
           ))}

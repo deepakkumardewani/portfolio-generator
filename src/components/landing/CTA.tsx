@@ -1,10 +1,13 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function CTA() {
+  const { user } = useAuth();
+
   return (
     <section className="bg-gradient-to-br bg-stone-50 dark:from-neutral-950 dark:to-black">
       <div className="flex flex-col items-center justify-center py-20 px-6 max-w-7xl mx-auto">
@@ -15,15 +18,9 @@ export default function CTA() {
           Join thousands of professionals who have built stunning portfolios
           with PortfolioGen
         </p>
-        <Link href="/create">
-          {/* <Button
-            size="lg"
-            className="bg-white hover:bg-stone-100 dark:bg-stone-100 dark:hover:bg-white text-stone-900 px-8 py-6 font-medium text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center"
-          >
-            Get Started Now <ArrowRight className="ml-2 h-5 w-5" />
-          </Button> */}
+        <Link href={user ? "/create" : "/auth/signup"}>
           <InteractiveHoverButton>
-            <span>Get Started Now</span>
+            <span>{user ? "Get Started Now" : "Sign Up Now"}</span>
           </InteractiveHoverButton>
         </Link>
       </div>

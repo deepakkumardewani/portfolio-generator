@@ -12,8 +12,12 @@ import { useTheme } from "next-themes";
 import { ShinyButton } from "../magicui/shiny-button";
 import { motion } from "motion/react";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
+import { useAuth } from "@/contexts/AuthContext";
+
 export default function Hero() {
   const { theme } = useTheme();
+  const { user } = useAuth();
+
   return (
     <section className="bg-neutral-50 dark:bg-neutral-950">
       <div className="h-[40rem] w-full rounded-md relative flex flex-col items-center justify-center antialiased">
@@ -41,16 +45,10 @@ export default function Hero() {
               portfolio templates that showcase your work and skills.
             </p>
             <div className="flex flex-row gap-4 mt-10 justify-center">
-              <Link href="/create">
+              <Link href={user ? "/create" : "/auth/signup"}>
                 <InteractiveHoverButton>
-                  <span>Create Your Portfolio</span>
+                  <span>{user ? "Create Your Portfolio" : "Sign Up Now"}</span>
                 </InteractiveHoverButton>
-                {/* <Button
-                  size="lg"
-                  className="text-white dark:text-black bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                >
-                  Create Your Portfolio
-                </Button> */}
               </Link>
               <Link href="#how-it-works">
                 <Button size="lg" variant="outline">
