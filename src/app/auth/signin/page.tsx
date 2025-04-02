@@ -10,7 +10,7 @@ import {
 export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-neutral-50 dark:bg-neutral-950">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
             Welcome back
