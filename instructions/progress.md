@@ -127,7 +127,7 @@ This document tracks the progress of the Portfolio Generator project as of **Apr
 ### 4.1 Landing Page (`/`)
 
 - **Status**: 100% Complete
-- **Components**: `Header.tsx`, `Hero.tsx`, `Steps.tsx`, `CTA.tsx`, `Footer.tsx` fully implemented.
+- **Components**: `Header.tsx`, `Hero.tsx`, `Steps.tsx`, `CTA.tsx`, `Footer.tsx` fully implemented.`
 
 ### 4.2 Creation Workflow (`/create/`)
 
