@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useDarkMode } from "@/contexts/DarkModeContext";
@@ -100,19 +100,20 @@ export default function Header() {
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? (
-              <X
+              <Icons.x
                 size={24}
                 className="transition-transform duration-300 scale-110"
               />
             ) : (
-              <Menu size={24} className="transition-transform duration-300" />
+              <Icons.menu
+                size={24}
+                className="transition-transform duration-300"
+              />
             )}
           </button>
           {/* Dark Mode Toggle */}
           <div className="flex flex-1 items-center justify-end ml-4">
             <ThemeToggle
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
               size="md"
               className={darkMode ? "hover:bg-gray-700" : "hover:bg-stone-100"}
             />

@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Monitor,
-  Smartphone,
-  ArrowLeft,
-  Download,
-  RocketIcon,
-  Settings,
-} from "lucide-react";
+
+import { Icons } from "@/components/ui/icons";
 import { useAppDispatch, useAppSelector, setViewMode } from "@/store";
 import {
   exportToStatic,
@@ -111,7 +105,7 @@ export default function PreviewHeader() {
           <div className="flex-1 flex items-center gap-4">
             <Link href="/create">
               <Button variant="outline">
-                <ArrowLeft className="h-4 w-4" />
+                <Icons.arrowLeftIcon className="h-4 w-4" />
                 Edit
               </Button>
             </Link>
@@ -134,7 +128,7 @@ export default function PreviewHeader() {
                 }`}
                 onClick={() => dispatch(setViewMode("desktop"))}
               >
-                <Monitor size={18} />
+                <Icons.monitor size={18} />
               </Button>
               <Button
                 variant={viewMode === "mobile" ? "default" : "ghost"}
@@ -145,7 +139,7 @@ export default function PreviewHeader() {
                 }`}
                 onClick={() => dispatch(setViewMode("mobile"))}
               >
-                <Smartphone size={18} />
+                <Icons.smartphone size={18} />
               </Button>
             </div>
           </div>
@@ -157,7 +151,7 @@ export default function PreviewHeader() {
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline">
-                  <Settings className="mr-2 h-4 w-4" />
+                  <Icons.settings className="mr-2 h-4 w-4" />
                   Edit Template
                 </Button>
               </PopoverTrigger>
@@ -173,14 +167,14 @@ export default function PreviewHeader() {
               onClick={() => handleExport("static")}
               className="rounded-full"
             >
-              <Download className="h-4 w-4" />
+              <Icons.download className="h-4 w-4" />
             </Button>
             <ShimmerButton
               className="shadow-2xl"
               shimmerColor="#9E7AFF"
               background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
             >
-              <RocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
+              <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
               <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
                 Deploy
               </span>
@@ -219,7 +213,7 @@ export default function PreviewHeader() {
                 }`}
                 onClick={() => dispatch(setViewMode("desktop"))}
               >
-                <Monitor size={18} />
+                <Icons.monitor size={18} />
               </Button>
               <Button
                 variant={viewMode === "mobile" ? "default" : "ghost"}
@@ -230,7 +224,7 @@ export default function PreviewHeader() {
                 }`}
                 onClick={() => dispatch(setViewMode("mobile"))}
               >
-                <Smartphone size={18} />
+                <Icons.smartphone size={18} />
               </Button>
             </div>
 
@@ -240,14 +234,14 @@ export default function PreviewHeader() {
                 onClick={() => handleExport("static")}
                 className={darkModeClasses.buttonOutline}
               >
-                <Download className="h-4 w-4" />
+                <Icons.download className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
                 className="bg-purple-600 text-white hover:bg-purple-700"
                 onClick={() => handleExport("netlify")}
               >
-                <RocketIcon className="h-4 w-4" />
+                <Icons.rocketIcon className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -260,7 +254,7 @@ export default function PreviewHeader() {
                 size="sm"
                 className={darkModeClasses.buttonOutline}
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
+                <Icons.arrowLeftIcon className="mr-2 h-4 w-4" />
                 Edit Info
               </Button>
             </Link>
@@ -281,7 +275,7 @@ export default function PreviewHeader() {
                     size="sm"
                     className={darkModeClasses.buttonOutline}
                   >
-                    <Settings className="mr-2 h-4 w-4" />
+                    <Icons.settings className="mr-2 h-4 w-4" />
                     Edit
                   </Button>
                 </PopoverTrigger>

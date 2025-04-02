@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Mail } from "lucide-react";
-import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 
 export default function Hero() {
@@ -53,19 +52,19 @@ export default function Hero() {
               href="#"
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
             >
-              <SiGithub size={24} />
+              <Icons.gitHub size={24} />
             </a>
             <a
               href="#"
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
             >
-              {/* <Linkedin size={24} /> */}
+              <Icons.linkedin size={24} />
             </a>
             <a
               href="#"
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
             >
-              <Mail size={24} />
+              <Icons.mail size={24} />
             </a>
           </div>
         </div>

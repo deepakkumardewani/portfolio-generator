@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink } from "lucide-react";
-import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Icons } from "@/components/ui/icons";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useAppSelector } from "@/store";
 
@@ -99,13 +98,13 @@ export default function Projects() {
                     href={project.githubUrl}
                     className="text-black dark:text-white hover:text-white transition-colors"
                   >
-                    <SiGithub size={20} />
+                    <Icons.gitHub size={20} />
                   </a>
                   <a
                     href={project.link}
                     className="text-black dark:text-white hover:text-white transition-colors"
                   >
-                    <ExternalLink size={20} />
+                    <Icons.externalLink size={20} />
                   </a>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppSelector } from "@/store";
 import { useDarkMode } from "@/contexts/DarkModeContext";
-import { Mail, Phone, ExternalLink } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 
 export default function MinimalistContact() {
   const { contact } = useAppSelector((state) => state.portfolio);
@@ -18,7 +18,7 @@ export default function MinimalistContact() {
         <div className="space-y-6 max-w-xl">
           {contact.email && (
             <div className="flex items-center">
-              <Mail
+              <Icons.mail
                 size={18}
                 className={`mr-4 text-neutral-600 dark:text-neutral-400`}
               />
@@ -33,7 +33,7 @@ export default function MinimalistContact() {
 
           {contact.phone && (
             <div className="flex items-center">
-              <Phone
+              <Icons.phone
                 size={18}
                 className={`mr-4 text-neutral-600 dark:text-neutral-400`}
               />
@@ -50,7 +50,7 @@ export default function MinimalistContact() {
             <div className="space-y-4 mt-6">
               {contact.links.map((link, index) => (
                 <div key={index} className="flex items-center">
-                  <ExternalLink
+                  <Icons.externalLink
                     size={18}
                     className={`mr-4 text-neutral-600 dark:text-neutral-400`}
                   />

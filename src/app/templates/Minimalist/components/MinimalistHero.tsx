@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "@/store";
-import { ChevronDown } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 
 export default function MinimalistHero() {
   const { bio } = useAppSelector((state) => state.portfolio);
@@ -17,7 +17,7 @@ export default function MinimalistHero() {
           </h2>
         </div>
         <div className="absolute bottom-8 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-gray-400 dark:text-white" />
+          <Icons.chevronDown className="w-6 h-6 text-gray-400 dark:text-white" />
         </div>
       </div>
     </section>
