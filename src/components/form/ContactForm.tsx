@@ -22,6 +22,7 @@ import {
 import { useAppDispatch, useAppSelector, setContact } from "@/store";
 import { ContactFormValues } from "@/types";
 import { darkModeClasses } from "@/lib/utils";
+import { useEffect } from "react";
 
 interface FormStep5Props {
   onBack: () => void;
@@ -39,6 +40,20 @@ export default function FormStep5({ onBack }: FormStep5Props) {
       links: savedContact.links || [],
     },
   });
+
+  useEffect(() => {
+    if (
+      savedContact.email ||
+      savedContact.phone ||
+      savedContact.links?.length > 0
+    ) {
+      form.reset({
+        phone: savedContact.phone || "",
+        email: savedContact.email || "",
+        links: savedContact.links || [],
+      });
+    }
+  }, [savedContact, form]);
 
   const onSubmit = (data: ContactFormValues) => {
     dispatch(setContact(data));
