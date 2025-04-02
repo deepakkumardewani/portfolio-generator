@@ -20,7 +20,7 @@ export default function CTA() {
         </p>
         <Link href={user ? "/create" : "/auth/signup"}>
           <InteractiveHoverButton>
-            <span>{user ? "Get Started Now" : "Sign Up Now"}</span>
+            <span>{user ? "Get Started Now" : "Create Your Portfolio"}</span>
           </InteractiveHoverButton>
         </Link>
       </div>

@@ -47,7 +47,7 @@ export default function Hero() {
             <div className="flex flex-row gap-4 mt-10 justify-center">
               <Link href={user ? "/create" : "/auth/signup"}>
                 <InteractiveHoverButton>
-                  <span>{user ? "Create Your Portfolio" : "Sign Up Now"}</span>
+                  <span>Create Your Portfolio</span>
                 </InteractiveHoverButton>
               </Link>
               <Link href="#how-it-works">
