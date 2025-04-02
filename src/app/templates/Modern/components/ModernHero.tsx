@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAppSelector } from "@/store";
-import { ArrowDownIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { motion } from "framer-motion";
 
 export default function ModernHero() {
@@ -58,7 +58,7 @@ export default function ModernHero() {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
         >
-          <ArrowDownIcon className="w-6 h-6 text-zinc-500" />
+          <Icons.arrowDownIcon className="w-6 h-6 text-zinc-500" />
         </motion.div>
       </div>
     </section>

@@ -2,8 +2,7 @@ import React from "react";
 import { useAppSelector } from "@/store";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Project } from "@/types";
-import { ExternalLink } from "lucide-react";
-import { SiGithub } from "@icons-pack/react-simple-icons";
+import { Icons } from "@/components/ui/icons";
 
 export default function MinimalistProjects() {
   const { projects } = useAppSelector((state) => state.portfolio);
@@ -84,7 +83,7 @@ export default function MinimalistProjects() {
                         rel="noopener noreferrer"
                         className={`flex items-center text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors`}
                       >
-                        <ExternalLink size={16} className="mr-1" />
+                        <Icons.externalLink size={16} className="mr-1" />
                         View Live
                       </a>
                     )}
@@ -96,7 +95,7 @@ export default function MinimalistProjects() {
                         rel="noopener noreferrer"
                         className={`flex items-center text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50 transition-colors`}
                       >
-                        <SiGithub size={16} className="mr-1" />
+                        <Icons.gitHub size={16} className="mr-1" />
                         Source Code
                       </a>
                     )}

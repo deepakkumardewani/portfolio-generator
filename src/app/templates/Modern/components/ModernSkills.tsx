@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import { CodeIcon, BrainIcon, WrenchIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { Skill } from "@/types";
 
 export default function ModernSkills() {
@@ -31,25 +31,25 @@ export default function ModernSkills() {
   // Category-specific styling
   const categoryStyles = {
     frontend: {
-      icon: <CodeIcon className="h-6 w-6 text-blue-400" />,
+      icon: <Icons.codeIcon className="h-6 w-6 text-blue-400" />,
       bgColor: "bg-blue-900/20",
       borderColor: "border-blue-800/30",
       textColor: "text-blue-300",
     },
     backend: {
-      icon: <BrainIcon className="h-6 w-6 text-purple-400" />,
+      icon: <Icons.brainIcon className="h-6 w-6 text-purple-400" />,
       bgColor: "bg-purple-900/20",
       borderColor: "border-purple-800/30",
       textColor: "text-purple-300",
     },
     tool: {
-      icon: <WrenchIcon className="h-6 w-6 text-green-400" />,
+      icon: <Icons.wrenchIcon className="h-6 w-6 text-green-400" />,
       bgColor: "bg-green-900/20",
       borderColor: "border-green-800/30",
       textColor: "text-green-300",
     },
     other: {
-      icon: <CodeIcon className="h-6 w-6 text-green-400" />,
+      icon: <Icons.codeIcon className="h-6 w-6 text-green-400" />,
       bgColor: "bg-green-900/20",
       borderColor: "border-green-800/30",
       textColor: "text-green-300",
@@ -125,7 +125,7 @@ export default function ModernSkills() {
 
           {Object.keys(groupedSkills).length === 0 && (
             <div className="col-span-2 text-center p-8 border border-dashed border-zinc-800 rounded-lg">
-              <CodeIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
+              <Icons.codeIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
               <p className="text-zinc-400">No skills added yet.</p>
             </div>
           )}

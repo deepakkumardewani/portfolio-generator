@@ -1,13 +1,9 @@
 "use client";
 
-// import Link from "next/link";
-// import { ArrowLeft } from "lucide-react";
-// import { Button } from "@/components/ui/button";
 import TemplateCard from "@/components/TemplateCard";
 import LoadingScreen from "@/components/LoadingScreen";
 import { TemplateType } from "@/types";
 import { Suspense } from "react";
-import { darkModeClasses } from "@/lib/utils";
 import TemplateHeader from "./components/TemplateHeader";
 
 interface TemplateInfo {

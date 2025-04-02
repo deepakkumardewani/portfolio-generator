@@ -3,7 +3,7 @@
 import React from "react";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import { ExternalLinkIcon, GithubIcon, FolderIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import Image from "next/image";
 
 export default function ModernProjects() {
@@ -52,7 +52,7 @@ export default function ModernProjects() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-zinc-800">
-                      <FolderIcon className="h-16 w-16 text-zinc-600" />
+                      <Icons.folderIcon className="h-16 w-16 text-zinc-600" />
                     </div>
                   )}
                   <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-t from-zinc-900 to-transparent opacity-0 group-hover:opacity-60 transition-opacity"></div>
@@ -86,7 +86,7 @@ export default function ModernProjects() {
                           rel="noopener noreferrer"
                           className="p-2 rounded-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
                         >
-                          <ExternalLinkIcon className="h-5 w-5" />
+                          <Icons.externalLinkIcon className="h-5 w-5" />
                         </a>
                       )}
                       {project.githubUrl && (
@@ -96,7 +96,7 @@ export default function ModernProjects() {
                           rel="noopener noreferrer"
                           className="p-2 rounded-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
                         >
-                          <GithubIcon className="h-5 w-5" />
+                          <Icons.gitHub className="h-5 w-5" />
                         </a>
                       )}
                     </div>
@@ -109,7 +109,7 @@ export default function ModernProjects() {
             ))
           ) : (
             <div className="col-span-2 text-center p-8 border border-dashed border-zinc-800 rounded-lg">
-              <FolderIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
+              <Icons.folderIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
               <p className="text-zinc-400">No projects added yet.</p>
             </div>
           )}

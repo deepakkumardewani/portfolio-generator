@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { darkModeClasses } from "@/lib/utils";
-import { ArrowLeft } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import Link from "next/link";
 import React from "react";
 
@@ -16,7 +16,7 @@ export default function CreateHeader() {
                 variant="outline"
                 className={darkModeClasses.buttonOutline}
               >
-                <ArrowLeft className="h-4 w-4" />
+                <Icons.arrowLeft className="h-4 w-4" />
                 Edit
               </Button>
             </Link>

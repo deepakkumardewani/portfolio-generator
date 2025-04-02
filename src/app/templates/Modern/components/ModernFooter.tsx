@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAppSelector } from "@/store";
-import { ArrowUpIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 
 export default function ModernFooter() {
   const { bio } = useAppSelector((state) => state.portfolio);
@@ -28,7 +28,7 @@ export default function ModernFooter() {
               className="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors border border-zinc-800"
               aria-label="Back to top"
             >
-              <ArrowUpIcon className="h-5 w-5" />
+              <Icons.arrowUpIcon className="h-5 w-5" />
             </a>
           </div>
         </div>

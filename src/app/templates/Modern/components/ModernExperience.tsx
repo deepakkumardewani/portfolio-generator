@@ -3,7 +3,7 @@
 import React from "react";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import { CalendarIcon, BriefcaseIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 
 export default function ModernExperience() {
   const { workExperience } = useAppSelector((state) => state.portfolio);
@@ -59,7 +59,7 @@ export default function ModernExperience() {
                 </div>
 
                 <div className="flex items-center gap-2 text-zinc-400 mb-4">
-                  <CalendarIcon className="h-4 w-4" />
+                  <Icons.calendarIcon className="h-4 w-4" />
                   <span>
                     {formatDate(job.fromDate)} - {formatDate(job.toDate)}
                   </span>
@@ -81,7 +81,7 @@ export default function ModernExperience() {
             ))
           ) : (
             <div className="text-center p-8 border border-dashed border-zinc-800 rounded-lg">
-              <BriefcaseIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
+              <Icons.briefcaseIcon className="h-12 w-12 mx-auto mb-4 text-zinc-700" />
               <p className="text-zinc-400">No work experience added yet.</p>
             </div>
           )}
