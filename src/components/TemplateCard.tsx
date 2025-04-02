@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Sun, Moon, Check } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { useState, lazy, Suspense, createContext } from "react";
 import { cn } from "@/lib/utils";
 import { useUpdateTemplate } from "@/hooks/useTemplateSync";
@@ -100,8 +100,10 @@ export default function TemplateCard({
           )}
         </Suspense>
         <div className="absolute top-2 right-2 flex space-x-1 bg-white/80 dark:bg-black/80 rounded-full p-1.5">
-          <Sun size={16} className="text-amber-500" />
-          {supportsDarkMode && <Moon size={16} className="text-indigo-700" />}
+          <Icons.sun size={16} className="text-amber-500" />
+          {supportsDarkMode && (
+            <Icons.moon size={16} className="text-indigo-700" />
+          )}
         </div>
       </div>
       <CardHeader>
@@ -116,7 +118,7 @@ export default function TemplateCard({
           className="w-full"
           variant={isHovered ? "default" : "outline"}
         >
-          {isHovered && <Check className="mr-2 h-4 w-4" />}
+          {isHovered && <Icons.checkIcon className="mr-2 h-4 w-4" />}
           Select Template
         </Button>
       </CardFooter>

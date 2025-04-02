@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, ExternalLink } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -119,7 +119,7 @@ export default function NetlifyDeployDialog({
                 )}
                 aria-label="Copy URL to clipboard"
               >
-                {copied ? <Check size={16} /> : <Copy size={16} />}
+                {copied ? <Icons.check size={16} /> : <Icons.copy size={16} />}
               </button>
             </div>
           )}
@@ -132,7 +132,7 @@ export default function NetlifyDeployDialog({
                 Close
               </Button>
               <Button onClick={visitSite} className="flex items-center gap-2">
-                Visit Site <ExternalLink size={16} />
+                Visit Site <Icons.externalLink size={16} />
               </Button>
             </>
           ) : deploymentStatus === "error" ? (

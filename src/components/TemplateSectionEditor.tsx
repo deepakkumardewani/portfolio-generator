@@ -8,7 +8,7 @@ import {
   updateTemplateSections,
 } from "@/store";
 import { TemplateSection } from "@/types";
-import { X, GripVertical, Eye, EyeOff, Save } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -83,14 +83,14 @@ const DraggableSection = ({
         />
         <span className="flex-1">{section.title}</span>
         {section.visible ? (
-          <Eye className="h-4 w-4 text-gray-500" />
+          <Icons.eye className="h-4 w-4 text-gray-500" />
         ) : (
-          <EyeOff className="h-4 w-4 text-gray-500" />
+          <Icons.eyeOff className="h-4 w-4 text-gray-500" />
         )}
       </div>
       {!section.isFixed && (
         <div className="p-1 hover:bg-gray-100 rounded">
-          <GripVertical className="h-5 w-5 text-gray-500" />
+          <Icons.gripVertical className="h-5 w-5 text-gray-500" />
         </div>
       )}
     </div>
@@ -165,7 +165,7 @@ export default function TemplateSectionEditor({
             disabled={!hasChanges}
             className="w-full flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white"
           >
-            <Save className="mr-2 h-4 w-4" />
+            <Icons.save className="mr-2 h-4 w-4" />
             Save Changes
           </Button>
         </div>

@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, addProject } from "@/store";
-import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { ProjectsFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import ImageUpload from "@/components/shared/ImageUpload";
@@ -143,15 +143,15 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                           }
                         }}
                       >
-                        <Trash className="h-4 w-4 text-red-500" />
+                        <Icons.trash className="h-4 w-4 text-red-500" />
                       </Button>
                     )}
                     {expandedIndex === index ? (
-                      <ChevronUp
+                      <Icons.chevronUpIcon
                         className={`h-5 w-5 ${darkModeClasses.text}`}
                       />
                     ) : (
-                      <ChevronDown
+                      <Icons.chevronDownIcon
                         className={`h-5 w-5 ${darkModeClasses.text}`}
                       />
                     )}
@@ -287,7 +287,6 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
 
             <Button
               type="button"
-              variant="outline"
               onClick={() =>
                 append({
                   title: "",
@@ -300,7 +299,8 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
               }
               className={`w-full ${darkModeClasses.buttonOutline}`}
             >
-              <Plus className="mr-2 h-4 w-4" /> Add Another Project
+              <Icons.plus className="mr-2 h-4 w-4" />
+              Add Project
             </Button>
 
             <div className="flex gap-2 justify-end">
