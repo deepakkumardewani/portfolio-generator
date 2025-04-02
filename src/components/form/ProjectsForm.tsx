@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +54,14 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
             ],
     },
   });
+
+  useEffect(() => {
+    if (savedProjects.length > 0) {
+      form.reset({
+        projects: savedProjects,
+      });
+    }
+  }, [savedProjects, form]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
