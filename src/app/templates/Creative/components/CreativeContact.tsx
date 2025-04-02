@@ -1,8 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Mail } from "lucide-react";
-import { SiGithub } from "@icons-pack/react-simple-icons";
-import { FaLinkedin } from "react-icons/fa";
+import { Icons } from "@/components/ui/icons";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 export default function Contact() {
   const [isVisible, setIsVisible] = useState(false);
@@ -61,21 +59,21 @@ export default function Contact() {
               href="mailto:your.email@example.com"
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
-              <Mail size={24} />
+              <Icons.mail size={24} />
               <span>Email</span>
             </a>
             <a
               href="#"
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
-              <FaLinkedin size={24} />
+              <Icons.linkedin size={24} />
               <span>LinkedIn</span>
             </a>
             <a
               href="#"
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
-              <SiGithub size={24} />
+              <Icons.gitHub size={24} />
               <span>GitHub</span>
             </a>
           </div>
