@@ -7,6 +7,7 @@ import type {
   Contact,
   PortfolioState,
 } from "../types";
+import { setPortfolioData, markAsSynced } from "@/store";
 
 // Initialize Appwrite client
 const client = new Client()
@@ -35,6 +36,7 @@ const COLLECTIONS = {
  */
 export const saveBio = async (bio: Bio, userId: string) => {
   try {
+    console.log("Saving bio to Appwrite");
     // Check if bio document already exists for the user
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
@@ -77,6 +79,7 @@ export const saveBio = async (bio: Bio, userId: string) => {
  */
 export const saveSkills = async (skills: Skill[], userId: string) => {
   try {
+    console.log("Saving skills to Appwrite");
     // Fetch existing skills for the user
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
@@ -161,6 +164,7 @@ export const saveWorkExperience = async (
   userId: string
 ) => {
   try {
+    console.log("Saving work experience to Appwrite");
     // Fetch existing work experience for the user
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
@@ -290,9 +294,7 @@ export const saveProjects = async (projects: Project[], userId: string) => {
             imageUrl: project.imageUrl,
             link: project.link,
             githubUrl: project.githubUrl || "",
-            technologies: project.technologies
-              ? JSON.stringify(project.technologies)
-              : "[]",
+            technologies: project.technologies ?? [],
             userId,
           }
         );
@@ -308,9 +310,7 @@ export const saveProjects = async (projects: Project[], userId: string) => {
             imageUrl: project.imageUrl,
             link: project.link,
             githubUrl: project.githubUrl || "",
-            technologies: project.technologies
-              ? JSON.stringify(project.technologies)
-              : "[]",
+            technologies: project.technologies ?? [],
             userId,
           }
         );
@@ -430,28 +430,24 @@ export const saveTemplate = async (
  */
 export const loadBio = async (userId: string): Promise<Bio | null> => {
   try {
-    console.log("Loading bio for user:", userId);
     const response = await databases.listDocuments(
       DATABASE_ID,
       COLLECTIONS.BIO,
       [Query.equal("userId", userId)]
     );
-    console.log("Bio response:", response);
 
     if (response.total === 0) {
-      console.log("No bio found for user");
       return null;
     }
 
     const bioDoc = response.documents[0];
-    console.log("Bio document:", bioDoc);
 
     const bio = {
       name: bioDoc.name,
       tagline: bioDoc.tagline,
       about: bioDoc.about,
+      profileImg: bioDoc.profileImg,
     };
-    console.log("Formatted bio:", bio);
     return bio;
   } catch (error) {
     console.error("Error loading bio:", error);
@@ -526,7 +522,10 @@ export const loadProjects = async (userId: string): Promise<Project[]> => {
       imageUrl: doc.imageUrl,
       link: doc.link,
       githubUrl: doc.githubUrl,
-      technologies: doc.technologies ? JSON.parse(doc.technologies) : undefined,
+      technologies:
+        doc.technologies && doc.technologies.length > 0
+          ? JSON.parse(doc.technologies)
+          : undefined,
     }));
   } catch (error) {
     console.error("Error loading projects:", error);
@@ -596,6 +595,7 @@ export const loadTemplate = async (
 export const loadPortfolio = async (
   userId: string
 ): Promise<Partial<PortfolioState>> => {
+  console.log("Loading portfolio for user:", userId);
   try {
     const [bio, skills, workExperience, projects, contact, template] =
       await Promise.all([
@@ -631,21 +631,109 @@ export const loadPortfolio = async (
  */
 export const savePortfolio = async (
   portfolio: PortfolioState,
-  userId: string
+  userId: string,
+  updatedSection?: string
 ): Promise<boolean> => {
   try {
-    await Promise.all([
-      saveBio(portfolio.bio, userId),
-      saveSkills(portfolio.skills, userId),
-      saveWorkExperience(portfolio.workExperience, userId),
-      saveProjects(portfolio.projects, userId),
-      saveContact(portfolio.contact, userId),
-      saveTemplate(portfolio.selectedTemplate, userId),
-    ]);
+    // If no specific section is provided, save everything (backward compatibility)
+    if (!updatedSection) {
+      await Promise.all([
+        saveBio(portfolio.bio, userId),
+        saveSkills(portfolio.skills, userId),
+        saveWorkExperience(portfolio.workExperience, userId),
+        saveProjects(portfolio.projects, userId),
+        saveContact(portfolio.contact, userId),
+        saveTemplate(portfolio.selectedTemplate, userId),
+      ]);
+      return true;
+    }
+
+    // Otherwise, only save the specified section
+    switch (updatedSection) {
+      case "bio":
+        await saveBio(portfolio.bio, userId);
+        break;
+      case "skills":
+        await saveSkills(portfolio.skills, userId);
+        break;
+      case "workExperience":
+        await saveWorkExperience(portfolio.workExperience, userId);
+        break;
+      case "projects":
+        await saveProjects(portfolio.projects, userId);
+        break;
+      case "contact":
+        await saveContact(portfolio.contact, userId);
+        break;
+      case "template":
+        await saveTemplate(portfolio.selectedTemplate, userId);
+        break;
+      default:
+        console.warn(`Unknown section: ${updatedSection}, saving all sections`);
+        await Promise.all([
+          saveBio(portfolio.bio, userId),
+          saveSkills(portfolio.skills, userId),
+          saveWorkExperience(portfolio.workExperience, userId),
+          saveProjects(portfolio.projects, userId),
+          saveContact(portfolio.contact, userId),
+          saveTemplate(portfolio.selectedTemplate, userId),
+        ]);
+    }
 
     return true;
   } catch (error) {
     console.error("Error saving portfolio:", error);
     return false;
+  }
+};
+
+/**
+ * Initialize Appwrite and load data considering data freshness
+ * @param userId The user ID to load data for
+ * @param store The Redux store
+ */
+export const initializeAppwrite = async (
+  userId: string,
+  store: any
+): Promise<void> => {
+  try {
+    const state = store.getState();
+    const portfolio = state.portfolio;
+
+    // Define staleness threshold (24 hours)
+    // const STALE_THRESHOLD = 24 * 60 * 60 * 1000;
+
+    // // Check if data is stale or has never been synced
+    // const isDataStale =
+    //   !portfolio._sync?.lastSyncedAt ||
+    //   Date.now() - portfolio._sync.lastSyncedAt > STALE_THRESHOLD;
+
+    // Check if there are unsaved changes
+    const hasPendingChanges = portfolio._sync?.isDirty || false;
+
+    // Only load from DB if data is stale or this is first load
+    if (!portfolio._sync) {
+      console.log("Loading fresh data from Appwrite");
+      const portfolioData = await loadPortfolio(userId);
+
+      if (Object.keys(portfolioData).length > 0) {
+        store.dispatch(setPortfolioData(portfolioData));
+        store.dispatch(markAsSynced());
+      }
+    } else {
+      console.log("Using persisted data from localStorage (via Redux Persist)");
+
+      // If there are pending changes, sync them to the server
+      if (hasPendingChanges) {
+        console.log("Syncing pending changes to Appwrite");
+        const portfolioToSave = { ...portfolio };
+        delete portfolioToSave._sync;
+
+        await savePortfolio(portfolioToSave, userId);
+        store.dispatch(markAsSynced());
+      }
+    }
+  } catch (error) {
+    console.error("Error initializing Appwrite:", error);
   }
 };

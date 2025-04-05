@@ -123,6 +123,7 @@ export default function FormStep5({ onBack }: FormStep5Props) {
                 control={form.control}
                 name="email"
                 rules={{
+                  required: "Email is required",
                   validate: validateEmail,
                 }}
                 render={({ field }) => (

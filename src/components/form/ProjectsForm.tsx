@@ -36,6 +36,9 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
   const dispatch = useAppDispatch();
   const savedProjects = useAppSelector((state) => state.portfolio.projects);
   const [expandedIndex, setExpandedIndex] = useState(0);
+  const [descriptionLengths, setDescriptionLengths] = useState<{
+    [key: number]: number;
+  }>({});
 
   const form = useForm<ProjectsFormValues>({
     defaultValues: {
@@ -60,6 +63,13 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
       form.reset({
         projects: savedProjects,
       });
+
+      // Initialize description lengths
+      const lengths: { [key: number]: number } = {};
+      savedProjects.forEach((project, index) => {
+        lengths[index] = project.description?.length || 0;
+      });
+      setDescriptionLengths(lengths);
     }
   }, [savedProjects, form]);
 
@@ -111,6 +121,12 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
 
   const handleImageUrlChange = (index: number, url: string) => {
     form.setValue(`projects.${index}.imageUrl`, url);
+  };
+
+  const handleDescriptionChange = (index: number, value: string) => {
+    const newLengths = { ...descriptionLengths };
+    newLengths[index] = value.length;
+    setDescriptionLengths(newLengths);
   };
 
   return (
@@ -201,6 +217,11 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     name={`projects.${index}.description`}
                     rules={{
                       required: "Project description is required",
+                      maxLength: {
+                        value: 2000,
+                        message:
+                          "Description must be less than 2000 characters",
+                      },
                     }}
                     render={({ field }) => (
                       <FormItem>
@@ -212,8 +233,23 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                             placeholder="A brief description of your project"
                             className={`min-h-24 ${darkModeClasses.textarea}`}
                             {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleDescriptionChange(index, e.target.value);
+                            }}
                           />
                         </FormControl>
+                        <div className="flex justify-end">
+                          <p
+                            className={`text-xs ${
+                              (descriptionLengths[index] || 0) > 2000
+                                ? "text-red-500"
+                                : "text-gray-500 dark:text-gray-400"
+                            }`}
+                          >
+                            {descriptionLengths[index] || 0}/2000
+                          </p>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -295,6 +331,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
 
             <Button
               type="button"
+              variant="outline"
               onClick={() =>
                 append({
                   title: "",

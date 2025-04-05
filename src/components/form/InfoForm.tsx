@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setBio } from "@/store";
 import { BioFormValues } from "@/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ProfileImageUpload from "@/components/shared/ProfileImageUpload";
+import { darkModeClasses } from "@/lib/utils";
 
 interface FormStep1Props {
   onNext: () => void;
@@ -31,23 +33,32 @@ interface FormStep1Props {
 export default function FormStep1({ onNext }: FormStep1Props) {
   const dispatch = useAppDispatch();
   const bioData = useAppSelector((state) => state.portfolio.bio);
+  const [aboutLength, setAboutLength] = useState(0);
 
   const form = useForm<BioFormValues>({
     defaultValues: {
       name: bioData.name || "",
       tagline: bioData.tagline || "",
       about: bioData.about || "",
+      profileImg: bioData.profileImg || "",
     },
   });
 
   // Update form values when bioData changes (after loading from DB)
   useEffect(() => {
-    if (bioData.name || bioData.tagline || bioData.about) {
+    if (
+      bioData.name ||
+      bioData.tagline ||
+      bioData.about ||
+      bioData.profileImg
+    ) {
       form.reset({
         name: bioData.name || "",
         tagline: bioData.tagline || "",
         about: bioData.about || "",
+        profileImg: bioData.profileImg || "",
       });
+      setAboutLength(bioData.about?.length || 0);
     }
   }, [bioData, form]);
 
@@ -56,13 +67,27 @@ export default function FormStep1({ onNext }: FormStep1Props) {
     onNext();
   };
 
+  // Update character count when about field changes
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === "about") {
+        setAboutLength(value.about?.length || 0);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  const handleProfileImageChange = (url: string) => {
+    form.setValue("profileImg", url);
+  };
+
   return (
-    <Card className="dark:bg-neutral-950 dark:border-neutral-800">
+    <Card className={darkModeClasses.card}>
       <CardHeader>
-        <CardTitle className="text-2xl dark:text-neutral-50">
+        <CardTitle className={`text-2xl ${darkModeClasses.cardTitle}`}>
           Personal Information
         </CardTitle>
-        <CardDescription className="dark:text-neutral-500">
+        <CardDescription className={darkModeClasses.cardDescription}>
           Tell us about yourself. This information will be displayed on your
           portfolio.
         </CardDescription>
@@ -70,6 +95,13 @@ export default function FormStep1({ onNext }: FormStep1Props) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="flex justify-center mb-6">
+              <ProfileImageUpload
+                currentImageUrl={form.watch("profileImg")}
+                onImageUrlChange={handleProfileImageChange}
+              />
+            </div>
+
             <FormField
               control={form.control}
               name="name"
@@ -82,15 +114,17 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-neutral-50">Name</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    Name
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="John Doe"
                       {...field}
-                      className="dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
+                      className={darkModeClasses.input}
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-neutral-500">
+                  <FormDescription className={darkModeClasses.formDescription}>
                     Your full name as you want it to appear on your portfolio.
                   </FormDescription>
                   <FormMessage />
@@ -109,17 +143,17 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-neutral-50">
+                  <FormLabel className={darkModeClasses.formLabel}>
                     Tagline
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Frontend Developer | UI/UX Designer"
                       {...field}
-                      className="dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
+                      className={darkModeClasses.input}
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-neutral-500">
+                  <FormDescription className={darkModeClasses.formDescription}>
                     A short phrase that describes what you do (optional).
                   </FormDescription>
                   <FormMessage />
@@ -133,33 +167,49 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               rules={{
                 required: "About is required",
                 maxLength: {
-                  value: 200,
-                  message: "About must be less than 200 characters",
+                  value: 2000,
+                  message: "About must be less than 2000 characters",
                 },
               }}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="dark:text-neutral-50">About</FormLabel>
+                  <FormLabel className={darkModeClasses.formLabel}>
+                    About
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="I'm a passionate developer with 5 years of experience..."
-                      className="min-h-32 dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50"
+                      className={`min-h-32 ${darkModeClasses.textarea}`}
                       {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setAboutLength(e.target.value.length);
+                      }}
                     />
                   </FormControl>
-                  <FormDescription className="dark:text-neutral-500">
-                    A brief description about yourself.
-                  </FormDescription>
+                  <div className="flex justify-between">
+                    <FormDescription
+                      className={darkModeClasses.formDescription}
+                    >
+                      A brief description about yourself.
+                    </FormDescription>
+                    <p
+                      className={`text-xs ${
+                        aboutLength > 2000
+                          ? "text-red-500"
+                          : "text-gray-500 dark:text-gray-400"
+                      }`}
+                    >
+                      {aboutLength}/2000
+                    </p>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <div className="flex justify-end">
-              <Button
-                type="submit"
-                className="dark:bg-stone-100 dark:text-stone-800 dark:hover:bg-white"
-              >
+              <Button type="submit" className={darkModeClasses.buttonPrimary}>
                 Next
               </Button>
             </div>

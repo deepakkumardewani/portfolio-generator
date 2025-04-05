@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setWorkExperience } from "@/store";
-import { ChevronDown, ChevronUp, Plus, Trash } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { WorkExperienceFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -39,6 +39,9 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   );
   const [expandedIndex, setExpandedIndex] = useState(0);
   const [isStudent, setIsStudent] = useState(false);
+  const [descriptionLengths, setDescriptionLengths] = useState<{
+    [key: number]: number;
+  }>({});
 
   const form = useForm<WorkExperienceFormValues>({
     defaultValues: {
@@ -64,6 +67,13 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
       form.reset({
         workExperience: savedWorkExperience,
       });
+
+      // Initialize description lengths
+      const lengths: { [key: number]: number } = {};
+      savedWorkExperience.forEach((exp, index) => {
+        lengths[index] = exp.description?.length || 0;
+      });
+      setDescriptionLengths(lengths);
     }
   }, [savedWorkExperience, form]);
 
@@ -108,6 +118,12 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
     setIsStudent(checked);
   };
 
+  const handleDescriptionChange = (index: number, value: string) => {
+    const newLengths = { ...descriptionLengths };
+    newLengths[index] = value.length;
+    setDescriptionLengths(newLengths);
+  };
+
   return (
     <Card className={darkModeClasses.card}>
       <CardHeader>
@@ -131,7 +147,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
               htmlFor="student"
               className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${darkModeClasses.text}`}
             >
-              I don't have work experience yet (Student/Fresh Graduate)
+              I don't have any work experience yet (Student/Fresh Graduate)
             </label>
           </div>
         </div>
@@ -168,15 +184,15 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                             }
                           }}
                         >
-                          <Trash className="h-4 w-4 text-red-500" />
+                          <Icons.trash className="h-4 w-4 text-red-500" />
                         </Button>
                       )}
                       {expandedIndex === index ? (
-                        <ChevronUp
+                        <Icons.chevronUpIcon
                           className={`h-5 w-5 ${darkModeClasses.text}`}
                         />
                       ) : (
-                        <ChevronDown
+                        <Icons.chevronDownIcon
                           className={`h-5 w-5 ${darkModeClasses.text}`}
                         />
                       )}
@@ -298,6 +314,11 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                       name={`workExperience.${index}.description`}
                       rules={{
                         required: "Description is required",
+                        maxLength: {
+                          value: 2000,
+                          message:
+                            "Description must be less than 2000 characters",
+                        },
                       }}
                       render={({ field }) => (
                         <FormItem>
@@ -309,8 +330,23 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                               placeholder="Describe your responsibilities and achievements"
                               className={`min-h-24 ${darkModeClasses.textarea}`}
                               {...field}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                handleDescriptionChange(index, e.target.value);
+                              }}
                             />
                           </FormControl>
+                          <div className="flex justify-end">
+                            <p
+                              className={`text-xs ${
+                                (descriptionLengths[index] || 0) > 2000
+                                  ? "text-red-500"
+                                  : "text-gray-500 dark:text-gray-400"
+                              }`}
+                            >
+                              {descriptionLengths[index] || 0}/2000
+                            </p>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -334,7 +370,8 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                 }
                 className={`w-full ${darkModeClasses.buttonOutline}`}
               >
-                <Plus className="mr-2 h-4 w-4" /> Add Another Work Experience
+                <Icons.plus className="mr-2 h-4 w-4" /> Add Another Work
+                Experience
               </Button>
 
               <div className="flex gap-2 justify-end">

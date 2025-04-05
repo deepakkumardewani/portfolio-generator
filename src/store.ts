@@ -3,10 +3,13 @@ import {
   createSlice,
   PayloadAction,
   Middleware,
+  combineReducers,
 } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { appwriteMiddleware } from "./lib/appwriteMiddleware";
-import { loadPortfolio } from "./lib/appwriteService";
+import * as appwriteService from "./lib/appwriteService";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import {
   Bio,
@@ -232,13 +235,29 @@ const prodData: PortfolioState = {
 };
 
 // Select initial state based on environment
-// const initialState =
-//   process.env.NODE_ENV === "development" ? devData : prodData;
+const initialState =
+  process.env.NODE_ENV === "development" ? devData : prodData;
 
-const initialState = prodData;
+// const initialState = prodData;
+
+// Configure Redux Persist
+const persistConfig = {
+  key: "portfolio",
+  storage,
+};
+
+// Add _sync field to initial state
+const initialStateWithSync = {
+  ...initialState,
+  _sync: {
+    lastSyncedAt: 0,
+    isDirty: false,
+  },
+};
+
 const portfolioSlice = createSlice({
   name: "portfolio",
-  initialState,
+  initialState: initialStateWithSync,
   reducers: {
     setBio: (state, action: PayloadAction<Bio>) => {
       state.bio = action.payload;
@@ -341,8 +360,60 @@ const portfolioSlice = createSlice({
 
       return result;
     },
+    markAsSynced: (state) => {
+      state._sync = {
+        lastSyncedAt: Date.now(),
+        isDirty: false,
+      };
+    },
+    markAsDirty: (state) => {
+      state._sync.isDirty = true;
+    },
   },
 });
+
+// Define root reducer type
+const rootReducer = combineReducers({
+  portfolio: portfolioSlice.reducer,
+});
+
+export type RootReducerState = ReturnType<typeof rootReducer>;
+
+// Create persisted reducer with proper typing
+const persistedReducer = persistReducer<RootReducerState>(
+  persistConfig,
+  rootReducer
+);
+
+// Create store with middleware and persistence
+const storeWithMiddleware = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+      },
+    }).concat(appwriteMiddleware as Middleware),
+});
+
+// Create persistor
+export const persistor = persistStore(storeWithMiddleware);
+
+// Export store instance
+export const store = storeWithMiddleware;
+
+// Define types for RootState and AppDispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+// Create a type for the persisted state structure
+export interface PersistState extends RootReducerState {
+  _persist: { version: number; rehydrated: boolean };
+}
+
+// Export typed hooks with proper typing
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<PersistState> = useSelector;
 
 // Export actions
 export const {
@@ -357,27 +428,9 @@ export const {
   updateTemplateSection,
   updateTemplateSections,
   setPortfolioData,
+  markAsSynced,
+  markAsDirty,
 } = portfolioSlice.actions;
-
-// Create store with middleware
-const storeWithMiddleware = configureStore({
-  reducer: {
-    portfolio: portfolioSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(appwriteMiddleware as Middleware),
-});
-
-// Define types for RootState and AppDispatch
-export type RootState = ReturnType<typeof storeWithMiddleware.getState>;
-export type AppDispatch = typeof storeWithMiddleware.dispatch;
-
-// Export the store
-export const store = storeWithMiddleware;
-
-// Create typed hooks
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 /**
  * Initialize Appwrite database and load data
@@ -385,21 +438,8 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
  */
 export const initializeAppwrite = async (userId: string): Promise<void> => {
   try {
-    // Initialize the database and collections if they don't exist
-    // await initializeDatabase();
-
-    // Load portfolio data from Appwrite
-    const portfolioData = await loadPortfolio(userId);
-    console.log("portfolioData", portfolioData);
-
-    // Update the Redux store with the loaded data
-    if (Object.keys(portfolioData).length > 0) {
-      console.log("Dispatching portfolio data to store:", portfolioData);
-      store.dispatch(setPortfolioData(portfolioData));
-      console.log("Store state after dispatch:", store.getState().portfolio);
-    } else {
-      console.log("No portfolio data found to load");
-    }
+    // Use the optimized version from appwriteService
+    await appwriteService.initializeAppwrite(userId, store);
   } catch (error) {
     console.error("Error initializing Appwrite:", error);
   }
