@@ -8,13 +8,12 @@ import ModernExperience from "./components/ModernExperience";
 import ModernProjects from "./components/ModernProjects";
 import ModernSkills from "./components/ModernSkills";
 import ModernContact from "./components/ModernContact";
-import ModernFooter from "./components/ModernFooter";
-import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import { Providers } from "@/app/providers";
+import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
 import CommonFooter from "../shared/CommonFooter";
 
-export default function Modern() {
+export default function Modern({ isServerSide = false }) {
   // Define the sections with their IDs
   const templateSections = [
     {
@@ -27,16 +26,20 @@ export default function Modern() {
     { id: "projects", component: <ModernProjects /> },
     { id: "skills", component: <ModernSkills /> },
     { id: "contact", component: <ModernContact /> },
-    { id: "footer", component: <CommonFooter /> },
+    {
+      id: "footer",
+      component: <CommonFooter />,
+    },
   ];
 
-  return (
-    <Providers>
-      <DarkModeProvider templateId="modern-template" defaultDark={true}>
-        <div id="modern-template" className="bg-zinc-950 text-zinc-200">
-          <OrderedTemplateContainer sections={templateSections} />
-        </div>
-      </DarkModeProvider>
-    </Providers>
+  const content = (
+    <DarkModeProvider templateId="modern-template" defaultDark={true}>
+      <div id="modern-template">
+        <OrderedTemplateContainer sections={templateSections} />
+      </div>
+    </DarkModeProvider>
   );
+
+  // Only wrap in Providers if not server-side rendering
+  return isServerSide ? content : <Providers>{content}</Providers>;
 }

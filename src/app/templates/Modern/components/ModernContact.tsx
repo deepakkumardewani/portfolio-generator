@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import { MailIcon, PhoneIcon } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import {
   SiGithub,
   SiX,
@@ -14,6 +14,28 @@ import { FaLinkedin } from "react-icons/fa";
 
 export default function ModernContact() {
   const { contact } = useAppSelector((state) => state.portfolio);
+  const { viewMode } = useAppSelector((state) => state.portfolio);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const isInPreview = document.getElementById("preview-pane") !== null;
+    setIsPreview(isInPreview);
+
+    // Check if we're in mobile view
+    const checkMobile = () => {
+      setIsMobile(viewMode === "mobile" || window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+  }, []);
+
+  const layoutClasses = isPreview
+    ? isMobile
+      ? "grid-cols-1"
+      : "grid-cols-2"
+    : "grid-cols-1 sm:grid-cols-2";
 
   // Function to detect social media links and return the appropriate icon
   const getSocialIcon = (url: string) => {
@@ -64,6 +86,7 @@ export default function ModernContact() {
 
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
+          id="contact-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -78,8 +101,9 @@ export default function ModernContact() {
           <div className="h-1 w-24 bg-gradient-to-r from-purple-400 to-blue-500 rounded"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className={`grid ${layoutClasses} gap-10`}>
           <motion.div
+            id="contact-info"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -90,11 +114,11 @@ export default function ModernContact() {
               opportunities to be part of your vision.
             </p>
 
-            <div className="space-y-6">
+            <div id="contact-info-links" className="space-y-6">
               {contact.email && (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/20 border border-purple-500/20 text-purple-400">
-                    <MailIcon className="h-5 w-5" />
+                    <Icons.mailIcon className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-zinc-400 text-sm">Email</p>
@@ -111,7 +135,7 @@ export default function ModernContact() {
               {contact.phone && (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/20 border border-blue-500/20 text-blue-400">
-                    <PhoneIcon className="h-5 w-5" />
+                    <Icons.phoneIcon className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-zinc-400 text-sm">Phone</p>
@@ -128,6 +152,7 @@ export default function ModernContact() {
           </motion.div>
 
           <motion.div
+            id="contact-social-links"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}

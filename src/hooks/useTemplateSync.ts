@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch, setTemplate } from "@/store";
 import { useSearchParams, useRouter } from "next/navigation";
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { TemplateType } from "@/types";
 
 /**
@@ -11,13 +13,26 @@ import { TemplateType } from "@/types";
  */
 export function useTemplateSync() {
   const { selectedTemplate } = useAppSelector((state) => state.portfolio);
-  const searchParams = useSearchParams();
+  let searchParams: ReadonlyURLSearchParams | undefined;
+  let router: AppRouterInstance | undefined;
+  let isRouterAvailable = true;
+
+  try {
+    searchParams = useSearchParams();
+    router = useRouter();
+  } catch (e) {
+    isRouterAvailable = false;
+  }
+
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   // Read template from URL and update store if needed
   useEffect(() => {
-    const templateFromUrl = searchParams.get("template") as TemplateType | null;
+    if (!isRouterAvailable) return;
+
+    const templateFromUrl = searchParams?.get(
+      "template"
+    ) as TemplateType | null;
 
     if (
       templateFromUrl &&
@@ -28,11 +43,11 @@ export function useTemplateSync() {
       }
     } else if (selectedTemplate) {
       // Update URL with current template if not already set
-      const newParams = new URLSearchParams(searchParams.toString());
+      const newParams = new URLSearchParams(searchParams?.toString() || "");
       newParams.set("template", selectedTemplate);
-      router.replace(`?${newParams.toString()}`, { scroll: false });
+      router?.replace(`?${newParams.toString()}`, { scroll: false });
     }
-  }, [searchParams, selectedTemplate, dispatch, router]);
+  }, [searchParams, selectedTemplate, dispatch, router, isRouterAvailable]);
 
   return selectedTemplate;
 }
@@ -43,15 +58,25 @@ export function useTemplateSync() {
  */
 export function useUpdateTemplate() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  let router: AppRouterInstance | undefined;
+  let searchParams: ReadonlyURLSearchParams | undefined;
+  let isRouterAvailable = true;
+
+  try {
+    router = useRouter();
+    searchParams = useSearchParams();
+  } catch (e) {
+    isRouterAvailable = false;
+  }
 
   return (template: TemplateType) => {
     dispatch(setTemplate(template));
 
+    if (!isRouterAvailable) return;
+
     // Update URL with the new template
-    const newParams = new URLSearchParams(searchParams.toString());
+    const newParams = new URLSearchParams(searchParams?.toString() || "");
     newParams.set("template", template);
-    router.replace(`?${newParams.toString()}`, { scroll: false });
+    router?.replace(`?${newParams.toString()}`, { scroll: false });
   };
 }

@@ -6,27 +6,47 @@ import { motion } from "framer-motion";
 import { Icons } from "@/components/ui/icons";
 import { Skill } from "@/types";
 
+// Move the grouping logic to a separate function
+function groupSkillsByCategory(skills: Skill[]): Record<string, Skill[]> {
+  return skills.reduce<Record<string, Skill[]>>((acc, skill) => {
+    const category = skill.category || "other";
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    if (!acc[category].some((s) => s.value === skill.value)) {
+      acc[category].push(skill);
+    }
+    return acc;
+  }, {});
+}
+
 export default function ModernSkills() {
   const { skills } = useAppSelector((state) => state.portfolio);
-  const [groupedSkills, setGroupedSkills] = useState<Record<string, Skill[]>>(
-    {}
-  );
+  // Group skills directly without useState/useEffect
+  const groupedSkills = groupSkillsByCategory(skills);
+
+  const { viewMode } = useAppSelector((state) => state.portfolio);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Group skills by category and remove duplicates
-    const grouped = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
-      const category = skill.category || "other";
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      if (!acc[category].some((s) => s.value === skill.value)) {
-        acc[category].push(skill);
-      }
-      return acc;
-    }, {});
+    const isInPreview = document.getElementById("preview-pane") !== null;
+    setIsPreview(isInPreview);
 
-    setGroupedSkills(grouped);
-  }, [skills]);
+    // Check if we're in mobile view
+    const checkMobile = () => {
+      setIsMobile(viewMode === "mobile" || window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+  }, []);
+
+  const layoutClasses = isPreview
+    ? isMobile
+      ? "grid-cols-1"
+      : "grid-cols-2"
+    : "grid-cols-1 sm:grid-cols-2";
 
   // Category-specific styling
   const categoryStyles = {
@@ -63,6 +83,7 @@ export default function ModernSkills() {
 
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
+          id="skills-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -77,7 +98,7 @@ export default function ModernSkills() {
           <div className="h-1 w-24 bg-gradient-to-r from-green-400 to-blue-500 rounded"></div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className={`grid ${layoutClasses} gap-10`}>
           {Object.entries(groupedSkills).map(([category, skills], index) => (
             <motion.div
               key={category}
@@ -85,7 +106,7 @@ export default function ModernSkills() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
+              className="skill-item bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
             >
               <div className="flex items-center gap-3 mb-4">
                 {categoryStyles[category as keyof typeof categoryStyles]

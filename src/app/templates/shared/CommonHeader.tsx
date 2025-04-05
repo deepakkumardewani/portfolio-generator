@@ -84,7 +84,7 @@ export default function Header({ templateId }: HeaderProps) {
     ? isMobile
       ? "justify-start"
       : "justify-center"
-    : "justify-start sm:justify-center";
+    : "justify-center sm:justify-center";
 
   return (
     <header className={`w-full ${darkModeClasses} ${previewClasses}`}>
@@ -96,7 +96,7 @@ export default function Header({ templateId }: HeaderProps) {
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className={`text-black dark:text-white transition-opacity ease-in duration-300 transform ${
+                className={`nav-link text-black dark:text-white transition-opacity ease-in duration-300 transform ${
                   isAnimated ? "opacity-100 " : "opacity-0"
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}

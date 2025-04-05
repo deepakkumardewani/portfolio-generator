@@ -1,69 +1,54 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { useDarkMode } from "@/contexts/DarkModeContext";
+import React from "react";
 import { useAppSelector } from "@/store";
+import { motion } from "framer-motion";
 
-export default function About() {
-  const { bio } = useAppSelector((state) => state.portfolio);
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
-  // const [isPreview, setIsPreview] = useState(false);
-  // const { darkMode } = useDarkMode();
+export default function CreativeAbout() {
+  const { bio } = useAppSelector((state: any) => state.portfolio);
+
   // Split the about text into paragraphs
   const paragraphs = bio.about
-    ? bio.about.split("\n").filter((p) => p.trim())
+    ? bio.about.split("\n").filter((p: string) => p.trim())
     : [];
-  useEffect(() => {
-    // const isInPreview = document.getElementById("preview-pane") !== null;
-    // setIsPreview(isInPreview);
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.2,
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
 
   return (
-    <section id="about" className={`py-20 bg-white dark:bg-black`}>
+    <section
+      id="about"
+      className="py-20 bg-white dark:bg-black"
+      aria-labelledby="about-heading"
+      itemScope
+      itemType="https://schema.org/AboutPage"
+    >
       <div className="container mx-auto px-6">
-        <div
-          ref={sectionRef}
-          id="about-inner"
-          className={`transition-all duration-800 transform ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-          }`}
+        <motion.div
+          id="creative-about-container"
+          initial={{ opacity: 0, y: 48 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <motion.h2
+            id="about-heading"
+            className="text-4xl font-bold mb-8 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+            itemProp="headline"
+          >
             About Me
-          </h2>
-          <div className="prose prose-invert">
-            {/* <p className="text-black dark:text-gray-300 text-lg leading-relaxed mb-6">
-              {bio.about}
-            </p>
-            <p className="text-black dark:text-gray-300 text-lg leading-relaxed">
-              I believe in writing clean, maintainable code and staying
-              up-to-date with the latest web technologies and best practices.
-              When I'm not coding, you can find me contributing to open-source
-              projects and mentoring junior developers.
-            </p> */}
+          </motion.h2>
+          <motion.div
+            id="creative-about-content"
+            className="prose prose-invert"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+            itemProp="text"
+          >
             {paragraphs.length > 0 ? (
-              paragraphs.map((paragraph, index) => (
+              paragraphs.map((paragraph: string, index: number) => (
                 <p
                   key={index}
                   className="mb-4 text-black dark:text-gray-300 leading-relaxed text-base"
@@ -73,11 +58,13 @@ export default function About() {
               ))
             ) : (
               <p className="mb-4 text-black dark:text-gray-300 leading-relaxed text-base">
-                {bio.about}
+                {bio.about ||
+                  "Tell your story here. What drives you? What's your background? What are you passionate about?"}
               </p>
             )}
-          </div>
-        </div>
+          </motion.div>
+          <meta itemProp="author" content={bio.name || "Your Name"} />
+        </motion.div>
       </div>
     </section>
   );

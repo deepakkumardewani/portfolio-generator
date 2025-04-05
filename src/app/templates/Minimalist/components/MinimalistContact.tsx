@@ -1,11 +1,9 @@
 import React from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Icons } from "@/components/ui/icons";
 
 export default function MinimalistContact() {
   const { contact } = useAppSelector((state) => state.portfolio);
-  const { darkMode } = useDarkMode();
 
   return (
     <section id="contact" className="py-12 bg-white dark:bg-black">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Project } from "@/types";
@@ -6,10 +6,41 @@ import { Icons } from "@/components/ui/icons";
 
 export default function MinimalistProjects() {
   const { projects } = useAppSelector((state) => state.portfolio);
-  const { darkMode } = useDarkMode();
   const { viewMode } = useAppSelector((state) => state.portfolio);
-  const isMobile = viewMode === "mobile" || window.innerWidth < 768;
 
+  const [isPreview, setIsPreview] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const isInPreview = document.getElementById("preview-pane") !== null;
+    setIsPreview(isInPreview);
+
+    // Check if we're in mobile view
+    const checkMobile = () => {
+      setIsMobile(viewMode === "mobile" || window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+  }, []);
+
+  const layoutClasses = isPreview
+    ? isMobile
+      ? "grid-cols-1"
+      : "grid-cols-12"
+    : "grid-cols-1 sm:grid-cols-12";
+
+  const projectImageClasses = isPreview
+    ? isMobile
+      ? ""
+      : "col-span-5 order-2"
+    : "sm:col-span-5 sm:order-2";
+
+  const projectDetailsClasses = isPreview
+    ? isMobile
+      ? ""
+      : "col-span-7 order-1"
+    : "sm:col-span-7 sm:order-1";
   return (
     <section id="projects" className=" py-12  bg-white dark:bg-black">
       <div className="px-6 max-w-4xl mx-auto">
@@ -23,12 +54,10 @@ export default function MinimalistProjects() {
             projects.map((project: Project, index: number) => (
               <div
                 key={index}
-                className={`${
-                  isMobile ? "grid grid-cols-1" : "grid grid-cols-12"
-                } gap-6 md:gap-8`}
+                className={`${layoutClasses} grid gap-6 md:gap-8`}
               >
                 {/* Project image - Full width on mobile, right column on desktop */}
-                <div className={isMobile ? "" : "col-span-5 order-2"}>
+                <div className={projectImageClasses}>
                   {project.imageUrl ? (
                     <div
                       className={`relative aspect-video overflow-hidden border border-neutral-200 dark:border-neutral-800`}
@@ -50,7 +79,7 @@ export default function MinimalistProjects() {
                 </div>
 
                 {/* Project details - Full width on mobile, left column on desktop */}
-                <div className={isMobile ? "" : "col-span-7 order-1"}>
+                <div className={projectDetailsClasses}>
                   <h3
                     className={`text-xl font-medium text-neutral-900 dark:text-neutral-50`}
                   >

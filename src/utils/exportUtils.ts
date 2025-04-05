@@ -41,8 +41,12 @@ export async function createPortfolioZip(data: PortfolioData): Promise<Blob> {
     // Generate the complete HTML document
     const htmlContent = generateHTMLDocument(componentString, data);
 
+    const template = data.selectedTemplate;
+
     // Fetch the index.js file
-    const indexJsResponse = await fetch("/templates/shared/index.js");
+    const indexJsResponse = await fetch(
+      `/templates/${template.toLowerCase()}/index.js`
+    );
     const indexJsContent = await indexJsResponse.text();
 
     // Add files to the zip
@@ -259,7 +263,7 @@ export function convertStateToExportData(state: PortfolioState): PortfolioData {
   return {
     bio: state.bio,
     projects: state.projects,
-    skills: state.skills.map((skill) => skill.value),
+    skills: state.skills,
     workExperience: state.workExperience,
     contact: state.contact,
     theme: state.theme,

@@ -1,18 +1,18 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
 import { Skill } from "@/types";
+import { motion } from "framer-motion";
 
-export default function Skills() {
+export default function CreativeSkills() {
   const { skills } = useAppSelector((state) => state.portfolio);
   const [groupedSkills, setGroupedSkills] = useState<Record<string, Skill[]>>(
     {}
   );
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
   const [isPreview, setIsPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { viewMode } = useAppSelector((state) => state.portfolio);
+
   useEffect(() => {
     const isInPreview = document.getElementById("preview-pane") !== null;
     setIsPreview(isInPreview);
@@ -34,51 +34,40 @@ export default function Skills() {
     }, {});
 
     setGroupedSkills(grouped);
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
   }, [skills, viewMode]);
+
   const skillsLayoutClasses = isPreview
     ? isMobile
       ? "grid grid-cols-1 gap-8"
       : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
     : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8";
+
   return (
-    <section id="skills" className={`py-20 bg-white dark:bg-black`}>
+    <section id="skills" className="py-20 bg-white dark:bg-black">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-12 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        <motion.h2
+          id="creative-skills-heading"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-4xl font-bold mb-12 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
+        >
           Skills
-        </h2>
-        <div ref={sectionRef} id="skills-inner" className={skillsLayoutClasses}>
+        </motion.h2>
+        <motion.div
+          id="creative-skills-container"
+          className={skillsLayoutClasses}
+        >
           {Object.entries(groupedSkills).map(([category, items], index) => (
-            <div
-              id="skill-card"
+            <motion.div
+              id={`creative-skill-card-${index}`}
               key={category}
-              className={`bg-white dark:bg-black/20 p-6 rounded-lg backdrop-blur-lg transition-all duration-500 transform ${
-                isVisible
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-12"
-              }`}
-              style={{ transitionDelay: `${index * 200}ms` }}
+              initial={{ opacity: 0, y: 48 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-black/20 p-6 rounded-lg backdrop-blur-lg"
             >
               <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -100,9 +89,9 @@ export default function Skills() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

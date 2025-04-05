@@ -6,19 +6,37 @@ export default function MinimalistHero() {
   const { bio } = useAppSelector((state) => state.portfolio);
 
   return (
-    <section id="hero" className="py-12 bg-gray-50 dark:bg-black">
-      <div className="px-6 max-w-4xl mx-auto min-h-screen flex flex-col items-center justify-center relative ">
-        <div className="text-center space-y-4 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white">
+    <section
+      id="home"
+      className="py-6 bg-gray-50 dark:bg-black"
+      aria-labelledby="hero-heading"
+      itemScope
+      itemType="https://schema.org/WPHeader"
+    >
+      <div className="px-6 max-w-4xl mx-auto min-h-screen flex flex-col items-center justify-center relative">
+        <div className="text-center space-y-4 animate-fade-in mb-20">
+          <h1
+            id="hero-heading"
+            className="text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white"
+            itemProp="headline"
+          >
             {bio.name || "Your Name"}
           </h1>
-          <h2 className="text-xl md:text-2xl text-gray-600 dark:text-white font-light">
+          <p
+            className="text-xl md:text-2xl text-gray-600 dark:text-white font-light"
+            itemProp="alternativeHeadline"
+          >
             {bio.tagline || "Your tagline"}
-          </h2>
+          </p>
+          <meta itemProp="author" content={bio.name || "Your Name"} />
         </div>
-        <div className="absolute bottom-8 animate-bounce">
+        <a
+          href="#about"
+          className="bottom-8 animate-bounce cursor-pointer"
+          aria-label="Scroll to About section"
+        >
           <Icons.chevronDown className="w-6 h-6 text-gray-400 dark:text-white" />
-        </div>
+        </a>
       </div>
     </section>
   );

@@ -12,7 +12,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { DeploymentStatus } from "@/utils/exportUtils";
-import { cn } from "@/lib/utils";
+import { cn, darkModeClasses } from "@/lib/utils";
 
 interface NetlifyDeployDialogProps {
   isOpen: boolean;
@@ -102,7 +102,7 @@ export default function NetlifyDeployDialog({
 
           {/* Deployed URL */}
           {deploymentStatus === "success" && deploymentUrl && (
-            <div className="flex items-center justify-between p-2 border rounded-md bg-slate-50">
+            <div className="flex items-center justify-between p-2 border rounded-md bg-neutral-50 dark:bg-neutral-950">
               <a
                 href={deploymentUrl}
                 target="_blank"
@@ -128,10 +128,18 @@ export default function NetlifyDeployDialog({
         <DialogFooter className="flex justify-between sm:justify-between">
           {deploymentStatus === "success" ? (
             <>
-              <Button variant="outline" onClick={onClose}>
+              <Button
+                variant="outline"
+                className={darkModeClasses.buttonOutline}
+                onClick={onClose}
+              >
                 Close
               </Button>
-              <Button onClick={visitSite} className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={visitSite}
+                className={`flex items-center gap-2 ${darkModeClasses.buttonOutline}`}
+              >
                 Visit Site <Icons.externalLink size={16} />
               </Button>
             </>

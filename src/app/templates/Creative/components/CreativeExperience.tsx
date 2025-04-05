@@ -1,64 +1,83 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useAppSelector } from "@/store";
 import { formatDate } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-export default function Experience() {
+export default function CreativeExperience() {
   const { workExperience } = useAppSelector((state) => state.portfolio);
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        threshold: 0.1,
-      }
-    );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
   return (
-    <section id="experience" className={`py-20 bg-white dark:bg-black`}>
+    <section
+      id="experience"
+      className="py-20 bg-white dark:bg-black"
+      aria-labelledby="experience-heading"
+      itemScope
+      itemType="https://schema.org/WorkExperience"
+    >
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold mb-12 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+        <motion.h2
+          id="experience-heading"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="text-4xl font-bold mb-12 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
+          itemProp="name"
+        >
           Experience
-        </h2>
-        <div ref={sectionRef} id="experience-inner" className="space-y-8">
+        </motion.h2>
+        <motion.div
+          id="creative-experience-container"
+          className="space-y-8"
+          itemProp="workExperienceItems"
+        >
           {workExperience.map((exp, index) => (
-            <div
-              id="experience-card"
+            <motion.article
+              id={`creative-experience-card-${index}`}
               key={index}
-              className={`bg-white dark:bg-black/30 p-6 rounded-lg backdrop-blur-lg transition-all duration-500 transform ${
-                isVisible
-                  ? "opacity-100 translate-x-0"
-                  : "opacity-0 -translate-x-12"
-              }`}
-              style={{ transitionDelay: `${index * 200}ms` }}
+              initial={{ opacity: 0, x: -48 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+              viewport={{ once: true }}
+              className="bg-white dark:bg-black/30 p-6 rounded-lg backdrop-blur-lg"
+              itemScope
+              itemType="https://schema.org/OrganizationRole"
             >
-              <h3 className="text-xl font-semibold text-black dark:text-white mb-2">
+              <h3
+                className="text-xl font-semibold text-black dark:text-white mb-2"
+                itemProp="roleName"
+              >
                 {exp.jobTitle}
               </h3>
-              <p className="text-purple-400 mb-2">{exp.company}</p>
-              <p className="text-black dark:text-white text-sm mb-4">
-                {formatDate(exp.fromDate)} - {formatDate(exp.toDate)}
+              <p className="text-purple-400 mb-2" itemProp="memberOf">
+                {exp.company}
               </p>
-              <p className="text-black dark:text-white">{exp.description}</p>
-            </div>
+              <p
+                className="text-black dark:text-white text-sm mb-4"
+                itemProp="dateRange"
+              >
+                <time dateTime={exp.fromDate}>{formatDate(exp.fromDate)}</time>{" "}
+                - <time dateTime={exp.toDate}>{formatDate(exp.toDate)}</time>
+              </p>
+              <p className="text-black dark:text-white" itemProp="description">
+                {exp.description}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {exp.skills &&
+                  exp.skills.map((skill, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-block px-3 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 rounded-full"
+                      itemProp="skills"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+              </div>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

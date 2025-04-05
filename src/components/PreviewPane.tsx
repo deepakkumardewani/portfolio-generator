@@ -11,7 +11,7 @@ import { useAppSelector } from "@/store";
 
 export default function PreviewPane() {
   const selectedTemplate = useTemplateSync();
-  const { viewMode } = useAppSelector((state) => state.portfolio);
+  const { viewMode } = useAppSelector((state: any) => state.portfolio);
   const [loading] = useState(false);
 
   const renderTemplate = () => {

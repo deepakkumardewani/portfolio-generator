@@ -1,10 +1,8 @@
 import React from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 
 export default function MinimalistSkills() {
   const { skills } = useAppSelector((state) => state.portfolio);
-  const { darkMode } = useDarkMode();
 
   return (
     <section id="skills" className="py-12 bg-neutral-50 dark:bg-black">

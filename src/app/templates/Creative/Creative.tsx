@@ -11,7 +11,8 @@ import { Providers } from "@/app/providers";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
 import CommonFooter from "../shared/CommonFooter";
-export default function Creative() {
+
+export default function Creative({ isServerSide = false }) {
   // Define the sections with their IDs
   const templateSections = [
     {
@@ -30,13 +31,14 @@ export default function Creative() {
     },
   ];
 
-  return (
-    <Providers>
-      <DarkModeProvider templateId="creative-template" defaultDark={true}>
-        <div id="creative-template">
-          <OrderedTemplateContainer sections={templateSections} />
-        </div>
-      </DarkModeProvider>
-    </Providers>
+  const content = (
+    <DarkModeProvider templateId="creative-template" defaultDark={true}>
+      <div id="creative-template">
+        <OrderedTemplateContainer sections={templateSections} />
+      </div>
+    </DarkModeProvider>
   );
+
+  // Only wrap in Providers if not server-side rendering
+  return isServerSide ? content : <Providers>{content}</Providers>;
 }

@@ -8,7 +8,6 @@ import TemplateHeader from "./components/TemplateHeader";
 
 interface TemplateInfo {
   name: TemplateType;
-  imageSrc: string;
   description: string;
   supportsDarkMode: boolean;
 }
@@ -17,23 +16,20 @@ export default function TemplatesPage() {
   const templates: TemplateInfo[] = [
     {
       name: "Minimalist",
-      imageSrc: "/templates/minimalist.svg",
       description:
-        "Elegant and modern, with a focus on typography and whitespace. Ideal for developers and writers.",
+        "Elegant and modern, with a focus on typography and whitespace.",
       supportsDarkMode: true,
     },
     {
       name: "Creative",
-      imageSrc: "/templates/creative.svg",
       description:
-        "Vibrant and expressive design for artists, designers, and creative professionals to showcase their work.",
+        "A vibrant and expressive design with a focus on color and typography.",
       supportsDarkMode: true,
     },
     {
       name: "Modern",
-      imageSrc: "/templates/modern.svg",
       description:
-        "A sleek, dark-themed design with vibrant gradients and smooth animations. Perfect for tech professionals and developers.",
+        "A sleek, dark-themed design with vibrant gradients and smooth animations.",
       supportsDarkMode: true,
     },
   ];
@@ -44,12 +40,11 @@ export default function TemplatesPage() {
         <div className="container mx-auto px-4">
           <TemplateHeader />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto my-8 sm:mt-32">
             {templates.map((template) => (
               <TemplateCard
                 key={template.name}
                 name={template.name}
-                imageSrc={template.imageSrc}
                 description={template.description}
                 supportsDarkMode={template.supportsDarkMode}
               />
