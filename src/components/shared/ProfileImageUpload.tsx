@@ -2,18 +2,19 @@
 
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Icons } from "@/components/ui/icons";
 import { darkModeClasses } from "@/lib/utils";
 import { client, storage } from "@/lib/appwrite";
-interface ImageUploadProps {
-  currentImageUrl: string;
+interface ProfileImageUploadProps {
+  currentImageUrl: string | undefined;
   onImageUrlChange: (url: string) => void;
 }
 
-export default function ImageUpload({
+export default function ProfileImageUpload({
   currentImageUrl,
   onImageUrlChange,
-}: ImageUploadProps) {
+}: ProfileImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentImageUrl || null
@@ -112,19 +113,20 @@ export default function ImageUpload({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col items-center space-y-4">
       {previewUrl ? (
         <div className="relative">
-          <img
-            src={previewUrl}
-            alt="Project preview"
-            className="w-full h-[200px] object-cover rounded-md"
-          />
+          <Avatar className="h-32 w-32">
+            <AvatarImage src={previewUrl} alt="Profile" />
+            <AvatarFallback className="text-2xl font-semibold">
+              {currentImageUrl ? "..." : "?"}
+            </AvatarFallback>
+          </Avatar>
           <Button
             type="button"
             variant="destructive"
             size="icon"
-            className="absolute top-2 right-2 h-8 w-8"
+            className="absolute -top-2 -right-2 h-8 w-8 rounded-full"
             onClick={removeImage}
           >
             <Icons.x className="h-4 w-4" />
@@ -132,37 +134,42 @@ export default function ImageUpload({
         </div>
       ) : (
         <div
-          className="flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md p-6 h-[200px] cursor-pointer"
+          className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-full p-6 h-32 w-32 cursor-pointer"
           onClick={handleButtonClick}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
         >
           <div className="text-center">
-            <Icons.upload className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
-            <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <Icons.upload className="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" />
+            <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
               {isUploading ? (
-                <div className="flex items-center">
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading...
+                <div className="flex items-center justify-center">
+                  <Icons.spinner className="mr-1 h-3 w-3 animate-spin" />
+                  <span>Uploading...</span>
                 </div>
               ) : (
-                <label className="cursor-pointer hover:text-gray-800 dark:hover:text-gray-300">
-                  <span>Upload an image (JPG, PNG, max 5MB)</span>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    className="sr-only"
-                    accept="image/png, image/jpeg, image/jpg"
-                    onChange={handleFileChange}
-                    disabled={isUploading}
-                  />
-                </label>
+                <span>Upload photo</span>
               )}
             </div>
-            {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
           </div>
         </div>
       )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        className="sr-only"
+        accept="image/png, image/jpeg, image/jpg"
+        onChange={handleFileChange}
+        disabled={isUploading}
+      />
+      {error && (
+        <p className="text-xs text-red-500 text-center max-w-[250px]">
+          {error}
+        </p>
+      )}
+      <p className="text-xs text-gray-500 dark:text-gray-400 text-center max-w-[250px]">
+        Upload a profile image (JPG, PNG, max 5MB)
+      </p>
     </div>
   );
 }

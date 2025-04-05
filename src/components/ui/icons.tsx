@@ -4,6 +4,7 @@ import { FaLinkedin } from "react-icons/fa";
 import {
   Monitor,
   Smartphone,
+  Palette,
   ArrowLeft,
   ArrowLeftIcon,
   ArrowRight,
@@ -107,4 +108,5 @@ export const Icons = {
   externalLinkIcon: ExternalLinkIcon,
   arrowUpIcon: ArrowUpIcon,
   arrowDownIcon: ArrowDownIcon,
+  paletteIcon: Palette,
 };
