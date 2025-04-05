@@ -1,0 +1,6 @@
+# Allow all web crawlers access to all content
+User-agent: *
+Allow: /
+
+# Sitemap location (when deployed)
+Sitemap: https://your-deployed-site.com/sitemap.xml 
