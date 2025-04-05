@@ -17,7 +17,6 @@ import { Icons } from "@/components/ui/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z
   .object({
@@ -158,9 +157,9 @@ export default function SignUpForm() {
                       tabIndex={-1}
                     >
                       {!showPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        <Icons.eyeOff className="h-4 w-4 text-muted-foreground" />
                       ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        <Icons.eye className="h-4 w-4 text-muted-foreground" />
                       )}
                       <span className="sr-only">
                         {!showPassword ? "Hide password" : "Show password"}
@@ -197,9 +196,9 @@ export default function SignUpForm() {
                       tabIndex={-1}
                     >
                       {!showConfirmPassword ? (
-                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                        <Icons.eyeOff className="h-4 w-4 text-muted-foreground" />
                       ) : (
-                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        <Icons.eye className="h-4 w-4 text-muted-foreground" />
                       )}
                       <span className="sr-only">
                         {!showConfirmPassword

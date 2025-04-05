@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { account } from "../lib/appwrite";
 import { Models, OAuthProvider } from "appwrite";
-import { initializeAppwrite } from "../store";
 
 interface UseAppwriteReturn {
   user: Models.User<Models.Preferences> | null;
@@ -18,7 +17,7 @@ interface UseAppwriteReturn {
 }
 
 /**
- * Hook to handle Appwrite authentication and initialization
+ * Hook to handle Appwrite authentication
  */
 export const useAppwrite = (): UseAppwriteReturn => {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
@@ -26,7 +25,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const dispatch = useAppDispatch();
 
   // Check if user is logged in on component mount
   useEffect(() => {
@@ -37,11 +35,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
 
         const currentUser = await account.get();
         setUser(currentUser);
-
-        // Initialize Appwrite database and load user data
-        if (currentUser) {
-          await initializeAppwrite(currentUser.$id);
-        }
       } catch (err) {
         // User is not logged in, don't show error
         setUser(null);
@@ -65,9 +58,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
       // Get the logged-in user
       const currentUser = await account.get();
       setUser(currentUser);
-
-      // Initialize Appwrite database and load user data
-      await initializeAppwrite(currentUser.$id);
     } catch (err: any) {
       setError(err.message || "Failed to log in");
       throw err;
@@ -142,9 +132,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
       // Get the logged-in user
       const currentUser = await account.get();
       setUser(currentUser);
-
-      // Initialize Appwrite database and load user data
-      await initializeAppwrite(currentUser.$id);
     } catch (err: any) {
       setError(err.message || "Failed to log in with Google");
       throw err;
