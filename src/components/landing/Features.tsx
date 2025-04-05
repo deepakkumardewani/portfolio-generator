@@ -4,35 +4,35 @@
 import { TextShimmer } from "@/components/ui/text-shimmer";
 // import { ShiningBorder } from "@/components/ui/shining-border";
 import { GlowingEffect } from "../ui/glowing-effect";
-import { Smartphone, Check, ChartBar } from "lucide-react";
+import { Icons } from "@/components/ui/icons";
 import { Badge } from "../ui/badge";
 const features = [
   {
     title: "Responsive Design",
     description:
       "All templates are fully responsive and look great on any device, from desktops to smartphones.",
-    icon: <Smartphone className="h-6 w-6" />,
+    icon: <Icons.smartphone className="h-6 w-6" />,
     completed: true,
   },
   {
     title: "One-Click Deploy",
     description:
       "Publish your portfolio instantly with our one-click deployment to our free hosting.",
-    icon: <Check className="h-6 w-6" />,
+    icon: <Icons.check className="h-6 w-6" />,
     completed: true,
   },
   {
     title: "SEO Optimized",
     description:
       "Get discovered online with built-in SEO optimization that helps your portfolio rank higher in search results.",
-    icon: <ChartBar className="h-6 w-6" />,
+    icon: <Icons.chartBar className="h-6 w-6" />,
     completed: true,
   },
   {
     title: "Analytics",
     description:
       "Track your portfolio's performance with built-in analytics tools.",
-    icon: <ChartBar className="h-6 w-6" />,
+    icon: <Icons.chartBar className="h-6 w-6" />,
     completed: false,
   },
 ];
@@ -40,7 +40,7 @@ const features = [
 export default function Features() {
   return (
     <section id="features" className="py-20 bg-neutral-50 dark:bg-neutral-950">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <TextShimmer>Everything You Need</TextShimmer> to Create the Perfect

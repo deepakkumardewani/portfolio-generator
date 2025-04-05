@@ -24,8 +24,8 @@ export default function ClientBody({
   }, []);
 
   return (
-    <body className={`antialiased`} suppressHydrationWarning>
+    <div className={`${geistSans.variable} ${geistMono.variable}`}>
       {children}
-    </body>
+    </div>
   );
 }

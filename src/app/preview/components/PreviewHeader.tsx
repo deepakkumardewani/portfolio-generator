@@ -33,9 +33,10 @@ export default function PreviewHeader() {
     undefined
   );
   const [showDeployDialog, setShowDeployDialog] = useState(false);
-  const [showTemplateEditor, setShowTemplateEditor] = useState(false);
+  // const [showTemplateEditor, setShowTemplateEditor] = useState(false);
 
   const portfolioData = useAppSelector((state) => state.portfolio);
+
   const handleExport = async (type: "static" | "netlify") => {
     try {
       if (type === "static") {
@@ -173,20 +174,13 @@ export default function PreviewHeader() {
               className="shadow-2xl"
               shimmerColor="#9E7AFF"
               background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
+              onClick={() => handleExport("netlify")}
             >
               <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
               <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
                 Deploy
               </span>
             </ShimmerButton>
-            {/* <Button
-              variant="outline"
-              className="bg-purple-600 text-white hover:bg-purple-700"
-              onClick={() => handleExport("netlify")}
-            >
-              <RocketIcon className="h-4 w-4" />
-              Deploy
-            </Button> */}
 
             <ThemeToggle size="md" />
           </div>

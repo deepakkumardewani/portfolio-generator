@@ -2,6 +2,7 @@ export interface Bio {
   name: string;
   tagline: string;
   about: string;
+  profileImg?: string;
 }
 
 export interface Project {
@@ -16,7 +17,7 @@ export interface Project {
 export interface PortfolioData {
   bio: Bio;
   projects: Project[];
-  skills: string[];
+  skills: Skill[];
   workExperience: WorkExperience[];
   contact: Contact;
   theme: Theme;
@@ -61,6 +62,10 @@ export interface PortfolioState {
   selectedTemplate: TemplateType;
   viewMode: "desktop" | "mobile";
   templateSections: TemplateSectionConfig;
+  _sync?: {
+    lastSyncedAt: number;
+    isDirty: boolean;
+  };
 }
 
 export interface SkillsFormValues {
@@ -70,6 +75,7 @@ export interface BioFormValues {
   name: string;
   tagline: string;
   about: string;
+  profileImg?: string;
 }
 
 export interface WorkExperienceFormValues {
@@ -90,12 +96,7 @@ export interface Theme {
   layout: "single" | "grid";
 }
 
-export type TemplateType =
-  | "Minimalist"
-  | "Creative"
-  | "Basic"
-  | "Professional"
-  | "Modern";
+export type TemplateType = "Minimalist" | "Creative" | "Modern";
 
 export interface TemplateSectionConfig {
   sections: TemplateSection[];

@@ -1,25 +1,24 @@
 import React from "react";
 import { Card, CardContent } from "../ui/card";
-import { ArrowRightIcon, Code, Palette, Rocket } from "lucide-react";
 import { AnimatedShinyText } from "../magicui/animated-shiny-text";
 import { cn } from "@/lib/utils";
 import { GlowingEffect } from "../ui/glowing-effect";
-
+import { Icons } from "../ui/icons";
 const STEPS = [
   {
-    icon: Code,
+    icon: Icons.codeIcon,
     title: "Fill Your Details",
     description:
       "Quickly add your details information through our intuitive form.",
   },
   {
-    icon: Palette,
+    icon: Icons.paletteIcon,
     title: "Select Your Template",
     description:
       "Choose from our collection of professionally designed templates.",
   },
   {
-    icon: Rocket,
+    icon: Icons.rocketIcon,
     title: "Deploy Your Portfolio",
     description:
       "Export or launch your professional portfolio site with just one click.",
@@ -42,7 +41,7 @@ export default function Steps() {
             >
               <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
                 <span>Simple Process</span>
-                <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                <Icons.arrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
               </AnimatedShinyText>
             </div>
           </div>

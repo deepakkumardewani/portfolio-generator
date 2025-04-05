@@ -76,21 +76,21 @@ function TemplateCard({ template }: { template: Template }) {
     }
   };
   return (
-    <ShiningBorder>
-      <div className="bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden ">
-        <div className="relative aspect-video w-full overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
-          <div className="relative h-full w-full">
-            <div className="transform scale-[0.25] origin-top-left h-[400%] w-[400%]">
-              {renderHeroComponent()}
-            </div>
+    // <ShiningBorder>
+    <div className="bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden mx-8 border border-black/5 dark:border-white/5">
+      <div className="relative aspect-video w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
+        <div className="relative h-full w-full">
+          <div className="transform scale-[0.25] origin-top-left h-[400%] w-[400%]">
+            {renderHeroComponent()}
           </div>
         </div>
-
-        <div className="p-6">
-          <p className="text-muted-foreground mb-4">{template.description}</p>
-        </div>
       </div>
-    </ShiningBorder>
+
+      <div className="p-6">
+        <p className="text-muted-foreground mb-4">{template.description}</p>
+      </div>
+    </div>
+    // </ShiningBorder>
   );
 }

@@ -5,15 +5,12 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { BackgroundBeams } from "../ui/background-beams";
 import { AnimatedShinyText } from "../magicui/animated-shiny-text";
-import { ArrowRightIcon, Code } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TextShimmer } from "../ui/text-shimmer";
 import { useTheme } from "next-themes";
-import { ShinyButton } from "../magicui/shiny-button";
-import { motion } from "motion/react";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 import { useAuth } from "@/contexts/AuthContext";
-
+import { Icons } from "../ui/icons";
 export default function Hero() {
   const { theme } = useTheme();
   const { user } = useAuth();
@@ -31,7 +28,7 @@ export default function Hero() {
               >
                 <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
                   <span>✨ Introducing PortfolioGen</span>
-                  <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+                  <Icons.arrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
                 </AnimatedShinyText>
               </div>
             </div>

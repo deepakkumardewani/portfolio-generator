@@ -11,7 +11,7 @@ export default function PreviewPage() {
 
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <div className="min-h-screen bg-stone-50 dark:bg-stone-900">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
         <PreviewHeader />
 
         {/* Main Content */}

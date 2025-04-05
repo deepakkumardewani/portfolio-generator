@@ -22,16 +22,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} dark`}>
-      <ClientBody>
-        <Providers>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <main className="min-h-screen font-sans antialiased">
-              {children}
-            </main>
-          </ThemeProvider>
-        </Providers>
-      </ClientBody>
+    <html
+      lang="en"
+      className={`scroll-smooth ${inter.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased dark:bg-gray-950">
+        <ClientBody>
+          <Providers>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <main className="min-h-screen font-sans antialiased">
+                {children}
+              </main>
+            </ThemeProvider>
+          </Providers>
+        </ClientBody>
+      </body>
     </html>
   );
 }

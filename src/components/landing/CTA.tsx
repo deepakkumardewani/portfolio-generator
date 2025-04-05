@@ -14,10 +14,10 @@ export default function CTA() {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 max-w-2xl">
           Ready to showcase your work to the world?
         </h2>
-        <p className="text-lg md:text-xl text-muted-foreground dark:text-stone-300 text-center mb-10 max-w-2xl">
+        {/* <p className="text-lg md:text-xl text-muted-foreground dark:text-stone-300 text-center mb-10 max-w-2xl">
           Join thousands of professionals who have built stunning portfolios
           with PortfolioGen
-        </p>
+        </p> */}
         <Link href={user ? "/create" : "/auth/signup"}>
           <InteractiveHoverButton>
             <span>{user ? "Get Started Now" : "Create Your Portfolio"}</span>

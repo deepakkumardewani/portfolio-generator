@@ -26,14 +26,12 @@ const CreativeHero = lazy(
 
 interface TemplateCardProps {
   name: TemplateType;
-  imageSrc: string;
   description: string;
   supportsDarkMode: boolean;
 }
 
 export default function TemplateCard({
   name,
-  imageSrc,
   description,
   supportsDarkMode,
 }: TemplateCardProps) {
@@ -57,24 +55,17 @@ export default function TemplateCard({
       case "Modern":
         return <ModernHero />;
       default:
-        // Fallback to image for templates without hero components
-        return (
-          <Image
-            src={imageSrc}
-            alt={`${name} template preview`}
-            width={600}
-            height={400}
-            className="object-cover"
-          />
-        );
+        return null;
     }
   };
 
   return (
     <Card
       className={cn(
-        "overflow-hidden transition-all hover:shadow-md border-2",
-        isHovered ? "border-primary" : "border-transparent"
+        "overflow-hidden transition-all hover:shadow-md border-2 bg-neutral-50 dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800",
+        isHovered
+          ? "border-neutral-300 dark:border-neutral-700"
+          : "border-transparent"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
