@@ -55,9 +55,11 @@ export async function createPortfolioZip(data: PortfolioData): Promise<Blob> {
     // Create a new JSZip instance
     const zip = new JSZip();
 
+    console.log("data", data);
     // Render the selected template to a string
     const componentString = renderTemplateToString(data);
 
+    console.log("componentString", componentString);
     // Generate the complete HTML document
     const htmlContent = generateHTMLDocument(componentString, data);
 
