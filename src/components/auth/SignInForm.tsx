@@ -18,6 +18,7 @@ import { Icons } from "@/components/ui/icons";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z
@@ -85,6 +86,37 @@ export default function SignInForm() {
     <div className="space-y-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="text-center text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link href="/auth/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              variant="outline"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn("github")}
+              className="w-full"
+            >
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+              Sign in with GitHub
+            </Button>
+            <Button
+              variant="outline"
+              disabled={isLoading}
+              onClick={() => handleSocialSignIn("google")}
+              className="w-full"
+            >
+              <Icons.google className="mr-2 h-4 w-4" />
+              Sign in with Google
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-3 before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+            <span className="text-xs text-muted-foreground">Or</span>
+          </div>
           <FormField
             control={form.control}
             name="email"
@@ -152,38 +184,6 @@ export default function SignInForm() {
           </Button>
         </form>
       </Form>
-
-      <div className="flex items-center gap-3 before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
-        <span className="text-xs text-muted-foreground">Or</span>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Button
-          variant="outline"
-          disabled={isLoading}
-          onClick={() => handleSocialSignIn("github")}
-          className="w-full"
-        >
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-          GitHub
-        </Button>
-        <Button
-          variant="outline"
-          disabled={isLoading}
-          onClick={() => handleSocialSignIn("google")}
-          className="w-full"
-        >
-          <Icons.google className="mr-2 h-4 w-4" />
-          Google
-        </Button>
-      </div>
-
-      <p className="text-center text-sm text-muted-foreground">
-        Don't have an account?{" "}
-        <Link href="/auth/signup" className="text-primary hover:underline">
-          Sign up
-        </Link>
-      </p>
     </div>
   );
 }

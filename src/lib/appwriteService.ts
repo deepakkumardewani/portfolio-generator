@@ -700,18 +700,10 @@ export const initializeAppwrite = async (
     const state = store.getState();
     const portfolio = state.portfolio;
 
-    // Define staleness threshold (24 hours)
-    // const STALE_THRESHOLD = 24 * 60 * 60 * 1000;
-
-    // // Check if data is stale or has never been synced
-    // const isDataStale =
-    //   !portfolio._sync?.lastSyncedAt ||
-    //   Date.now() - portfolio._sync.lastSyncedAt > STALE_THRESHOLD;
-
     // Check if there are unsaved changes
     const hasPendingChanges = portfolio._sync?.isDirty || false;
 
-    // Only load from DB if data is stale or this is first load
+    // Only load from DB if this is first load
     if (!portfolio._sync) {
       console.log("Loading fresh data from Appwrite");
       const portfolioData = await loadPortfolio(userId);
