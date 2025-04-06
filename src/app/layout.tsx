@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className="antialiased dark:bg-gray-950">
         <ClientBody>
           <Providers>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
               <main className="min-h-screen font-sans antialiased">
                 {children}
               </main>
