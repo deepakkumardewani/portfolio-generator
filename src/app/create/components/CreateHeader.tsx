@@ -1,4 +1,5 @@
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import UserMenu from "@/components/shared/UserMenu";
 import Link from "next/link";
 import React from "react";
 
@@ -18,6 +19,7 @@ export default function CreateHeader() {
           <div className="flex-1 flex justify-end items-center space-x-4">
             <ThemeToggle size="md" />
           </div>
+          <UserMenu />
         </div>
       </div>
     </div>

@@ -42,10 +42,10 @@ export default function Features() {
     <section id="features" className="py-20 bg-neutral-50 dark:bg-neutral-950">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <TextShimmer>Everything You Need</TextShimmer> to Create the Perfect
-            Portfolio
-          </h2>
+          <div className="text-3xl md:text-4xl font-bold my-4">
+            <TextShimmer className="my-3">Everything You Need</TextShimmer> to
+            Create the Perfect Portfolio
+          </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Our platform provides all the tools you need to create a
             professional portfolio that showcases your work effectively.
@@ -59,9 +59,7 @@ export default function Features() {
               key={index}
             >
               <GlowingEffect
-                blur={0}
-                borderWidth={3}
-                spread={80}
+                spread={40}
                 glow={true}
                 disabled={false}
                 proximity={64}

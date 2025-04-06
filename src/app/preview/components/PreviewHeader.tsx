@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { Icons } from "@/components/ui/icons";
 import { useAppDispatch, useAppSelector, setViewMode } from "@/store";
@@ -21,10 +28,18 @@ import { darkModeClasses } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { useTheme } from "next-themes";
+import ToggleButtons from "./ToggleButtons";
+import UserMenu from "@/components/shared/UserMenu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function PreviewHeader() {
-  const dispatch = useAppDispatch();
-  const { viewMode } = useAppSelector((state) => state.portfolio);
+  // const dispatch = useAppDispatch();
+  // const { viewMode } = useAppSelector((state) => state.portfolio);
   const [deploymentStatus, setDeploymentStatus] =
     useState<DeploymentStatus>("preparing");
   const [deploymentProgress, setDeploymentProgress] = useState(0);
@@ -33,9 +48,16 @@ export default function PreviewHeader() {
     undefined
   );
   const [showDeployDialog, setShowDeployDialog] = useState(false);
-  // const [showTemplateEditor, setShowTemplateEditor] = useState(false);
+  const [netlifySiteId, setNetlifySiteId] = useState<string | null>(null);
 
   const portfolioData = useAppSelector((state) => state.portfolio);
+
+  useEffect(() => {
+    const siteId = localStorage.getItem("netlify_portfolio_site_id");
+    const siteUrl = localStorage.getItem("netlify_portfolio_site");
+    setNetlifySiteId(siteId);
+    setDeploymentUrl(siteUrl || "");
+  }, []);
 
   const handleExport = async (type: "static" | "netlify") => {
     try {
@@ -73,7 +95,16 @@ export default function PreviewHeader() {
         // Update state with deployment result
         setDeploymentStatus(result.status);
         if (result.url) {
+          localStorage.setItem("netlify_portfolio_site", result.url);
           setDeploymentUrl(result.url);
+
+          // Store deployment date for reference in profile page
+          if (result.status === "success") {
+            localStorage.setItem(
+              "netlify_deployment_date",
+              new Date().toISOString()
+            );
+          }
         }
         if (result.error) {
           setDeploymentError(result.error);
@@ -94,6 +125,12 @@ export default function PreviewHeader() {
 
   const closeDeployDialog = () => {
     setShowDeployDialog(false);
+  };
+
+  const handleCopyDeploymentUrl = () => {
+    if (deploymentUrl) {
+      navigator.clipboard.writeText(deploymentUrl);
+    }
   };
 
   const { theme } = useTheme();
@@ -118,43 +155,38 @@ export default function PreviewHeader() {
           </div>
 
           <div className="flex-1 flex justify-center">
-            {/* Device Toggle Buttons */}
-            <div className="flex border rounded-md overflow-hidden">
-              <Button
-                variant={viewMode === "desktop" ? "default" : "ghost"}
-                className={`rounded-none px-3 py-2 h-9 ${
-                  viewMode === "desktop"
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-white dark:bg-stone-950 dark:text-stone-300 dark:hover:bg-stone-800"
-                }`}
-                onClick={() => dispatch(setViewMode("desktop"))}
-              >
-                <Icons.monitor size={18} />
-              </Button>
-              <Button
-                variant={viewMode === "mobile" ? "default" : "ghost"}
-                className={`rounded-none px-3 py-2 h-9 ${
-                  viewMode === "mobile"
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-white dark:bg-stone-950 dark:text-stone-300 dark:hover:bg-stone-800"
-                }`}
-                onClick={() => dispatch(setViewMode("mobile"))}
-              >
-                <Icons.smartphone size={18} />
-              </Button>
-            </div>
+            <ToggleButtons />
           </div>
 
           <div className="flex-1 flex justify-end items-center space-x-4">
             <Link href="/templates">
-              <Button variant="outline">Change Template</Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline">
+                      <Icons.pencil className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Change template</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </Link>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline">
-                  <Icons.settings className="mr-2 h-4 w-4" />
-                  Edit Template
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline">
+                        <Icons.settings className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Edit template</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </PopoverTrigger>
               <PopoverContent
                 className="w-[400px] p-0 dark:bg-stone-800 dark:border-stone-700"
@@ -163,26 +195,65 @@ export default function PreviewHeader() {
                 <TemplateSectionEditor onClose={() => {}} />
               </PopoverContent>
             </Popover>
-            <Button
-              variant="outline"
-              onClick={() => handleExport("static")}
-              className="rounded-full"
-            >
-              <Icons.download className="h-4 w-4" />
-            </Button>
-            <ShimmerButton
-              className="shadow-2xl"
-              shimmerColor="#9E7AFF"
-              background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
-              onClick={() => handleExport("netlify")}
-            >
-              <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
-              <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
-                Deploy
-              </span>
-            </ShimmerButton>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleExport("static")}
+                  >
+                    <Icons.download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Download</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <div className="flex items-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <ShimmerButton
+                    className={`shadow-2xl`}
+                    shimmerColor="#9E7AFF"
+                    background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
+                  >
+                    <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
+                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
+                      Deploy
+                    </span>
+                  </ShimmerButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="bg-neutral-50 dark:bg-neutral-950"
+                  align="end"
+                >
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => handleExport("netlify")}
+                  >
+                    <Icons.rocketIcon className="h-4 w-4" />
+                    Publish
+                  </DropdownMenuItem>
+                  {netlifySiteId && (
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Link
+                        className="flex items-center justify-between"
+                        href={deploymentUrl}
+                        target="_blank"
+                      >
+                        <Icons.externalLinkIcon className="mr-2 h-4 w-4" />
+                        View
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
 
             <ThemeToggle size="md" />
+            <UserMenu />
           </div>
         </div>
 
@@ -197,48 +268,59 @@ export default function PreviewHeader() {
             </div>
 
             {/* Device Toggle Buttons */}
-            <div className="flex border rounded-md overflow-hidden dark:border-stone-700">
-              <Button
-                variant={viewMode === "desktop" ? "default" : "ghost"}
-                className={`rounded-none px-3 py-2 h-9 ${
-                  viewMode === "desktop"
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-white dark:bg-stone-900 dark:text-stone-300 dark:hover:bg-stone-800"
-                }`}
-                onClick={() => dispatch(setViewMode("desktop"))}
-              >
-                <Icons.monitor size={18} />
-              </Button>
-              <Button
-                variant={viewMode === "mobile" ? "default" : "ghost"}
-                className={`rounded-none px-3 py-2 h-9 ${
-                  viewMode === "mobile"
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "bg-white dark:bg-stone-900 dark:text-stone-300 dark:hover:bg-stone-800"
-                }`}
-                onClick={() => dispatch(setViewMode("mobile"))}
-              >
-                <Icons.smartphone size={18} />
-              </Button>
-            </div>
+            <ToggleButtons />
 
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => handleExport("static")}
-                className={darkModeClasses.buttonOutline}
-              >
-                <Icons.download className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                className="bg-purple-600 text-white hover:bg-purple-700"
-                onClick={() => handleExport("netlify")}
-              >
-                <Icons.rocketIcon className="h-4 w-4" />
-              </Button>
+            <div className="flex gap-2 items-center">
+              <div className="flex items-center">
+                <ShimmerButton
+                  className={`shadow-2xl ${
+                    netlifySiteId ? "rounded-r-none border-r-0" : ""
+                  }`}
+                  shimmerColor="#9E7AFF"
+                  background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
+                  onClick={() => handleExport("netlify")}
+                >
+                  <Icons.rocketIcon className="h-4 w-4 text-black dark:text-white" />
+                </ShimmerButton>
+
+                {netlifySiteId && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 rounded-l-none border-l-0 px-1"
+                      >
+                        <Icons.chevronDown className="h-3 w-3" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem className="flex items-center justify-between">
+                        <a
+                          href={deploymentUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 truncate mr-2 text-xs"
+                        >
+                          {deploymentUrl}
+                        </a>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleCopyDeploymentUrl}
+                          className="h-5 w-5 p-0"
+                        >
+                          <Icons.copy className="h-3 w-3" />
+                        </Button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
             </div>
           </div>
+
+          <div className="h-px bg-stone-200 dark:bg-stone-900" />
 
           {/* Second row: Edit Info and Change Template buttons */}
           <div className="flex justify-between items-center">
@@ -253,24 +335,22 @@ export default function PreviewHeader() {
               </Button>
             </Link>
             <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => handleExport("static")}
+                className={darkModeClasses.buttonOutline}
+              >
+                <Icons.download className="h-4 w-4" />
+              </Button>
               <Link href="/templates">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className={darkModeClasses.buttonOutline}
-                >
-                  Change Template
+                <Button variant="outline">
+                  <Icons.pencil className="h-4 w-4" />
                 </Button>
               </Link>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={darkModeClasses.buttonOutline}
-                  >
-                    <Icons.settings className="mr-2 h-4 w-4" />
-                    Edit
+                  <Button variant="outline">
+                    <Icons.settings className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent

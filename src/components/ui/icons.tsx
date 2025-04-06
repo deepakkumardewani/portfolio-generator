@@ -3,6 +3,7 @@ import { SiGoogle, SiGithub } from "@icons-pack/react-simple-icons";
 import { FaLinkedin } from "react-icons/fa";
 import {
   Monitor,
+  Pencil,
   Smartphone,
   Palette,
   ArrowLeft,
@@ -52,6 +53,8 @@ import {
   Trash,
   HashIcon,
   ChartBar,
+  User,
+  LogOut,
 } from "lucide-react";
 // export type Icon = typeof LucideIcon;
 
@@ -109,4 +112,7 @@ export const Icons = {
   arrowUpIcon: ArrowUpIcon,
   arrowDownIcon: ArrowDownIcon,
   paletteIcon: Palette,
+  pencil: Pencil,
+  user: User,
+  logout: LogOut,
 };

@@ -45,12 +45,13 @@ export default function Templates() {
     >
       <div className="container mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Choose from <TextShimmer>3 Beautiful Templates</TextShimmer>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Handcrafted beautiful templates to get you started
-          </p>
+          <div className="text-3xl md:text-4xl font-bold mb-4">
+            <div className="mb-2">Choose from</div>
+            <TextShimmer>3 Handcrafted Beautiful Templates</TextShimmer>
+          </div>
+          {/* <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            to get you started
+          </p> */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {templates.map((template, index) => (

@@ -4,6 +4,7 @@ import { AnimatedShinyText } from "../magicui/animated-shiny-text";
 import { cn } from "@/lib/utils";
 import { GlowingEffect } from "../ui/glowing-effect";
 import { Icons } from "../ui/icons";
+import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 const STEPS = [
   {
     icon: Icons.codeIcon,
@@ -25,6 +26,30 @@ const STEPS = [
   },
 ] as const;
 
+const words = [
+  {
+    text: "Create",
+  },
+  {
+    text: "your",
+  },
+
+  {
+    text: "Portfolio",
+  },
+  {
+    text: "in",
+  },
+  {
+    text: "3",
+  },
+  {
+    text: "Simple",
+  },
+  {
+    text: "Steps",
+  },
+];
 export default function Steps() {
   return (
     <section
@@ -45,9 +70,12 @@ export default function Steps() {
               </AnimatedShinyText>
             </div>
           </div>
-          <h2 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
+          <div className="flex justify-center mb-4">
+            <TypewriterEffectSmooth words={words} />
+          </div>
+          {/* <h2 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
             Create Your Portfolio in 3 Simple Steps
-          </h2>
+          </h2> */}
           <p className="text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto">
             Our streamlined process makes it easy to build and deploy your
             professional portfolio
@@ -58,9 +86,7 @@ export default function Steps() {
           {STEPS.map((step, index) => (
             <div key={step.title} className={cn("relative h-full rounded-xl")}>
               <GlowingEffect
-                blur={0}
-                borderWidth={3}
-                spread={80}
+                spread={40}
                 glow={true}
                 disabled={false}
                 proximity={64}

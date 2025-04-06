@@ -11,16 +11,35 @@ import { useTheme } from "next-themes";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Icons } from "../ui/icons";
+import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
+import { motion } from "framer-motion";
+import { TextGenerateEffect } from "../ui/text-generate-effect";
 export default function Hero() {
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   const { user } = useAuth();
+
+  const words = [
+    {
+      text: "Build",
+    },
+    {
+      text: "your",
+    },
+    {
+      text: "Perfect",
+    },
+    {
+      text: "Portfolio",
+    },
+  ];
+  const words2 = "in Minutes.";
 
   return (
     <section className="bg-neutral-50 dark:bg-neutral-950">
       <div className="h-[40rem] w-full rounded-md relative flex flex-col items-center justify-center antialiased">
         <div className="flex flex-col relative z-10 items-center justify-center h-[40rem] w-full min-h-[70vh] px-6 py-16 max-w-7xl mx-auto">
           <div className="animate-fade-in-up">
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-6">
               <div
                 className={cn(
                   "group rounded-full border w-fit border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
@@ -33,10 +52,11 @@ export default function Hero() {
               </div>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-stone-900 via-stone-700 to-stone-800 dark:from-stone-100 dark:via-stone-300 dark:to-stone-200 text-center leading-tight max-w-4xl">
-              <div>Build Your Perfect Portfolio </div>
-              <TextShimmer className="inline">in Minutes</TextShimmer>
-            </h1>
+            <div className="flex flex-col items-center justify-center">
+              <TypewriterEffectSmooth words={words} />
+              {/* <div>Build Your Perfect Portfolio </div> */}
+              <TextGenerateEffect duration={1} words={words2} />
+            </div>
             <p className="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mt-6 text-center max-w-2xl mx-auto leading-relaxed">
               Stand out from the crowd with beautifully designed, customizable
               portfolio templates that showcase your work and skills.
