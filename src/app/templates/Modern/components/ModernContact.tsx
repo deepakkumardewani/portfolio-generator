@@ -39,17 +39,17 @@ export default function ModernContact() {
 
   // Function to detect social media links and return the appropriate icon
   const getSocialIcon = (url: string) => {
-    const lowerCaseUrl = url.toLowerCase();
+    const lowerCaseUrl = url?.toLowerCase() || "";
 
-    if (lowerCaseUrl.includes("linkedin")) {
+    if (lowerCaseUrl?.includes("linkedin")) {
       return <FaLinkedin className="h-5 w-5" />;
-    } else if (lowerCaseUrl.includes("github")) {
+    } else if (lowerCaseUrl?.includes("github")) {
       return <SiGithub className="h-5 w-5" />;
-    } else if (lowerCaseUrl.includes("twitter")) {
+    } else if (lowerCaseUrl?.includes("twitter")) {
       return <SiX className="h-5 w-5" />;
-    } else if (lowerCaseUrl.includes("instagram")) {
+    } else if (lowerCaseUrl?.includes("instagram")) {
       return <SiInstagram className="h-5 w-5" />;
-    } else if (lowerCaseUrl.includes("facebook")) {
+    } else if (lowerCaseUrl?.includes("facebook")) {
       return <SiFacebook className="h-5 w-5" />;
     } else {
       // Default icon for other links
@@ -165,22 +165,25 @@ export default function ModernContact() {
 
             <div className="grid grid-cols-2 gap-4">
               {contact.links.length > 0 ? (
-                contact.links.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg hover:bg-zinc-800 transition-colors group"
-                  >
-                    <div className="text-zinc-400 group-hover:text-zinc-100 transition-colors">
-                      {getSocialIcon(link.url)}
-                    </div>
-                    <span className="text-zinc-300 group-hover:text-zinc-100 transition-colors truncate">
-                      {link.label}
-                    </span>
-                  </a>
-                ))
+                contact.links.map(
+                  (link, index) =>
+                    link.url && (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg hover:bg-zinc-800 transition-colors group"
+                      >
+                        <div className="text-zinc-400 group-hover:text-zinc-100 transition-colors">
+                          {getSocialIcon(link.url)}
+                        </div>
+                        <span className="text-zinc-300 group-hover:text-zinc-100 transition-colors truncate">
+                          {link.label}
+                        </span>
+                      </a>
+                    )
+                )
               ) : (
                 <div className="col-span-2 text-center py-8 text-zinc-500">
                   No social links added
