@@ -31,7 +31,7 @@ export default function CreativeHero() {
             className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent"
             itemProp="headline"
           >
-            {bio.name}
+            {bio.name || "Your Name"}
           </motion.h1>
           <motion.p
             id="creative-hero-tagline"
@@ -41,7 +41,7 @@ export default function CreativeHero() {
             className="text-xl md:text-2xl dark:text-gray-400 text-black mb-8"
             itemProp="alternativeHeadline"
           >
-            {bio.tagline}
+            {bio.tagline || "Your tagline"}
           </motion.p>
           <meta itemProp="author" content={bio.name || "Your Name"} />
           <motion.div

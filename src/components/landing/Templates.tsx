@@ -89,6 +89,8 @@ function TemplateCard({ template }: { template: Template }) {
       </div>
 
       <div className="p-6">
+        <div className="mb-2 text-2xl font-bold">{template.name}</div>
+
         <p className="text-muted-foreground mb-4">{template.description}</p>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { GlowingEffect } from "../ui/glowing-effect";
 import { Icons } from "../ui/icons";
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
+import { TypingAnimation } from "@/components/magicui/typing-animation";
 const STEPS = [
   {
     icon: Icons.codeIcon,
@@ -71,7 +72,10 @@ export default function Steps() {
             </div>
           </div>
           <div className="flex justify-center mb-4">
-            <TypewriterEffectSmooth words={words} />
+            <TypingAnimation startOnView={true} duration={50}>
+              Create Your Portfolio in 3 Simple Steps
+            </TypingAnimation>
+            {/* <TypewriterEffectSmooth words={words} /> */}
           </div>
           {/* <h2 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
             Create Your Portfolio in 3 Simple Steps
