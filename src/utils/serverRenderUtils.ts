@@ -131,11 +131,11 @@ export function generateHTMLDocument(
   const websiteUrl =
     data.contact?.links?.find(
       (link) =>
-        link.label.toLowerCase().includes("website") ||
-        (link.url &&
-          !link.url.includes("github") &&
-          !link.url.includes("linkedin") &&
-          !link.url.includes("twitter"))
+        link?.label?.toLowerCase().includes("website") ||
+        (link?.url &&
+          !link?.url.includes("github") &&
+          !link?.url.includes("linkedin") &&
+          !link?.url.includes("twitter"))
     )?.url || "";
 
   return `<!DOCTYPE html>
