@@ -65,7 +65,7 @@ export default function CreativeExperience() {
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {exp.skills &&
-                  exp.skills.map((skill, idx) => (
+                  exp.skills.map((skill: string, idx: number) => (
                     <span
                       key={idx}
                       className="inline-block px-3 py-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 rounded-full"

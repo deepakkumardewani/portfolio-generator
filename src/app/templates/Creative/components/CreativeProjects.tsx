@@ -92,7 +92,7 @@ export default function CreativeProjects() {
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies?.map((tech) => (
+                  {project.technologies?.map((tech: string) => (
                     <span
                       key={tech}
                       className="px-3 py-1 bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-full text-sm"
