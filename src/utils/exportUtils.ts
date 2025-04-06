@@ -26,6 +26,26 @@ export interface DeploymentResult {
 const NETLIFY_SITE_ID_KEY = "netlify_portfolio_site_id";
 
 /**
+ * Generates a unique site name with optional random suffix
+ * @param baseName Base name for the site
+ * @param addRandomness Whether to add random suffix
+ * @returns Unique site name for Netlify
+ */
+function generateSiteName(baseName: string, addRandomness = true): string {
+  // Sanitize the base name for URL
+  const sanitizedName = baseName.toLowerCase().replace(/[^a-z0-9]/g, "-");
+
+  // Add timestamp and random suffix if requested
+  if (addRandomness) {
+    // const timestamp = Date.now().toString().slice(-6);
+    const randomStr = Math.random().toString(36).substring(2, 6);
+    return `portfolio-${randomStr}`;
+  }
+
+  return `portfolio-${sanitizedName}`;
+}
+
+/**
  * Creates a zip file containing the portfolio static files
  * @param data Portfolio data
  * @returns Promise that resolves to the zip blob
@@ -79,26 +99,6 @@ export async function exportToStatic(
     console.error("Error exporting to static files:", error);
     throw error;
   }
-}
-
-/**
- * Generates a unique site name with optional random suffix
- * @param baseName Base name for the site
- * @param addRandomness Whether to add random suffix
- * @returns Unique site name for Netlify
- */
-function generateSiteName(baseName: string, addRandomness = true): string {
-  // Sanitize the base name for URL
-  const sanitizedName = baseName.toLowerCase().replace(/[^a-z0-9]/g, "-");
-
-  // Add timestamp and random suffix if requested
-  if (addRandomness) {
-    const timestamp = Date.now().toString().slice(-6);
-    const randomStr = Math.random().toString(36).substring(2, 6);
-    return `portfolio-${sanitizedName}-${timestamp}-${randomStr}`;
-  }
-
-  return `portfolio-${sanitizedName}`;
 }
 
 /**
