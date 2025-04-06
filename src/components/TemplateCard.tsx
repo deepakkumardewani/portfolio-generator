@@ -65,12 +65,12 @@ export default function TemplateCard({
         "overflow-hidden transition-all hover:shadow-md border-2 bg-neutral-50 dark:bg-neutral-950 border-neutral-200 dark:border-neutral-800",
         isHovered
           ? "border-neutral-300 dark:border-neutral-700"
-          : "border-transparent"
+          : "border-neutral-200 dark:border-neutral-800"
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="border-b border-neutral-200 dark:border-neutral-800 relative h-48 w-full overflow-hidden">
         <Suspense
           fallback={
             <div className="flex h-full w-full items-center justify-center bg-muted">
@@ -80,15 +80,11 @@ export default function TemplateCard({
             </div>
           }
         >
-          {name === "Minimalist" || name === "Creative" || name === "Modern" ? (
-            <div className="h-full w-full overflow-hidden">
-              <div className="transform scale-[0.25] origin-top-left h-[400%] w-[400%]">
-                {renderHeroComponent()}
-              </div>
+          <div className="h-full w-full overflow-hidden">
+            <div className="transform scale-[0.25] origin-top-left h-[400%] w-[400%]">
+              {renderHeroComponent()}
             </div>
-          ) : (
-            renderHeroComponent()
-          )}
+          </div>
         </Suspense>
         <div className="absolute top-2 right-2 flex space-x-1 bg-white/80 dark:bg-black/80 rounded-full p-1.5">
           <Icons.sun size={16} className="text-amber-500" />
