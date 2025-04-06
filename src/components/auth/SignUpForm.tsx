@@ -100,7 +100,7 @@ export default function SignUpForm() {
       <Form {...form}>
         <div className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/auth/signin" className="text-primary hover:underline">
+          <Link href="/signin" className="text-primary hover:underline">
             Sign in
           </Link>
         </div>

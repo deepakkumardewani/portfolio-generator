@@ -18,7 +18,7 @@ export default function CTA() {
           Join thousands of professionals who have built stunning portfolios
           with PortfolioGen
         </p> */}
-        <Link href={user ? "/create" : "/auth/signup"}>
+        <Link href={user ? "/create" : "/signup"}>
           <InteractiveHoverButton>
             <span>{user ? "Get Started Now" : "Create Your Portfolio"}</span>
           </InteractiveHoverButton>

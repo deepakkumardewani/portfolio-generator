@@ -30,7 +30,7 @@ export default function Header() {
               <UserMenu />
             </div>
           ) : (
-            <Link href="/auth/signup">
+            <Link href="/signup">
               <ShimmerButton className="shadow-2xl" shimmerColor="#9E7AFF">
                 <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:text-stone-300 text-md">
                   Get Started

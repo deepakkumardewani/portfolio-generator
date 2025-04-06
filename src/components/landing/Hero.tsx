@@ -62,7 +62,7 @@ export default function Hero() {
               portfolio templates that showcase your work and skills.
             </p>
             <div className="flex flex-row gap-4 mt-10 justify-center">
-              <Link href={user ? "/create" : "/auth/signup"}>
+              <Link href={user ? "/create" : "/signup"}>
                 <InteractiveHoverButton>
                   <span>Create Your Portfolio</span>
                 </InteractiveHoverButton>
