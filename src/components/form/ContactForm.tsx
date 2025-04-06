@@ -56,7 +56,12 @@ export default function FormStep5({ onBack }: FormStep5Props) {
   }, [savedContact, form]);
 
   const onSubmit = (data: ContactFormValues) => {
-    dispatch(setContact(data));
+    // Filter out links with empty URLs before dispatching
+    const filteredData = {
+      ...data,
+      links: data.links.filter((link) => link.url),
+    };
+    dispatch(setContact(filteredData));
     router.push("/templates");
   };
 
