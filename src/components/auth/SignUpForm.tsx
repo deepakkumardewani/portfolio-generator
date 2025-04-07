@@ -105,9 +105,10 @@ export default function SignUpForm() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
           <Button
             variant="outline"
+            type="button"
             disabled={isLoading}
             onClick={() => handleSocialSignIn("github")}
             className="w-full"
@@ -117,6 +118,7 @@ export default function SignUpForm() {
           </Button>
           <Button
             variant="outline"
+            type="button"
             disabled={isLoading}
             onClick={() => handleSocialSignIn("google")}
             className="w-full"
