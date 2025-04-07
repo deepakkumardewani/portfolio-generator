@@ -32,18 +32,8 @@ function Minimalist({ isServerSide = false }) {
     { id: "footer", component: <CommonFooter /> },
   ];
 
-  // In client-side rendering, add additional metadata with Helmet
-  const SEOMetadata = isServerSide ? null : (
-    <Helmet>
-      <html lang="en" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta name="robots" content="index, follow" />
-    </Helmet>
-  );
-
   const content = (
     <DarkModeProvider templateId="minimalist-template">
-      {SEOMetadata}
       <div
         id="minimalist-template"
         className="minimalist-portfolio"
