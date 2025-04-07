@@ -12,8 +12,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "CreateFolio",
-  description: "Create and customize your portfolio with ease",
+  title: "CreateFolio - Create Your Professional Portfolio",
+  description:
+    "Build a stunning professional portfolio with our easy-to-use portfolio generator.",
   keywords: [
     "portfolio",
     "generator",
