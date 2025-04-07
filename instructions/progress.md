@@ -1,12 +1,12 @@
 # Portfolio Generator - Development Progress
 
-This document tracks the progress of the Portfolio Generator project as of **May 30, 2025**. It covers the status of features, components, and tasks outlined in the PRD, Tech Stack, and App Flow documents.
+This document tracks the progress of the Portfolio Generator project as of **June 5, 2025**. It covers the status of features, components, and tasks outlined in the PRD, Tech Stack, and App Flow documents.
 
 ---
 
 ## 1. Overall Status
 
-- **Completion**: ~95% (Core functionality implemented, polish and final testing in progress).
+- **Completion**: ~98% (Core functionality implemented, final testing in progress).
 - **Milestones Achieved**:
   1. Prototype: Basic form and template rendering completed.
   2. Core Features: Multi-step form, preview, and export functionality implemented.
