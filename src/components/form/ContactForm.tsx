@@ -37,7 +37,12 @@ export default function FormStep5({ onBack }: FormStep5Props) {
     defaultValues: {
       phone: savedContact.phone || "",
       email: savedContact.email || "",
-      links: savedContact.links || [],
+      links: savedContact.links || [
+        { label: "LinkedIn", url: "" },
+        { label: "GitHub", url: "" },
+        { label: "Dribbble", url: "" },
+        { label: "Twitter", url: "" },
+      ],
     },
   });
 
@@ -47,20 +52,64 @@ export default function FormStep5({ onBack }: FormStep5Props) {
       savedContact.phone ||
       savedContact.links?.length > 0
     ) {
+      console.log("savedContact", savedContact);
+      // Ensure all link types are present with proper labels
+      const links = [...savedContact.links];
+      const linkLabels = ["LinkedIn", "GitHub", "Dribbble", "Twitter"];
+
+      // Create an array with all required links, preserving existing ones
+      const completeLinks = linkLabels.map((label, index) => {
+        const existingLink = links.find(
+          (link) => link.label.toLowerCase() === label.toLowerCase()
+        );
+        return existingLink || { label, url: "" };
+      });
+
+      console.log("completeLinks", completeLinks);
       form.reset({
         phone: savedContact.phone || "",
         email: savedContact.email || "",
-        links: savedContact.links || [],
+        links: completeLinks,
       });
     }
   }, [savedContact, form]);
 
   const onSubmit = (data: ContactFormValues) => {
+    // Extract domain names from URLs and use them as labels
+    const processedLinks = data.links.map((link) => {
+      if (!link.url) return link;
+
+      try {
+        const url = new URL(link.url);
+        // Extract the domain name without TLD (e.g., "linkedin" from "linkedin.com")
+        const domainParts = url.hostname.split(".");
+        const domain =
+          domainParts.length > 1
+            ? domainParts[domainParts.length - 2]
+            : domainParts[0];
+
+        // Capitalize the first letter
+        const label = domain.charAt(0).toUpperCase() + domain.slice(1);
+
+        return {
+          url: link.url,
+          label: label,
+        };
+      } catch (_) {
+        // If URL parsing fails, use the original label or a default
+        return {
+          url: link.url,
+          label: link.label || "Link",
+        };
+      }
+    });
+
     // Filter out links with empty URLs before dispatching
     const filteredData = {
       ...data,
-      links: data.links.filter((link) => link.url),
+      links: processedLinks.filter((link) => link.url),
     };
+
     dispatch(setContact(filteredData));
     router.push("/templates");
   };
@@ -101,6 +150,8 @@ export default function FormStep5({ onBack }: FormStep5Props) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
+              {/* Phone Number */}
+
               <FormField
                 control={form.control}
                 name="phone"
@@ -124,6 +175,7 @@ export default function FormStep5({ onBack }: FormStep5Props) {
                 )}
               />
 
+              {/* Email */}
               <FormField
                 control={form.control}
                 name="email"
@@ -149,97 +201,112 @@ export default function FormStep5({ onBack }: FormStep5Props) {
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="links.0.url"
-              rules={{
-                validate: validateUrl,
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={darkModeClasses.formLabel}>
-                    LinkedIn
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://linkedin.com/in/yourprofile"
-                      className={darkModeClasses.input}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* LinkedIn */}
+            <div>
+              {/* <FormLabel className={darkModeClasses.formLabel}>
+                LinkedIn
+              </FormLabel> */}
+              <FormField
+                control={form.control}
+                name="links.0.url"
+                rules={{
+                  validate: validateUrl,
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      LinkedIn
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://linkedin.com/in/yourprofile"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="links.1.url"
-              rules={{
-                validate: validateUrl,
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={darkModeClasses.formLabel}>
-                    GitHub
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://github.com/yourusername"
-                      className={darkModeClasses.input}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* GitHub */}
+            <div>
+              <FormField
+                control={form.control}
+                name="links.1.url"
+                rules={{
+                  validate: validateUrl,
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      GitHub
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://github.com/yourusername"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="links.2.url"
-              rules={{
-                validate: validateUrl,
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={darkModeClasses.formLabel}>
-                    Dribbble
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://dribbble.com/yourusername"
-                      className={darkModeClasses.input}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Dribbble */}
+            <div>
+              <FormField
+                control={form.control}
+                name="links.2.url"
+                rules={{
+                  validate: validateUrl,
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      Dribbble
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://dribbble.com/yourusername"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-            <FormField
-              control={form.control}
-              name="links.3.url"
-              rules={{
-                validate: validateUrl,
-              }}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={darkModeClasses.formLabel}>
-                    Twitter
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://twitter.com/yourusername"
-                      className={darkModeClasses.input}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Twitter */}
+            <div>
+              <FormField
+                control={form.control}
+                name="links.3.url"
+                rules={{
+                  validate: validateUrl,
+                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={darkModeClasses.formLabel}>
+                      Twitter
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://twitter.com/yourusername"
+                        className={darkModeClasses.input}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="flex gap-2 justify-end">
               <Button

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setSkills } from "@/store";
-import { SkillsFormValues } from "@/types";
+import { Skill, SkillsFormValues } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 
 interface FormStep2Props {
@@ -36,12 +36,9 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
   const { setValue, watch } = form;
   const skills = watch("skills");
 
-  const addSkill = (skillName: string) => {
-    if (skillName && !skills.some((skill) => skill.value === skillName)) {
-      const updatedSkills = [
-        ...skills,
-        { value: skillName, label: skillName, image: "", category: "" },
-      ];
+  const addSkill = (skill: Skill) => {
+    if (skill && !skills.some((s) => s.value === skill.value)) {
+      const updatedSkills = [...skills, skill];
       setValue("skills", updatedSkills);
     }
   };
@@ -54,6 +51,7 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
   };
 
   const onSubmit = (data: SkillsFormValues) => {
+    console.log("data", data);
     dispatch(setSkills(data.skills));
     onNext();
   };

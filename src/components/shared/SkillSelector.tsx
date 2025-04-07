@@ -20,10 +20,11 @@ import { FormLabel } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 import { TECHNICAL_SKILLS } from "@/utils/constants";
 import { cn, darkModeClasses } from "@/lib/utils";
+import { Skill } from "@/types";
 
 interface SkillSelectorProps {
   selectedSkills: string[];
-  onSkillAdd: (skill: string) => void;
+  onSkillAdd: (skill: Skill) => void;
   onSkillRemove: (skill: string) => void;
   label?: string;
   showCustomSkillInput?: boolean;
@@ -40,9 +41,9 @@ export default function SkillSelector({
   const [selectedSkill, setSelectedSkill] = useState("");
   const [customSkill, setCustomSkill] = useState("");
 
-  const addSkill = (skillName: string) => {
-    if (skillName && !selectedSkills.includes(skillName)) {
-      onSkillAdd(skillName);
+  const addSkill = (skill: Skill) => {
+    if (skill && !selectedSkills.includes(skill.value)) {
+      onSkillAdd(skill);
       setSelectedSkill("");
       setCustomSkill("");
     }
@@ -84,7 +85,7 @@ export default function SkillSelector({
                         const value =
                           currentValue === selectedSkill ? "" : currentValue;
                         setSelectedSkill(value);
-                        if (value) addSkill(value);
+                        if (value) addSkill(skill);
                         setOpen(false);
                       }}
                     >
@@ -120,14 +121,26 @@ export default function SkillSelector({
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
-                addSkill(customSkill);
+                addSkill({
+                  value: customSkill,
+                  label: customSkill,
+                  image: "",
+                  category: "other",
+                });
               }
             }}
             className={darkModeClasses.input}
           />
           <Button
             type="button"
-            onClick={() => addSkill(customSkill)}
+            onClick={() =>
+              addSkill({
+                value: customSkill,
+                label: customSkill,
+                image: "",
+                category: "other",
+              })
+            }
             disabled={!customSkill}
             className={darkModeClasses.buttonPrimary}
           >
