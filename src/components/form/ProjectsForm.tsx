@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, addProject } from "@/store";
 import { Icons } from "@/components/ui/icons";
-import { ProjectsFormValues } from "@/types";
+import { ProjectsFormValues, Skill } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import ImageUpload from "@/components/shared/ImageUpload";
 import { darkModeClasses } from "@/lib/utils";
@@ -97,25 +97,25 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
     setExpandedIndex(index === expandedIndex ? -1 : index);
   };
 
-  const addSkill = (index: number, skill: string) => {
+  const addSkill = (index: number, skill: Skill) => {
     if (!skill) return;
 
     const currentTechnologies =
       form.getValues(`projects.${index}.technologies`) || [];
-    if (!currentTechnologies.includes(skill)) {
+    if (!currentTechnologies.includes(skill.value)) {
       form.setValue(`projects.${index}.technologies`, [
         ...currentTechnologies,
-        skill,
+        skill.value,
       ]);
     }
   };
 
-  const removeSkill = (index: number, skillToRemove: string) => {
+  const removeSkill = (index: number, skillValue: string) => {
     const currentTechnologies =
       form.getValues(`projects.${index}.technologies`) || [];
     form.setValue(
       `projects.${index}.technologies`,
-      currentTechnologies.filter((tech) => tech !== skillToRemove)
+      currentTechnologies.filter((tech) => tech !== skillValue)
     );
   };
 
@@ -321,7 +321,9 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                         form.watch(`projects.${index}.technologies`) || []
                       }
                       onSkillAdd={(skill) => addSkill(index, skill)}
-                      onSkillRemove={(skill) => removeSkill(index, skill)}
+                      onSkillRemove={(skillValue) =>
+                        removeSkill(index, skillValue)
+                      }
                       label="Technologies Used"
                     />
                   </div>

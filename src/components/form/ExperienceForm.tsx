@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector, setWorkExperience } from "@/store";
 import { Icons } from "@/components/ui/icons";
-import { WorkExperienceFormValues } from "@/types";
+import { WorkExperienceFormValues, Skill } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { darkModeClasses } from "@/lib/utils";
@@ -88,25 +88,25 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
     onNext();
   };
 
-  const addSkill = (index: number, skill: string) => {
-    if (!skill) return;
+  const addSkill = (index: number, skill: Skill) => {
+    if (!skill.value) return;
 
     const currentSkills =
       form.getValues(`workExperience.${index}.skills`) || [];
-    if (!currentSkills.includes(skill)) {
+    if (!currentSkills.includes(skill.value)) {
       form.setValue(`workExperience.${index}.skills`, [
         ...currentSkills,
-        skill,
+        skill.value,
       ]);
     }
   };
 
-  const removeSkill = (index: number, skillToRemove: string) => {
+  const removeSkill = (index: number, skillValue: string) => {
     const currentSkills =
       form.getValues(`workExperience.${index}.skills`) || [];
     form.setValue(
       `workExperience.${index}.skills`,
-      currentSkills.filter((skill) => skill !== skillToRemove)
+      currentSkills.filter((s) => s !== skillValue)
     );
   };
 
@@ -305,7 +305,9 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         form.watch(`workExperience.${index}.skills`) || []
                       }
                       onSkillAdd={(skill) => addSkill(index, skill)}
-                      onSkillRemove={(skill) => removeSkill(index, skill)}
+                      onSkillRemove={(skillValue) =>
+                        removeSkill(index, skillValue)
+                      }
                       label="Technical Skills Used"
                     />
 
