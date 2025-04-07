@@ -79,11 +79,10 @@ export default function ModernContact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-4 relative">
-      {/* Subtle background with glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 opacity-50"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-zinc-900/0 to-zinc-950/0"></div>
-
+    <section
+      id="contact"
+      className="py-24 px-4 relative bg-gray-50 dark:bg-black"
+    >
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
           id="contact-heading"
@@ -114,7 +113,7 @@ export default function ModernContact() {
               opportunities to be part of your vision.
             </p>
 
-            <div id="contact-info-links" className="space-y-6">
+            <div className="space-y-6">
               {contact.email && (
                 <div className="flex items-center gap-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-900/20 border border-purple-500/20 text-purple-400">

@@ -77,10 +77,10 @@ export default function ModernSkills() {
   };
 
   return (
-    <section id="skills" className="py-24 px-4 relative">
-      {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-zinc-950 opacity-50"></div>
-
+    <section
+      id="skills"
+      className="py-24 px-4 relative bg-gray-50 dark:bg-black"
+    >
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
           id="skills-heading"

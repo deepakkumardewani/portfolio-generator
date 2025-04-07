@@ -16,12 +16,6 @@ export default function ModernHero() {
       itemScope
       itemType="https://schema.org/WPHeader"
     >
-      {/* Background gradient */}
-      <div className="absolute h-screen w-full inset-0 bg-gradient-to-b dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950"></div>
-
-      {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
-
       {/* Content */}
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
@@ -50,14 +44,14 @@ export default function ModernHero() {
           <div className="flex flex-wrap gap-4 justify-center">
             <a
               href="#projects"
-              className="px-6 py-3 rounded-md bg-zinc-800 hover:bg-zinc-700 text-white transition-colors"
+              className="px-6 py-3 rounded-md bg-zinc-500 dark:bg-zinc-800 hover:bg-zinc-700 text-white transition-colors"
               aria-label="View my projects"
             >
               View Work
             </a>
             <a
               href="#contact"
-              className="px-6 py-3 rounded-md border border-zinc-700 hover:border-zinc-500 transition-colors"
+              className="px-6 py-3 rounded-md border text-black dark:text-white border-zinc-500 dark:border-zinc-700 hover:border-zinc-900 transition-colors"
               aria-label="Contact me"
             >
               Contact Me

@@ -43,17 +43,14 @@ export default function ModernExperience() {
   return (
     <section
       id="experience"
-      className="py-24 px-4 relative"
+      className="py-24 px-4 relative bg-gray-50 dark:bg-black"
       aria-labelledby="experience-heading"
       itemScope
       itemType="https://schema.org/WorkExperience"
     >
-      {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 to-zinc-950 opacity-50"></div>
-
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
-          id="experience-heading-container"
+          id="experience-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -61,7 +58,6 @@ export default function ModernExperience() {
           className="mb-16"
         >
           <h2
-            id="experience-heading"
             className="text-3xl md:text-4xl font-bold mb-3 inline-block"
             itemProp="name"
           >

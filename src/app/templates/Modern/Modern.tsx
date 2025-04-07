@@ -33,7 +33,7 @@ export default function Modern({ isServerSide = false }) {
   ];
 
   const content = (
-    <DarkModeProvider templateId="modern-template" defaultDark={true}>
+    <DarkModeProvider templateId="modern-template">
       <div id="modern-template">
         <OrderedTemplateContainer sections={templateSections} />
       </div>

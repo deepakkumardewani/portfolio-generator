@@ -33,17 +33,14 @@ export default function ModernProjects() {
   return (
     <section
       id="projects"
-      className="py-24 px-4 relative"
+      className="py-24 px-4 relative bg-gray-50 dark:bg-black"
       aria-labelledby="projects-heading"
       itemScope
       itemType="https://schema.org/CollectionPage"
     >
-      {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 to-zinc-900 opacity-50"></div>
-
       <div className="container mx-auto max-w-4xl relative">
         <motion.div
-          id="projects-heading-container"
+          id="projects-heading"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -51,7 +48,6 @@ export default function ModernProjects() {
           className="mb-16"
         >
           <h2
-            id="projects-heading"
             className="text-3xl md:text-4xl font-bold mb-3 inline-block"
             itemProp="name"
           >
