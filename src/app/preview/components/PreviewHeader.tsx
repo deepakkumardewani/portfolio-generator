@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { Icons } from "@/components/ui/icons";
-import { useAppDispatch, useAppSelector, setViewMode } from "@/store";
+import { useAppSelector } from "@/store";
 import {
   exportToStatic,
   deployToNetlify,
@@ -36,8 +36,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { useAuth } from "@/contexts/AuthContext";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 export default function PreviewHeader() {
+  const { user } = useAuth();
+  const isAuthenticated = sessionStorage.getItem("is_authenticated");
   // const dispatch = useAppDispatch();
   // const { viewMode } = useAppSelector((state) => state.portfolio);
   const [deploymentStatus, setDeploymentStatus] =
@@ -57,7 +60,7 @@ export default function PreviewHeader() {
     const siteUrl = localStorage.getItem("netlify_portfolio_site");
     setNetlifySiteId(siteId);
     setDeploymentUrl(siteUrl || "");
-  }, []);
+  }, [deploymentUrl]);
 
   const handleExport = async (type: "static" | "netlify") => {
     try {
@@ -174,22 +177,22 @@ export default function PreviewHeader() {
               </TooltipProvider>
             </Link>
             <Popover>
-              <PopoverTrigger asChild>
-                <TooltipProvider>
-                  <Tooltip>
+              <TooltipProvider>
+                <Tooltip>
+                  <PopoverTrigger asChild>
                     <TooltipTrigger asChild>
                       <Button variant="outline">
                         <Icons.settings className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Edit template</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </PopoverTrigger>
+                  </PopoverTrigger>
+                  <TooltipContent>
+                    <p>Edit template</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <PopoverContent
-                className="w-[400px] p-0 dark:bg-stone-800 dark:border-stone-700"
+                className="w-[300px] p-0 dark:bg-stone-800 dark:border-stone-700"
                 align="end"
               >
                 <TemplateSectionEditor onClose={() => {}} />
@@ -210,11 +213,11 @@ export default function PreviewHeader() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
+            <ThemeToggle size="md" />
             <div className="flex items-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <ShimmerButton
+                  {/* <ShimmerButton
                     className={`shadow-2xl`}
                     shimmerColor="#9E7AFF"
                     background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
@@ -223,7 +226,17 @@ export default function PreviewHeader() {
                     <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
                       Deploy
                     </span>
-                  </ShimmerButton>
+                  </ShimmerButton> */}
+                  <HoverBorderGradient
+                    containerClassName="rounded-full"
+                    as="button"
+                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 cursor-pointer"
+                  >
+                    <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
+                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:text-stone-300 text-md">
+                      Deploy
+                    </span>
+                  </HoverBorderGradient>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   className="bg-neutral-50 dark:bg-neutral-950"
@@ -252,8 +265,7 @@ export default function PreviewHeader() {
               </DropdownMenu>
             </div>
 
-            <ThemeToggle size="md" />
-            <UserMenu />
+            {isAuthenticated && <UserMenu />}
           </div>
         </div>
 

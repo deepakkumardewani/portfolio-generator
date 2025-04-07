@@ -5,14 +5,20 @@ import { Suspense, useEffect } from "react";
 import CreateHeader from "./components/CreateHeader";
 import { useAppwrite } from "@/hooks/useAppwrite";
 import { initializeAppwrite } from "@/store";
+import { store } from "@/store";
+// import { ensureUserDocument } from "@/lib/appwriteService";
+// import { useSearchParams } from "next/navigation";
 
 export default function CreatePage() {
   const { user } = useAppwrite();
+  // const searchParams = useSearchParams();
+  // const [checkedDocument, setCheckedDocument] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      initializeAppwrite(user.$id);
-    }
+    if (!user) return;
+
+    // Only initialize Appwrite - document creation should be handled during signup flow
+    initializeAppwrite(user.$id);
   }, [user]);
 
   return (
