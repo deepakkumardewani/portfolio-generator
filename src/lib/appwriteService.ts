@@ -23,10 +23,8 @@ const databases = new Databases(client);
 
 // Database and collections constants
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "";
-
-const COLLECTIONS = {
-  USER: process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID || "",
-};
+const USER_COLLECTION_ID =
+  process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID || "";
 
 /**
  * Create a new user document when a user signs up
@@ -37,33 +35,21 @@ export const createUserDocument = async (
   email: string
 ) => {
   try {
-    console.log(
-      `[${new Date().toISOString()}] Checking for existing document for user: ${userId}`
-    );
-
     // Check if user document already exists
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
     if (existingDocs.total > 0) {
-      console.log(
-        `[${new Date().toISOString()}] User document already exists for ${userId}, documentId: ${
-          existingDocs.documents[0].$id
-        }`
-      );
       return existingDocs.documents[0];
     }
 
-    console.log(
-      `[${new Date().toISOString()}] No existing document, creating new document for user: ${userId}`
-    );
     // Create new user document
     const newUser = await databases.createDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       ID.unique(),
       {
         userId,
@@ -77,42 +63,22 @@ export const createUserDocument = async (
         selectedTemplate: "",
       }
     );
-
-    console.log(
-      `[${new Date().toISOString()}] Created new user document: ${
-        newUser.$id
-      } for user: ${userId}`
-    );
     return newUser;
   } catch (error) {
     // Handle specific error for duplicate documents
     // This helps in case two requests try to create a document simultaneously
     if (error instanceof Error && error.message.includes("duplicate")) {
-      console.log(
-        `[${new Date().toISOString()}] Duplicate document error - retrieving existing document for user: ${userId}`
-      );
-
       // Retrieve the existing document instead
       const docs = await databases.listDocuments(
         DATABASE_ID,
-        COLLECTIONS.USER,
+        USER_COLLECTION_ID,
         [Query.equal("userId", userId)]
       );
 
       if (docs.total > 0) {
-        console.log(
-          `[${new Date().toISOString()}] Found existing document after duplicate error: ${
-            docs.documents[0].$id
-          }`
-        );
         return docs.documents[0];
       }
     }
-
-    console.error(
-      `[${new Date().toISOString()}] Error creating user document:`,
-      error
-    );
     throw error;
   }
 };
@@ -129,7 +95,7 @@ const getUserDocument = async (userId: string) => {
     // Check if user document already exists
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -181,7 +147,7 @@ const getUserDocument = async (userId: string) => {
         // Final attempt to get document in case it was created by another process
         const finalCheckDocs = await databases.listDocuments(
           DATABASE_ID,
-          COLLECTIONS.USER,
+          USER_COLLECTION_ID,
           [Query.equal("userId", userId)]
         );
 
@@ -219,7 +185,7 @@ export const saveBio = async (bio: Bio, userId: string) => {
 
     return await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         bio: JSON.stringify(bio),
@@ -241,7 +207,7 @@ export const saveSkills = async (skills: Skill[], userId: string) => {
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         skills: JSON.stringify(skills),
@@ -268,7 +234,7 @@ export const saveWorkExperience = async (
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         workExperience: JSON.stringify(workExperience),
@@ -292,7 +258,7 @@ export const saveProjects = async (projects: Project[], userId: string) => {
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         projects: JSON.stringify(projects),
@@ -316,7 +282,7 @@ export const saveContact = async (contact: Contact, userId: string) => {
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         contact: JSON.stringify(contact),
@@ -343,7 +309,7 @@ export const saveTemplate = async (
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       {
         selectedTemplate: JSON.stringify(selectedTemplate),
@@ -364,7 +330,7 @@ export const loadBio = async (userId: string): Promise<Bio | null> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -392,7 +358,7 @@ export const loadSkills = async (userId: string): Promise<Skill[]> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -416,7 +382,7 @@ export const loadWorkExperience = async (
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -438,7 +404,7 @@ export const loadProjects = async (userId: string): Promise<Project[]> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -460,7 +426,7 @@ export const loadContact = async (userId: string): Promise<Contact | null> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -486,7 +452,7 @@ export const loadTemplate = async (
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -514,7 +480,7 @@ export const loadPortfolio = async (
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -572,7 +538,7 @@ export const savePortfolio = async (
     if (!updatedSection) {
       await databases.updateDocument(
         DATABASE_ID,
-        COLLECTIONS.USER,
+        USER_COLLECTION_ID,
         document.$id,
         {
           bio: JSON.stringify(portfolio.bio),
@@ -617,7 +583,7 @@ export const savePortfolio = async (
 
     await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       document.$id,
       updateData
     );
@@ -639,7 +605,7 @@ export const ensureUserDocument = async (userId: string): Promise<boolean> => {
     // Check if user document already exists
     const existingDocs = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.USER,
+      USER_COLLECTION_ID,
       [Query.equal("userId", userId)]
     );
 
@@ -653,17 +619,22 @@ export const ensureUserDocument = async (userId: string): Promise<boolean> => {
     console.log("Creating new user document for:", userId);
 
     // Create new user document
-    await databases.createDocument(DATABASE_ID, COLLECTIONS.USER, ID.unique(), {
-      userId,
-      name: user.name || "",
-      email: user.email || "",
-      bio: "",
-      skills: "[]",
-      workExperience: "[]",
-      projects: "[]",
-      contact: "",
-      selectedTemplate: JSON.stringify("Minimalist"),
-    });
+    await databases.createDocument(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      ID.unique(),
+      {
+        userId,
+        name: user.name || "",
+        email: user.email || "",
+        bio: "",
+        skills: "[]",
+        workExperience: "[]",
+        projects: "[]",
+        contact: "",
+        selectedTemplate: JSON.stringify("Minimalist"),
+      }
+    );
 
     console.log("Created new user document for:", userId);
     return true;

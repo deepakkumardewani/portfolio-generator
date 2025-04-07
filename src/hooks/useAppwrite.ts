@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { account } from "../lib/appwrite";
 import { Models, OAuthProvider } from "appwrite";
 import { createUserDocument } from "../lib/appwriteService";
+import { useRouter } from "next/navigation";
 
 interface UseAppwriteReturn {
   user: Models.User<Models.Preferences> | null;
@@ -26,7 +27,7 @@ export const useAppwrite = (): UseAppwriteReturn => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const router = useRouter();
   // Check if user is logged in on component mount
   useEffect(() => {
     const checkSession = async () => {
@@ -103,24 +104,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
     }
   };
 
-  // Logout user
-  const logout = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Delete current session
-      await account.deleteSession("current");
-
-      setUser(null);
-    } catch (err: any) {
-      setError(err.message || "Failed to log out");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Login with OAuth provider (Google, GitHub)
   const oauthLogin = async (provider: string) => {
     try {
@@ -150,6 +133,24 @@ export const useAppwrite = (): UseAppwriteReturn => {
     }
   };
 
+  // Logout user
+  const logout = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Delete current session
+      await account.deleteSession("current");
+
+      setUser(null);
+      router.push("/");
+    } catch (err: any) {
+      setError(err.message || "Failed to log out");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     user,
     loading,
