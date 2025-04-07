@@ -596,52 +596,12 @@ export const savePortfolio = async (
 };
 
 /**
- * Ensures a user document exists, creating one if it doesn't
+ * Clear the persisted portfolio state from localStorage
+ * Call this on login to ensure we're loading fresh data
  */
-export const ensureUserDocument = async (userId: string): Promise<boolean> => {
-  try {
-    console.log("Checking if user document exists for:", userId);
-
-    // Check if user document already exists
-    const existingDocs = await databases.listDocuments(
-      DATABASE_ID,
-      USER_COLLECTION_ID,
-      [Query.equal("userId", userId)]
-    );
-
-    if (existingDocs.total > 0) {
-      console.log("User document already exists");
-      return true;
-    }
-
-    // Get user details from account
-    const user = await account.get();
-    console.log("Creating new user document for:", userId);
-
-    // Create new user document
-    await databases.createDocument(
-      DATABASE_ID,
-      USER_COLLECTION_ID,
-      ID.unique(),
-      {
-        userId,
-        name: user.name || "",
-        email: user.email || "",
-        bio: "",
-        skills: "[]",
-        workExperience: "[]",
-        projects: "[]",
-        contact: "",
-        selectedTemplate: JSON.stringify("Minimalist"),
-      }
-    );
-
-    console.log("Created new user document for:", userId);
-    return true;
-  } catch (error) {
-    console.error("Error ensuring user document:", error);
-    return false;
-  }
+export const clearPersistedState = (): void => {
+  localStorage.removeItem("persist:portfolio");
+  console.log("Cleared persisted portfolio state from localStorage");
 };
 
 /**
@@ -657,30 +617,55 @@ export const initializeAppwrite = async (
     const state = store.getState();
     const portfolio = state.portfolio;
 
-    // Check if there are unsaved changes
+    // Always load fresh data from Appwrite first
+    console.log("Loading fresh data from Appwrite");
+    const portfolioData = await loadPortfolio(userId);
+
+    console.log("portfolioData", portfolioData);
+    // Check if Appwrite has any data
+    const hasAppwriteData = Object.keys(portfolioData).length > 0;
+
+    if (hasAppwriteData) {
+      console.log("Found data in Appwrite, updating Redux store");
+      store.dispatch(setPortfolioData(portfolioData));
+      store.dispatch(markAsSynced());
+      return;
+    }
+
+    // If no data in Appwrite but we have local changes, sync them to Appwrite
     const hasPendingChanges = portfolio._sync?.isDirty || false;
+    const hasLocalData = Object.keys(portfolio).some((key) => {
+      if (key === "_sync" || key === "_persist") return false;
 
-    // Only load from DB if this is first load
-    if (!portfolio._sync) {
-      console.log("Loading fresh data from Appwrite");
-      const portfolioData = await loadPortfolio(userId);
-
-      if (Object.keys(portfolioData).length > 0) {
-        store.dispatch(setPortfolioData(portfolioData));
-        store.dispatch(markAsSynced());
+      if (Array.isArray(portfolio[key])) {
+        return portfolio[key].length > 0;
       }
+
+      if (typeof portfolio[key] === "object" && portfolio[key] !== null) {
+        return Object.values(portfolio[key]).some(
+          (val) => val !== null && val !== undefined && val !== ""
+        );
+      }
+
+      return (
+        portfolio[key] !== null &&
+        portfolio[key] !== undefined &&
+        portfolio[key] !== ""
+      );
+    });
+
+    if (hasLocalData) {
+      console.log(
+        "No data in Appwrite but found local data, syncing to server"
+      );
+      const portfolioToSave = { ...portfolio };
+      delete portfolioToSave._sync;
+      delete portfolioToSave._persist;
+
+      await savePortfolio(portfolioToSave, userId);
+      store.dispatch(markAsSynced());
     } else {
-      console.log("Using persisted data from localStorage (via Redux Persist)");
-
-      // If there are pending changes, sync them to the server
-      if (hasPendingChanges) {
-        console.log("Syncing pending changes to Appwrite");
-        const portfolioToSave = { ...portfolio };
-        delete portfolioToSave._sync;
-
-        await savePortfolio(portfolioToSave, userId);
-        store.dispatch(markAsSynced());
-      }
+      console.log("No data found in Appwrite or locally");
     }
   } catch (error) {
     console.error("Error initializing Appwrite:", error);

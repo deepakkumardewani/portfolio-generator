@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { account } from "../lib/appwrite";
 import { Models, OAuthProvider } from "appwrite";
-import { createUserDocument } from "../lib/appwriteService";
+import {
+  createUserDocument,
+  clearPersistedState,
+} from "../lib/appwriteService";
 import { useRouter } from "next/navigation";
 
 interface UseAppwriteReturn {
@@ -61,6 +64,9 @@ export const useAppwrite = (): UseAppwriteReturn => {
       // Get the logged-in user
       const currentUser = await account.get();
       setUser(currentUser);
+
+      // Clear persisted state to ensure fresh data load
+      clearPersistedState();
 
       // Redirect to create page after successful login
       window.location.href = "/create";
