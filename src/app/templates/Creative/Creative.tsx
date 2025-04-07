@@ -32,7 +32,7 @@ export default function Creative({ isServerSide = false }) {
   ];
 
   const content = (
-    <DarkModeProvider templateId="creative-template" defaultDark={true}>
+    <DarkModeProvider templateId="creative-template">
       <div id="creative-template">
         <OrderedTemplateContainer sections={templateSections} />
       </div>

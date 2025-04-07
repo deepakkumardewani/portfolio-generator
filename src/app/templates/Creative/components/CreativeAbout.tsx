@@ -19,9 +19,9 @@ export default function CreativeAbout() {
       itemScope
       itemType="https://schema.org/AboutPage"
     >
-      <div className="container mx-auto px-6">
+      <div className="container px-6 max-w-4xl mx-auto">
         <motion.div
-          id="creative-about-container"
+          id="about-container"
           initial={{ opacity: 0, y: 48 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -39,7 +39,7 @@ export default function CreativeAbout() {
             About Me
           </motion.h2>
           <motion.div
-            id="creative-about-content"
+            id="about-content"
             className="prose prose-invert"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

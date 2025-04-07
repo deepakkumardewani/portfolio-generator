@@ -24,7 +24,7 @@ export default function CreativeHero() {
           className="text-center"
         >
           <motion.h1
-            id="hero-heading"
+            id="creative-hero-title"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -77,9 +77,9 @@ export default function CreativeHero() {
             </a>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            id="scroll-indicator"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
             className="mt-12"
           >
             <a
@@ -87,7 +87,7 @@ export default function CreativeHero() {
               aria-label="Scroll to About section"
               className="inline-block"
             >
-              <Icons.chevronDown className="w-8 h-8 text-gray-400 dark:text-gray-400 animate-bounce" />
+              <Icons.chevronDown className="w-8 h-8 text-black dark:text-gray-400 animate-bounce" />
             </a>
           </motion.div>
         </motion.div>

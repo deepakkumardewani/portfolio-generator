@@ -4,11 +4,22 @@ import { useAppSelector } from "@/store";
 import { Skill } from "@/types";
 import { motion } from "framer-motion";
 
+function groupSkillsByCategory(skills: Skill[]): Record<string, Skill[]> {
+  return skills.reduce<Record<string, Skill[]>>((acc, skill) => {
+    const category = skill.category || "Other";
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    if (!acc[category].some((s) => s.value === skill.value)) {
+      acc[category].push(skill);
+    }
+    return acc;
+  }, {});
+}
 export default function CreativeSkills() {
   const { skills } = useAppSelector((state) => state.portfolio);
-  const [groupedSkills, setGroupedSkills] = useState<Record<string, Skill[]>>(
-    {}
-  );
+  const groupedSkills = groupSkillsByCategory(skills);
+
   const [isPreview, setIsPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { viewMode } = useAppSelector((state) => state.portfolio);
@@ -20,21 +31,7 @@ export default function CreativeSkills() {
       setIsMobile(viewMode === "mobile" || window.innerWidth < 768);
     };
     checkMobile();
-
-    // Group skills by category and remove duplicates
-    const grouped = skills.reduce<Record<string, Skill[]>>((acc, skill) => {
-      const category = skill.category || "Other";
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      if (!acc[category].some((s) => s.value === skill.value)) {
-        acc[category].push(skill);
-      }
-      return acc;
-    }, {});
-
-    setGroupedSkills(grouped);
-  }, [skills, viewMode]);
+  }, [viewMode]);
 
   const skillsLayoutClasses = isPreview
     ? isMobile
@@ -44,9 +41,9 @@ export default function CreativeSkills() {
 
   return (
     <section id="skills" className="py-20 bg-white dark:bg-black">
-      <div className="container mx-auto px-6">
+      <div className="container px-6 max-w-4xl mx-auto">
         <motion.h2
-          id="creative-skills-heading"
+          id="skills-heading"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -61,13 +58,12 @@ export default function CreativeSkills() {
         >
           {Object.entries(groupedSkills).map(([category, items], index) => (
             <motion.div
-              id={`creative-skill-card-${index}`}
               key={category}
               initial={{ opacity: 0, y: 48 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
               viewport={{ once: true }}
-              className="bg-white dark:bg-black/20 p-6 rounded-lg backdrop-blur-lg"
+              className="bg-white dark:bg-black/20 p-6 rounded-lg backdrop-blur-lg creative-skill-card"
             >
               <h3 className="text-xl font-semibold text-black dark:text-white mb-4">
                 {category.charAt(0).toUpperCase() + category.slice(1)}

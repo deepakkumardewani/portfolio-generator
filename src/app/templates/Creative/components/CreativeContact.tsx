@@ -1,27 +1,28 @@
 "use client";
-import React from "react";
+// import React from "react";
 import { Icons } from "@/components/ui/icons";
-import { useDarkMode } from "@/contexts/DarkModeContext";
+// import { useDarkMode } from "@/contexts/DarkModeContext";
 import { motion } from "framer-motion";
-
+import { useAppSelector } from "@/store";
 export default function CreativeContact() {
-  const [isPreview, setIsPreview] = React.useState(false);
-  const { darkMode } = useDarkMode();
+  const { contact } = useAppSelector((state) => state.portfolio);
+  // const [isPreview, setIsPreview] = React.useState(false);
+  // const { darkMode } = useDarkMode();
 
-  React.useEffect(() => {
-    const isInPreview = document.getElementById("preview-pane") !== null;
-    setIsPreview(isInPreview);
-  }, []);
+  // React.useEffect(() => {
+  //   const isInPreview = document.getElementById("preview-pane") !== null;
+  //   setIsPreview(isInPreview);
+  // }, []);
 
-  const darkModeClasses = isPreview
-    ? darkMode
-      ? "bg-black/10"
-      : "bg-white"
-    : "bg-white text-black dark:bg-black/10 dark:text-white";
+  // const darkModeClasses = isPreview
+  //   ? darkMode
+  //     ? "bg-black/10"
+  //     : "bg-white"
+  //   : "bg-white text-black dark:bg-black/10 dark:text-white";
 
   return (
     <section id="contact" className="py-20 bg-white dark:bg-black">
-      <div className="container mx-auto px-6">
+      <div className="container px-6 max-w-4xl mx-auto">
         <motion.div
           id="creative-contact-container"
           initial={{ opacity: 0, y: 48 }}
@@ -60,21 +61,21 @@ export default function CreativeContact() {
             className="flex justify-center space-x-8"
           >
             <a
-              href="mailto:your.email@example.com"
+              href={`mailto:${contact.email}`}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.mail size={24} />
               <span>Email</span>
             </a>
             <a
-              href="#"
+              href={contact.links[0].url}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.linkedin size={24} />
               <span>LinkedIn</span>
             </a>
             <a
-              href="#"
+              href={contact.links[1].url}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.gitHub size={24} />

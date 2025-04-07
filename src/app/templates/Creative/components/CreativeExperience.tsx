@@ -15,7 +15,7 @@ export default function CreativeExperience() {
       itemScope
       itemType="https://schema.org/WorkExperience"
     >
-      <div className="container mx-auto px-6">
+      <div className="container px-6 max-w-4xl mx-auto">
         <motion.h2
           id="experience-heading"
           initial={{ opacity: 0 }}
@@ -34,13 +34,12 @@ export default function CreativeExperience() {
         >
           {workExperience.map((exp, index) => (
             <motion.article
-              id={`creative-experience-card-${index}`}
               key={index}
               initial={{ opacity: 0, x: -48 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="bg-white dark:bg-black/30 p-6 rounded-lg backdrop-blur-lg"
+              className="bg-white dark:bg-black/30 p-6 rounded-lg backdrop-blur-lg creative-experience-card"
               itemScope
               itemType="https://schema.org/OrganizationRole"
             >

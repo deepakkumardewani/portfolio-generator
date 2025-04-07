@@ -41,7 +41,7 @@ export default function CreativeProjects() {
       itemScope
       itemType="https://schema.org/CollectionPage"
     >
-      <div className="container mx-auto px-6">
+      <div className="container px-6 max-w-4xl mx-auto">
         <motion.h2
           id="projects-heading"
           initial={{ opacity: 0 }}
@@ -61,13 +61,12 @@ export default function CreativeProjects() {
         >
           {projects.map((project, index) => (
             <motion.article
-              id={`creative-project-card-${index}`}
               key={index}
               initial={{ opacity: 0, y: 48 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="bg-white dark:bg-black/10 w-full rounded-lg overflow-hidden backdrop-blur-lg"
+              className="bg-white dark:bg-black/10 w-full rounded-lg overflow-hidden backdrop-blur-lg creative-project-card"
               itemScope
               itemType="https://schema.org/CreativeWork"
               itemProp="itemListElement"
