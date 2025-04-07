@@ -18,7 +18,7 @@ export default function UserMenu() {
 
   // Function to get user's initials
   const getUserInitials = () => {
-    if (!user || !user.name) return "U";
+    if (!user || !user.name) return "";
     const names = user.name.split(" ");
     if (names.length >= 2) {
       return `${names[0][0]}${names[1][0]}`.toUpperCase();
@@ -27,27 +27,27 @@ export default function UserMenu() {
   };
 
   // Function to generate a random color
-  const getRandomColor = () => {
-    const colors = [
-      "bg-red-500",
-      "bg-blue-500",
-      "bg-green-500",
-      "bg-yellow-500",
-      "bg-purple-500",
-      "bg-pink-500",
-      "bg-indigo-500",
-      "bg-teal-500",
-    ];
-    // Use the user's email to ensure the same color for the same user
-    const index = user?.email
-      ? user.email
-          .split("")
-          .reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) %
-        colors.length
-      : Math.floor(Math.random() * colors.length);
+  // const getRandomColor = () => {
+  //   const colors = [
+  //     "bg-red-500",
+  //     "bg-blue-500",
+  //     "bg-green-500",
+  //     "bg-yellow-500",
+  //     "bg-purple-500",
+  //     "bg-pink-500",
+  //     "bg-indigo-500",
+  //     "bg-teal-500",
+  //   ];
+  //   // Use the user's email to ensure the same color for the same user
+  //   const index = user?.email
+  //     ? user.email
+  //         .split("")
+  //         .reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) %
+  //       colors.length
+  //     : Math.floor(Math.random() * colors.length);
 
-    return colors[index];
-  };
+  //   return colors[index];
+  // };
 
   const handleProfileClick = () => {
     router.push("/profile");
