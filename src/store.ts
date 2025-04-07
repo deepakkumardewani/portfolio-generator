@@ -235,8 +235,7 @@ const prodData: PortfolioState = {
 };
 
 // Select initial state based on environment
-const initialState =
-  process.env.NODE_ENV === "development" ? devData : prodData;
+const initialState = prodData;
 
 // const initialState = prodData;
 
