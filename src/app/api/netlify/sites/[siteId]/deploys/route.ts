@@ -33,11 +33,6 @@ export async function POST(
       );
     }
 
-    // Create new FormData to send to Netlify
-    // const netlifyFormData = new FormData();
-    // netlifyFormData.append("file", zipFile);
-
-    // console.log("netlifyFormData", netlifyFormData);
     // Deploy to Netlify
     const response = await fetch(
       `${NETLIFY_BASE_URL}/sites/${siteId}/deploys`,
