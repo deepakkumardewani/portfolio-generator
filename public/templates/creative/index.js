@@ -92,6 +92,32 @@ const scaleOnHover = (element) => {
   });
 };
 
+// Infinite bounce animation for scroll indicator
+const infiniteBounce = (element) => {
+  if (!animate) {
+    console.error("Motion.animate is not available");
+    return null;
+  }
+
+  try {
+    return element.animate(
+      [
+        { transform: "translateY(0px)" },
+        { transform: "translateY(10px)" },
+        { transform: "translateY(0px)" },
+      ],
+      {
+        duration: 1500,
+        iterations: Infinity,
+        easing: "ease-in-out",
+      }
+    );
+  } catch (error) {
+    console.error("Animation error:", error);
+    return null;
+  }
+};
+
 // Viewport animation (triggers when element enters viewport)
 const createIntersectionObserver = (element, animation) => {
   const observer = new IntersectionObserver(
@@ -109,24 +135,124 @@ const createIntersectionObserver = (element, animation) => {
   return observer;
 };
 
-// Initialize animations
-document.addEventListener("DOMContentLoaded", () => {
-  // Check if Motion library is loaded
-  if (!window.Motion) {
-    console.warn("Motion library is not loaded. Using fallbacks.");
-    // Apply fallback styles to make content visible
-    document.querySelectorAll('[style*="opacity: 0"]').forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
-  }
+const heroSectionAnimations = () => {
+  // Hero section animations
+  const heroContainer = document.querySelector("#creative-hero-container");
+  const heroTitle = document.querySelector("#creative-hero-title");
+  const heroTagline = document.querySelector("#creative-hero-tagline");
+  const heroSocial = document.querySelector("#creative-hero-social");
 
-  // Set dark mode by default for Creative template
-  document.documentElement.classList.add("dark");
-  document.getElementById("theme-toggle")?.addEventListener("click", () => {
-    document.documentElement.classList.toggle("dark");
+  if (heroContainer) fadeInUp(heroContainer, 0, 20);
+  if (heroTitle) fadeInUp(heroTitle, 200, 20);
+  if (heroTagline) fadeInUp(heroTagline, 400, 20);
+  if (heroSocial) fadeInUp(heroSocial, 600, 20);
+
+  const scrollIndicator = document.querySelector("#scroll-indicator");
+  if (scrollIndicator) {
+    infiniteBounce(scrollIndicator);
+  }
+};
+
+const aboutSectionAnimations = () => {
+  // About section animations with intersection observer
+  const aboutContainer = document.querySelector("#about-container");
+  const aboutHeading = document.querySelector("#about-heading");
+  const aboutContent = document.querySelector("#about-content");
+
+  if (aboutContainer)
+    createIntersectionObserver(aboutContainer, (el) => fadeInUp(el, 0, 48));
+  if (aboutHeading)
+    createIntersectionObserver(aboutHeading, (el) => fadeInUp(el, 200));
+  if (aboutContent)
+    createIntersectionObserver(aboutContent, (el) => fadeInUp(el, 300, 20));
+};
+const experienceSectionAnimations = () => {
+  // Experience section animations
+  const experienceHeading = document.querySelector("#experience-heading");
+  if (experienceHeading)
+    createIntersectionObserver(experienceHeading, (el) => fadeInUp(el));
+
+  const experienceItems = document.querySelectorAll(
+    ".creative-experience-card"
+  );
+  experienceItems.forEach((item, index) => {
+    createIntersectionObserver(item, (el) => fadeInLeft(el, index * 200));
+  });
+};
+const projectsSectionAnimations = () => {
+  // Projects section animations
+  const projectsHeading = document.querySelector("#projects-heading");
+  if (projectsHeading)
+    createIntersectionObserver(projectsHeading, (el) => fadeInUp(el));
+
+  const projectItems = document.querySelectorAll(".creative-project-card");
+  projectItems.forEach((item, index) => {
+    createIntersectionObserver(item, (el) => fadeInUp(el, index * 200, 48));
+    scaleOnHover(item);
+  });
+};
+const skillsSectionAnimations = () => {
+  // Skills section animations
+  const skillsHeading = document.querySelector("#skills-heading");
+  if (skillsHeading)
+    createIntersectionObserver(skillsHeading, (el) => fadeInUp(el));
+
+  const skillItems = document.querySelectorAll(".creative-skill-card");
+  console.log(skillItems);
+  skillItems.forEach((item, index) => {
+    createIntersectionObserver(item, (el) => fadeInUp(el, index * 150, 48));
+  });
+};
+const contactSectionAnimations = () => {
+  // Contact section animations
+  const contactContainer = document.querySelector(
+    "#creative-contact-container"
+  );
+  const contactHeading = document.querySelector("#creative-contact-heading");
+  const contactText = document.querySelector("#creative-contact-text");
+  const contactLinks = document.querySelector("#creative-contact-links");
+
+  if (contactContainer)
+    createIntersectionObserver(contactContainer, (el) => fadeInUp(el, 0, 48));
+  if (contactHeading)
+    createIntersectionObserver(contactHeading, (el) => fadeInUp(el, 200));
+  if (contactText)
+    createIntersectionObserver(contactText, (el) => fadeInUp(el, 300));
+  if (contactLinks)
+    createIntersectionObserver(contactLinks, (el) => fadeInUp(el, 400, 20));
+
+  // Add hover animations to contact links
+  const contactLinkElements = document.querySelectorAll(
+    "#creative-contact-links a"
+  );
+  contactLinkElements.forEach((link) => {
+    scaleOnHover(link);
+  });
+};
+
+const themeToggle = () => {
+  const root = document.documentElement;
+  const toggleBtn = document.getElementById("theme-toggle");
+
+  toggleBtn.classList.add("text-yellow-300");
+  toggleBtn.innerHTML = `<i data-lucide="sun"></i>`;
+  root.classList.add("dark");
+  toggleBtn.addEventListener("click", () => {
+    root.classList.toggle("dark");
+    const isDark = root.classList.contains("dark");
+    toggleBtn.classList.toggle("text-yellow-300");
+    toggleBtn.innerHTML = isDark
+      ? `<i data-lucide="sun"></i>`
+      : `<i data-lucide="moon"></i>`;
+
+    // Re-render the Lucide icon after injecting it
+    lucide.createIcons();
   });
 
+  lucide.createIcons();
+};
+
+const mobileMenu = () => {
   // Show mobile menu on button click
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
@@ -161,9 +287,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Change to X icon
         menuIcon.innerHTML = `
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        `;
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      `;
       } else {
         // Animate menu disappearance
         mobileMenuButton.classList.toggle("rotate-90");
@@ -190,10 +316,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Change back to menu icon
         menuIcon.innerHTML = `
-          <line x1="4" x2="20" y1="12" y2="12"></line>
-          <line x1="4" x2="20" y1="6" y2="6"></line>
-          <line x1="4" x2="20" y1="18" y2="18"></line>
-        `;
+        <line x1="4" x2="20" y1="12" y2="12"></line>
+        <line x1="4" x2="20" y1="6" y2="6"></line>
+        <line x1="4" x2="20" y1="18" y2="18"></line>
+      `;
       }
 
       const links = mobileMenu.querySelectorAll("a");
@@ -205,97 +331,35 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+};
 
+const navLinks = () => {
   // Show navigation links with staggered animation
   const navLinks = document.querySelectorAll("header .space-x-8 > a");
   navLinks.forEach((link) => {
     link.style.opacity = "1";
   });
+};
 
-  // Hero section animations
-  const heroContainer = document.querySelector("#creative-hero-container");
-  const heroTitle = document.querySelector("#creative-hero-title");
-  const heroTagline = document.querySelector("#creative-hero-tagline");
-  const heroSocial = document.querySelector("#creative-hero-social");
+// Initialize animations
+document.addEventListener("DOMContentLoaded", () => {
+  // Check if Motion library is loaded
+  if (!window.Motion) {
+    console.warn("Motion library is not loaded. Using fallbacks.");
+    // Apply fallback styles to make content visible
+    document.querySelectorAll('[style*="opacity: 0"]').forEach((el) => {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+  }
 
-  if (heroContainer) fadeInUp(heroContainer, 0, 20);
-  if (heroTitle) fadeInUp(heroTitle, 200, 20);
-  if (heroTagline) fadeInUp(heroTagline, 400, 20);
-  if (heroSocial) fadeInUp(heroSocial, 600, 20);
-
-  // About section animations with intersection observer
-  const aboutContainer = document.querySelector("#creative-about-container");
-  const aboutHeading = document.querySelector("#creative-about-heading");
-  const aboutContent = document.querySelector("#creative-about-content");
-
-  if (aboutContainer)
-    createIntersectionObserver(aboutContainer, (el) => fadeInUp(el, 0, 48));
-  if (aboutHeading)
-    createIntersectionObserver(aboutHeading, (el) => fadeInUp(el, 200));
-  if (aboutContent)
-    createIntersectionObserver(aboutContent, (el) => fadeInUp(el, 300, 20));
-
-  // Experience section animations
-  const experienceHeading = document.querySelector(
-    "#creative-experience-heading"
-  );
-  if (experienceHeading)
-    createIntersectionObserver(experienceHeading, (el) => fadeInUp(el));
-
-  const experienceItems = document.querySelectorAll(
-    'div[id^="creative-experience-card-"]'
-  );
-  experienceItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInLeft(el, index * 200));
-  });
-
-  // Projects section animations
-  const projectsHeading = document.querySelector("#creative-projects-heading");
-  if (projectsHeading)
-    createIntersectionObserver(projectsHeading, (el) => fadeInUp(el));
-
-  const projectItems = document.querySelectorAll(
-    'div[id^="creative-project-card-"]'
-  );
-  projectItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInUp(el, index * 200, 48));
-    scaleOnHover(item);
-  });
-
-  // Skills section animations
-  const skillsHeading = document.querySelector("#creative-skills-heading");
-  if (skillsHeading)
-    createIntersectionObserver(skillsHeading, (el) => fadeInUp(el));
-
-  const skillItems = document.querySelectorAll(
-    'div[id^="creative-skill-card-"]'
-  );
-  skillItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInUp(el, index * 150, 48));
-  });
-
-  // Contact section animations
-  const contactContainer = document.querySelector(
-    "#creative-contact-container"
-  );
-  const contactHeading = document.querySelector("#creative-contact-heading");
-  const contactText = document.querySelector("#creative-contact-text");
-  const contactLinks = document.querySelector("#creative-contact-links");
-
-  if (contactContainer)
-    createIntersectionObserver(contactContainer, (el) => fadeInUp(el, 0, 48));
-  if (contactHeading)
-    createIntersectionObserver(contactHeading, (el) => fadeInUp(el, 200));
-  if (contactText)
-    createIntersectionObserver(contactText, (el) => fadeInUp(el, 300));
-  if (contactLinks)
-    createIntersectionObserver(contactLinks, (el) => fadeInUp(el, 400, 20));
-
-  // Add hover animations to contact links
-  const contactLinkElements = document.querySelectorAll(
-    "#creative-contact-links a"
-  );
-  contactLinkElements.forEach((link) => {
-    scaleOnHover(link);
-  });
+  themeToggle();
+  heroSectionAnimations();
+  aboutSectionAnimations();
+  experienceSectionAnimations();
+  projectsSectionAnimations();
+  skillsSectionAnimations();
+  contactSectionAnimations();
+  mobileMenu();
+  navLinks();
 });

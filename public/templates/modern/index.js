@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
     createIntersectionObserver(contactInfo, (el) => fadeInUp(el, 100));
   }
 
-  const socialLinks = document.querySelector("#contact-info-links");
+  const socialLinks = document.querySelector("#contact-social-links");
   if (socialLinks) {
     createIntersectionObserver(socialLinks, (el) => fadeInUp(el, 200));
   }
