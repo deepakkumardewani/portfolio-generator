@@ -143,7 +143,7 @@ export default function TemplateSectionEditor({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="w-full">
-        <div className="p-4 border-b bg-neutral-50 dark:bg-neutral-950">
+        <div className="p-4 border-b rounded-t-lg bg-neutral-50 dark:bg-neutral-950">
           <h3 className="text-lg font-medium">Edit Template Sections</h3>
         </div>
 
@@ -159,7 +159,7 @@ export default function TemplateSectionEditor({
           ))}
         </div>
 
-        <div className="p-4 border-t bg-neutral-50 dark:bg-neutral-950">
+        <div className="p-4 border-t rounded-b-lg bg-neutral-50 dark:bg-neutral-950">
           <Button
             onClick={saveChanges}
             disabled={!hasChanges}
