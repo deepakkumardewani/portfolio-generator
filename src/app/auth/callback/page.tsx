@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppwrite } from "@/hooks/useAppwrite";
-import { createUserDocument } from "@/lib/appwriteService";
+import { createUserDocument, clearPersistedState } from "@/lib/appwriteService";
 
 export default function OAuthCallbackPage() {
   const { user } = useAppwrite();
@@ -53,6 +53,10 @@ export default function OAuthCallbackPage() {
         // Store in session storage that we've handled this user
         sessionStorage.setItem(`oauth_handled_${user.$id}`, "true");
         sessionStorage.setItem("is_authenticated", "true");
+
+        // Clear persisted state to ensure fresh data load
+        clearPersistedState();
+
         // Redirect to create page
         router.push("/create");
       } catch (err: any) {

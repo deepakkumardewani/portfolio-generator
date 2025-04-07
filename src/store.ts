@@ -243,6 +243,74 @@ const initialState = prodData;
 const persistConfig = {
   key: "portfolio",
   storage,
+  // Add blacklist or whitelist to control what gets persisted
+  blacklist: ["_sync"], // Don't persist sync state
+  // Add version and migration for proper data handling
+  version: 1,
+  migrate: (state: any) => {
+    // Always return a promise
+    return Promise.resolve(state);
+  },
+  // Add condition to determine when to rehydrate
+  // This will skip rehydration if Appwrite has newer data
+  shouldRehydrate: (state: any) => {
+    // If we have data in Appwrite that's newer than our local storage,
+    // we'll skip rehydration and use Appwrite data instead
+    return true; // We'll control this through our initialization flow
+  },
+  stateReconciler: (inboundState: any, originalState: any): any => {
+    // If we have data in Appwrite, prefer it over localStorage
+    // This is a simple reconciliation function that merges states
+    // but gives precedence to non-empty inbound values
+    const mergedState = { ...originalState };
+
+    // Helper to check if an object has actual data
+    const hasData = (obj: any): boolean => {
+      if (!obj) return false;
+      // For objects with primitive properties, check if any property has content
+      return Object.values(obj).some(
+        (val) =>
+          val !== null &&
+          val !== undefined &&
+          val !== "" &&
+          (typeof val !== "object" || hasData(val))
+      );
+    };
+
+    // Only merge if we have inbound state
+    if (inboundState) {
+      // For each key in the inbound state
+      Object.keys(inboundState).forEach((key) => {
+        // Skip internal persist state
+        if (key === "_persist") return;
+
+        // For arrays and complex objects, check if data exists
+        if (Array.isArray(inboundState[key])) {
+          // If array has items, use it
+          if (inboundState[key].length > 0) {
+            mergedState[key] = inboundState[key];
+          }
+        } else if (typeof inboundState[key] === "object") {
+          // For objects, prefer inbound if it has actual data
+          if (hasData(inboundState[key])) {
+            mergedState[key] = {
+              ...originalState[key],
+              ...inboundState[key],
+            };
+          }
+        } else if (
+          inboundState[key] !== null &&
+          inboundState[key] !== undefined &&
+          inboundState[key] !== ""
+        ) {
+          // For primitives, prefer non-empty inbound values
+          mergedState[key] = inboundState[key];
+        }
+      });
+    }
+
+    return mergedState;
+  },
 };
 
 // Add _sync field to initial state
@@ -300,46 +368,72 @@ const portfolioSlice = createSlice({
       state,
       action: PayloadAction<Partial<PortfolioState>>
     ) => {
+      // Start with current state
       const result = { ...state };
 
-      // Only merge bio if it exists in payload
-      if (action.payload.bio) {
+      // Helper to check if incoming data has actual content
+      const hasValidData = (data: any): boolean => {
+        if (data === null || data === undefined) return false;
+
+        // Arrays should not be empty
+        if (Array.isArray(data)) return data.length > 0;
+
+        // Objects should have at least one non-empty property
+        if (typeof data === "object") {
+          return Object.values(data).some(
+            (val) =>
+              val !== null &&
+              val !== undefined &&
+              val !== "" &&
+              (typeof val !== "object" || hasValidData(val))
+          );
+        }
+
+        // Primitives should not be empty strings
+        return data !== "";
+      };
+
+      // Only merge bio if it exists in payload and has valid data
+      if (action.payload.bio && hasValidData(action.payload.bio)) {
         result.bio = {
           ...state.bio,
           ...action.payload.bio,
         };
       }
 
-      // Only update arrays if they exist in payload
-      if (action.payload.skills) {
+      // Only update arrays if they exist in payload and have items
+      if (action.payload.skills && action.payload.skills.length > 0) {
         result.skills = action.payload.skills;
       }
 
-      if (action.payload.workExperience) {
+      if (
+        action.payload.workExperience &&
+        action.payload.workExperience.length > 0
+      ) {
         result.workExperience = action.payload.workExperience;
       }
 
-      if (action.payload.projects) {
+      if (action.payload.projects && action.payload.projects.length > 0) {
         result.projects = action.payload.projects;
       }
 
-      // Only merge contact if it exists in payload
-      if (action.payload.contact) {
+      // Only merge contact if it exists in payload and has valid data
+      if (action.payload.contact && hasValidData(action.payload.contact)) {
         result.contact = {
           ...state.contact,
           ...action.payload.contact,
         };
       }
 
-      // Only merge theme if it exists in payload
-      if (action.payload.theme) {
+      // Only merge theme if it exists in payload and has valid data
+      if (action.payload.theme && hasValidData(action.payload.theme)) {
         result.theme = {
           ...state.theme,
           ...action.payload.theme,
         };
       }
 
-      // Only update template if it exists in payload
+      // Only update template if it exists in payload and is not empty
       if (action.payload.selectedTemplate) {
         result.selectedTemplate = action.payload.selectedTemplate;
       }
@@ -349,8 +443,11 @@ const portfolioSlice = createSlice({
         result.viewMode = action.payload.viewMode;
       }
 
-      // Only merge templateSections if it exists in payload
-      if (action.payload.templateSections) {
+      // Only merge templateSections if it exists in payload and has valid data
+      if (
+        action.payload.templateSections &&
+        hasValidData(action.payload.templateSections)
+      ) {
         result.templateSections = {
           ...state.templateSections,
           ...action.payload.templateSections,
@@ -437,8 +534,14 @@ export const {
  */
 export const initializeAppwrite = async (userId: string): Promise<void> => {
   try {
+    // Clear any stale persisted data first
+    persistor.purge(); // This will clear the persist:portfolio from localStorage
+
     // Use the optimized version from appwriteService
     await appwriteService.initializeAppwrite(userId, store);
+
+    // After loading Appwrite data, mark as synced
+    store.dispatch(markAsSynced());
   } catch (error) {
     console.error("Error initializing Appwrite:", error);
   }

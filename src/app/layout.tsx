@@ -12,8 +12,44 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio Generator",
+  title: "CreateFolio",
   description: "Create and customize your portfolio with ease",
+  keywords: [
+    "portfolio",
+    "generator",
+    "developer",
+    "resume",
+    "personal website",
+  ],
+  authors: [{ name: "Portfolio Generator Team" }],
+  creator: "Portfolio Generator",
+  publisher: "Portfolio Generator",
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    title: "CreateFolio - Create Professional Portfolios",
+    description:
+      "Create and customize your professional portfolio with ease. Showcase your work, skills, and experience.",
+    url: "https://createfolio.app",
+    siteName: "CreateFolio",
+    images: [
+      {
+        url: "https://cloud.appwrite.io/v1/storage/buckets/portfolio-gen-bucket/files/67f407ee001d3b1b09ca/view?project=67ec2e4a000218d4bf94&mode=admin",
+        width: 512,
+        height: 512,
+        alt: "CreateFolio Preview",
+      },
+    ],
+    locale: "en_US",
+  },
+  viewport: "width=device-width, initial-scale=1",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+  ],
+  alternates: {
+    canonical: "https://createfolio.app",
+  },
 };
 
 export default function RootLayout({
