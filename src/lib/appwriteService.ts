@@ -8,6 +8,7 @@ import type {
   PortfolioState,
 } from "../types";
 import { setPortfolioData, markAsSynced } from "@/store";
+import { account } from "@/lib/appwrite";
 
 // Initialize Appwrite client
 const client = new Client()
@@ -21,14 +22,191 @@ const client = new Client()
 const databases = new Databases(client);
 
 // Database and collections constants
-const DATABASE_ID = "67ec3593000b842f000f";
+const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "";
+
 const COLLECTIONS = {
-  BIO: "bio",
-  SKILLS: "skills",
-  WORK_EXPERIENCE: "work_experience",
-  PROJECTS: "projects",
-  CONTACT: "contact",
-  TEMPLATE: "template",
+  USER: process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID || "",
+};
+
+/**
+ * Create a new user document when a user signs up
+ */
+export const createUserDocument = async (
+  userId: string,
+  name: string,
+  email: string
+) => {
+  try {
+    console.log(
+      `[${new Date().toISOString()}] Checking for existing document for user: ${userId}`
+    );
+
+    // Check if user document already exists
+    const existingDocs = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      [Query.equal("userId", userId)]
+    );
+
+    if (existingDocs.total > 0) {
+      console.log(
+        `[${new Date().toISOString()}] User document already exists for ${userId}, documentId: ${
+          existingDocs.documents[0].$id
+        }`
+      );
+      return existingDocs.documents[0];
+    }
+
+    console.log(
+      `[${new Date().toISOString()}] No existing document, creating new document for user: ${userId}`
+    );
+    // Create new user document
+    const newUser = await databases.createDocument(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      ID.unique(),
+      {
+        userId,
+        name,
+        email,
+        bio: "",
+        skills: "",
+        workExperience: "",
+        projects: "",
+        contact: "",
+        selectedTemplate: "",
+      }
+    );
+
+    console.log(
+      `[${new Date().toISOString()}] Created new user document: ${
+        newUser.$id
+      } for user: ${userId}`
+    );
+    return newUser;
+  } catch (error) {
+    // Handle specific error for duplicate documents
+    // This helps in case two requests try to create a document simultaneously
+    if (error instanceof Error && error.message.includes("duplicate")) {
+      console.log(
+        `[${new Date().toISOString()}] Duplicate document error - retrieving existing document for user: ${userId}`
+      );
+
+      // Retrieve the existing document instead
+      const docs = await databases.listDocuments(
+        DATABASE_ID,
+        COLLECTIONS.USER,
+        [Query.equal("userId", userId)]
+      );
+
+      if (docs.total > 0) {
+        console.log(
+          `[${new Date().toISOString()}] Found existing document after duplicate error: ${
+            docs.documents[0].$id
+          }`
+        );
+        return docs.documents[0];
+      }
+    }
+
+    console.error(
+      `[${new Date().toISOString()}] Error creating user document:`,
+      error
+    );
+    throw error;
+  }
+};
+
+/**
+ * Helper function to get or create a user document
+ */
+const getUserDocument = async (userId: string) => {
+  try {
+    console.log(
+      `[${new Date().toISOString()}] getUserDocument called for user: ${userId}`
+    );
+
+    // Check if user document already exists
+    const existingDocs = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      [Query.equal("userId", userId)]
+    );
+
+    if (existingDocs.total > 0) {
+      // Return existing document
+      console.log(
+        `[${new Date().toISOString()}] getUserDocument found existing document: ${
+          existingDocs.documents[0].$id
+        }`
+      );
+      return {
+        exists: true,
+        document: existingDocs.documents[0],
+      };
+    } else {
+      // Use createUserDocument to create a new document
+      // This ensures we use a single path for document creation
+      console.log(
+        `[${new Date().toISOString()}] No document found, calling createUserDocument...`
+      );
+
+      try {
+        // Get user account info to pass to createUserDocument
+        const userInfo = await account.get();
+
+        // Call createUserDocument which already has duplicate checking logic
+        const newDoc = await createUserDocument(
+          userId,
+          userInfo.name,
+          userInfo.email
+        );
+
+        console.log(
+          `[${new Date().toISOString()}] Document created via createUserDocument: ${
+            newDoc.$id
+          }`
+        );
+
+        return {
+          exists: false,
+          document: newDoc,
+        };
+      } catch (error) {
+        console.error(
+          `[${new Date().toISOString()}] Error in getUserDocument while creating:`,
+          error
+        );
+
+        // Final attempt to get document in case it was created by another process
+        const finalCheckDocs = await databases.listDocuments(
+          DATABASE_ID,
+          COLLECTIONS.USER,
+          [Query.equal("userId", userId)]
+        );
+
+        if (finalCheckDocs.total > 0) {
+          console.log(
+            `[${new Date().toISOString()}] Found document in final check: ${
+              finalCheckDocs.documents[0].$id
+            }`
+          );
+          return {
+            exists: true,
+            document: finalCheckDocs.documents[0],
+          };
+        }
+
+        throw error;
+      }
+    }
+  } catch (error) {
+    console.error(
+      `[${new Date().toISOString()}] Error in getUserDocument:`,
+      error
+    );
+    throw error;
+  }
 };
 
 /**
@@ -37,37 +215,16 @@ const COLLECTIONS = {
 export const saveBio = async (bio: Bio, userId: string) => {
   try {
     console.log("Saving bio to Appwrite");
-    // Check if bio document already exists for the user
-    const existingDocs = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTIONS.BIO,
-      [Query.equal("userId", userId)]
-    );
+    const { document } = await getUserDocument(userId);
 
-    if (existingDocs.total > 0) {
-      // Update existing document
-      const docId = existingDocs.documents[0].$id;
-      return await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.BIO,
-        docId,
-        {
-          ...bio,
-          userId,
-        }
-      );
-    } else {
-      // Create new document
-      return await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.BIO,
-        ID.unique(),
-        {
-          ...bio,
-          userId,
-        }
-      );
-    }
+    return await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        bio: JSON.stringify(bio),
+      }
+    );
   } catch (error) {
     console.error("Error saving bio:", error);
     throw error;
@@ -80,74 +237,16 @@ export const saveBio = async (bio: Bio, userId: string) => {
 export const saveSkills = async (skills: Skill[], userId: string) => {
   try {
     console.log("Saving skills to Appwrite");
-    // Fetch existing skills for the user
-    const existingDocs = await databases.listDocuments(
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.SKILLS,
-      [Query.equal("userId", userId)]
-    );
-
-    // Create a map of existing skills using value+category as the key
-    const existingSkillsMap = new Map();
-    for (const doc of existingDocs.documents) {
-      const key = `${doc.value}:${doc.category}`;
-      existingSkillsMap.set(key, {
-        id: doc.$id,
-        ...doc,
-      });
-    }
-
-    // Track which skills have been processed
-    const processedIds = new Set();
-
-    // Update or create each skill
-    const operations = skills.map((skill) => {
-      const key = `${skill.value}:${skill.category}`;
-      const existingSkill = existingSkillsMap.get(key);
-
-      if (existingSkill) {
-        // Mark this skill as processed
-        processedIds.add(existingSkill.id);
-
-        // Update existing document
-        return databases.updateDocument(
-          DATABASE_ID,
-          COLLECTIONS.SKILLS,
-          existingSkill.id,
-          {
-            value: skill.value,
-            label: skill.label,
-            image: skill.image,
-            category: skill.category,
-            userId,
-          }
-        );
-      } else {
-        // Create new document
-        return databases.createDocument(
-          DATABASE_ID,
-          COLLECTIONS.SKILLS,
-          ID.unique(),
-          {
-            value: skill.value,
-            label: skill.label,
-            image: skill.image,
-            category: skill.category,
-            userId,
-          }
-        );
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        skills: JSON.stringify(skills),
       }
-    });
-
-    // Delete skills that no longer exist in the input array
-    const deleteOperations = Array.from(existingSkillsMap.values())
-      .filter((skill) => !processedIds.has(skill.id))
-      .map((skill) =>
-        databases.deleteDocument(DATABASE_ID, COLLECTIONS.SKILLS, skill.id)
-      );
-
-    // Execute all operations
-    await Promise.all([...operations, ...deleteOperations]);
+    );
 
     return true;
   } catch (error) {
@@ -165,82 +264,16 @@ export const saveWorkExperience = async (
 ) => {
   try {
     console.log("Saving work experience to Appwrite");
-    // Fetch existing work experience for the user
-    const existingDocs = await databases.listDocuments(
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.WORK_EXPERIENCE,
-      [Query.equal("userId", userId)]
-    );
-
-    // Create a map of existing work experiences using company+jobTitle+fromDate as the key
-    const existingWorkMap = new Map();
-    for (const doc of existingDocs.documents) {
-      const key = `${doc.company}:${doc.jobTitle}:${doc.fromDate}`;
-      existingWorkMap.set(key, {
-        id: doc.$id,
-        ...doc,
-      });
-    }
-
-    // Track which work experiences have been processed
-    const processedIds = new Set();
-
-    // Update or create each work experience
-    const operations = workExperience.map((experience) => {
-      const key = `${experience.company}:${experience.jobTitle}:${experience.fromDate}`;
-      const existingExperience = existingWorkMap.get(key);
-
-      if (existingExperience) {
-        // Mark this experience as processed
-        processedIds.add(existingExperience.id);
-
-        // Update existing document
-        return databases.updateDocument(
-          DATABASE_ID,
-          COLLECTIONS.WORK_EXPERIENCE,
-          existingExperience.id,
-          {
-            company: experience.company,
-            jobTitle: experience.jobTitle,
-            fromDate: experience.fromDate,
-            toDate: experience.toDate,
-            description: experience.description,
-            skills: JSON.stringify(experience.skills),
-            userId,
-          }
-        );
-      } else {
-        // Create new document
-        return databases.createDocument(
-          DATABASE_ID,
-          COLLECTIONS.WORK_EXPERIENCE,
-          ID.unique(),
-          {
-            company: experience.company,
-            jobTitle: experience.jobTitle,
-            fromDate: experience.fromDate,
-            toDate: experience.toDate,
-            description: experience.description,
-            skills: JSON.stringify(experience.skills),
-            userId,
-          }
-        );
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        workExperience: JSON.stringify(workExperience),
       }
-    });
-
-    // Delete work experiences that no longer exist in the input array
-    const deleteOperations = Array.from(existingWorkMap.values())
-      .filter((experience) => !processedIds.has(experience.id))
-      .map((experience) =>
-        databases.deleteDocument(
-          DATABASE_ID,
-          COLLECTIONS.WORK_EXPERIENCE,
-          experience.id
-        )
-      );
-
-    // Execute all operations
-    await Promise.all([...operations, ...deleteOperations]);
+    );
 
     return true;
   } catch (error) {
@@ -254,78 +287,17 @@ export const saveWorkExperience = async (
  */
 export const saveProjects = async (projects: Project[], userId: string) => {
   try {
-    // Fetch existing projects for the user
-    const existingDocs = await databases.listDocuments(
+    console.log("Saving projects to Appwrite");
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.PROJECTS,
-      [Query.equal("userId", userId)]
-    );
-
-    // Create a map of existing projects using title+link as the key
-    const existingProjectsMap = new Map();
-    for (const doc of existingDocs.documents) {
-      const key = `${doc.title}:${doc.link}`;
-      existingProjectsMap.set(key, {
-        id: doc.$id,
-        ...doc,
-      });
-    }
-
-    // Track which projects have been processed
-    const processedIds = new Set();
-
-    // Update or create each project
-    const operations = projects.map((project) => {
-      const key = `${project.title}:${project.link}`;
-      const existingProject = existingProjectsMap.get(key);
-
-      if (existingProject) {
-        // Mark this project as processed
-        processedIds.add(existingProject.id);
-
-        // Update existing document
-        return databases.updateDocument(
-          DATABASE_ID,
-          COLLECTIONS.PROJECTS,
-          existingProject.id,
-          {
-            title: project.title,
-            description: project.description,
-            imageUrl: project.imageUrl,
-            link: project.link,
-            githubUrl: project.githubUrl || "",
-            technologies: project.technologies ?? [],
-            userId,
-          }
-        );
-      } else {
-        // Create new document
-        return databases.createDocument(
-          DATABASE_ID,
-          COLLECTIONS.PROJECTS,
-          ID.unique(),
-          {
-            title: project.title,
-            description: project.description,
-            imageUrl: project.imageUrl,
-            link: project.link,
-            githubUrl: project.githubUrl || "",
-            technologies: project.technologies ?? [],
-            userId,
-          }
-        );
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        projects: JSON.stringify(projects),
       }
-    });
-
-    // Delete projects that no longer exist in the input array
-    const deleteOperations = Array.from(existingProjectsMap.values())
-      .filter((project) => !processedIds.has(project.id))
-      .map((project) =>
-        databases.deleteDocument(DATABASE_ID, COLLECTIONS.PROJECTS, project.id)
-      );
-
-    // Execute all operations
-    await Promise.all([...operations, ...deleteOperations]);
+    );
 
     return true;
   } catch (error) {
@@ -339,41 +311,19 @@ export const saveProjects = async (projects: Project[], userId: string) => {
  */
 export const saveContact = async (contact: Contact, userId: string) => {
   try {
-    // Check if contact document already exists for the user
-    const existingDocs = await databases.listDocuments(
+    console.log("Saving contact to Appwrite");
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.CONTACT,
-      [Query.equal("userId", userId)]
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        contact: JSON.stringify(contact),
+      }
     );
 
-    if (existingDocs.total > 0) {
-      // Update existing document
-      const docId = existingDocs.documents[0].$id;
-      return await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.CONTACT,
-        docId,
-        {
-          phone: contact.phone,
-          email: contact.email,
-          links: JSON.stringify(contact.links),
-          userId,
-        }
-      );
-    } else {
-      // Create new document
-      return await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.CONTACT,
-        ID.unique(),
-        {
-          phone: contact.phone,
-          email: contact.email,
-          links: JSON.stringify(contact.links),
-          userId,
-        }
-      );
-    }
+    return true;
   } catch (error) {
     console.error("Error saving contact:", error);
     throw error;
@@ -388,37 +338,19 @@ export const saveTemplate = async (
   userId: string
 ) => {
   try {
-    // Check if template document already exists for the user
-    const existingDocs = await databases.listDocuments(
+    console.log("Saving template to Appwrite");
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
       DATABASE_ID,
-      COLLECTIONS.TEMPLATE,
-      [Query.equal("userId", userId)]
+      COLLECTIONS.USER,
+      document.$id,
+      {
+        selectedTemplate: JSON.stringify(selectedTemplate),
+      }
     );
 
-    if (existingDocs.total > 0) {
-      // Update existing document
-      const docId = existingDocs.documents[0].$id;
-      return await databases.updateDocument(
-        DATABASE_ID,
-        COLLECTIONS.TEMPLATE,
-        docId,
-        {
-          selectedTemplate,
-          userId,
-        }
-      );
-    } else {
-      // Create new document
-      return await databases.createDocument(
-        DATABASE_ID,
-        COLLECTIONS.TEMPLATE,
-        ID.unique(),
-        {
-          selectedTemplate,
-          userId,
-        }
-      );
-    }
+    return true;
   } catch (error) {
     console.error("Error saving template:", error);
     throw error;
@@ -432,7 +364,7 @@ export const loadBio = async (userId: string): Promise<Bio | null> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.BIO,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
@@ -440,15 +372,13 @@ export const loadBio = async (userId: string): Promise<Bio | null> => {
       return null;
     }
 
-    const bioDoc = response.documents[0];
+    const userDoc = response.documents[0];
 
-    const bio = {
-      name: bioDoc.name,
-      tagline: bioDoc.tagline,
-      about: bioDoc.about,
-      profileImg: bioDoc.profileImg,
-    };
-    return bio;
+    if (!userDoc.bio) {
+      return null;
+    }
+
+    return JSON.parse(userDoc.bio);
   } catch (error) {
     console.error("Error loading bio:", error);
     return null;
@@ -462,16 +392,15 @@ export const loadSkills = async (userId: string): Promise<Skill[]> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.SKILLS,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
-    return response.documents.map((doc) => ({
-      value: doc.value,
-      label: doc.label,
-      image: doc.image,
-      category: doc.category,
-    }));
+    if (response.total === 0 || !response.documents[0].skills) {
+      return [];
+    }
+
+    return JSON.parse(response.documents[0].skills);
   } catch (error) {
     console.error("Error loading skills:", error);
     return [];
@@ -487,18 +416,15 @@ export const loadWorkExperience = async (
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.WORK_EXPERIENCE,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
-    return response.documents.map((doc) => ({
-      company: doc.company,
-      jobTitle: doc.jobTitle,
-      fromDate: doc.fromDate,
-      toDate: doc.toDate,
-      description: doc.description,
-      skills: JSON.parse(doc.skills),
-    }));
+    if (response.total === 0 || !response.documents[0].workExperience) {
+      return [];
+    }
+
+    return JSON.parse(response.documents[0].workExperience);
   } catch (error) {
     console.error("Error loading work experience:", error);
     return [];
@@ -512,21 +438,15 @@ export const loadProjects = async (userId: string): Promise<Project[]> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.PROJECTS,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
-    return response.documents.map((doc) => ({
-      title: doc.title,
-      description: doc.description,
-      imageUrl: doc.imageUrl,
-      link: doc.link,
-      githubUrl: doc.githubUrl,
-      technologies:
-        doc.technologies && doc.technologies.length > 0
-          ? JSON.parse(doc.technologies)
-          : undefined,
-    }));
+    if (response.total === 0 || !response.documents[0].projects) {
+      return [];
+    }
+
+    return JSON.parse(response.documents[0].projects);
   } catch (error) {
     console.error("Error loading projects:", error);
     return [];
@@ -540,20 +460,15 @@ export const loadContact = async (userId: string): Promise<Contact | null> => {
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.CONTACT,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
-    if (response.total === 0) {
+    if (response.total === 0 || !response.documents[0].contact) {
       return null;
     }
 
-    const contactDoc = response.documents[0];
-    return {
-      phone: contactDoc.phone,
-      email: contactDoc.email,
-      links: JSON.parse(contactDoc.links),
-    };
+    return JSON.parse(response.documents[0].contact);
   } catch (error) {
     console.error("Error loading contact:", error);
     return null;
@@ -571,17 +486,17 @@ export const loadTemplate = async (
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
-      COLLECTIONS.TEMPLATE,
+      COLLECTIONS.USER,
       [Query.equal("userId", userId)]
     );
 
-    if (response.total === 0) {
+    if (response.total === 0 || !response.documents[0].selectedTemplate) {
       return null;
     }
 
-    const templateDoc = response.documents[0];
+    const template = JSON.parse(response.documents[0].selectedTemplate);
     return {
-      selectedTemplate: templateDoc.selectedTemplate,
+      selectedTemplate: template,
     };
   } catch (error) {
     console.error("Error loading template:", error);
@@ -597,26 +512,42 @@ export const loadPortfolio = async (
 ): Promise<Partial<PortfolioState>> => {
   console.log("Loading portfolio for user:", userId);
   try {
-    const [bio, skills, workExperience, projects, contact, template] =
-      await Promise.all([
-        loadBio(userId),
-        loadSkills(userId),
-        loadWorkExperience(userId),
-        loadProjects(userId),
-        loadContact(userId),
-        loadTemplate(userId),
-      ]);
+    const response = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      [Query.equal("userId", userId)]
+    );
 
+    if (response.total === 0) {
+      return {};
+    }
+
+    const userDoc = response.documents[0];
     const portfolioData: Partial<PortfolioState> = {};
 
-    if (bio) portfolioData.bio = bio;
-    if (skills.length > 0) portfolioData.skills = skills;
-    if (workExperience.length > 0)
-      portfolioData.workExperience = workExperience;
-    if (projects.length > 0) portfolioData.projects = projects;
-    if (contact) portfolioData.contact = contact;
-    if (template) {
-      portfolioData.selectedTemplate = template.selectedTemplate as any;
+    // Parse each field if it exists
+    if (userDoc.bio) {
+      portfolioData.bio = JSON.parse(userDoc.bio);
+    }
+
+    if (userDoc.skills) {
+      portfolioData.skills = JSON.parse(userDoc.skills);
+    }
+
+    if (userDoc.workExperience) {
+      portfolioData.workExperience = JSON.parse(userDoc.workExperience);
+    }
+
+    if (userDoc.projects) {
+      portfolioData.projects = JSON.parse(userDoc.projects);
+    }
+
+    if (userDoc.contact) {
+      portfolioData.contact = JSON.parse(userDoc.contact);
+    }
+
+    if (userDoc.selectedTemplate) {
+      portfolioData.selectedTemplate = JSON.parse(userDoc.selectedTemplate);
     }
 
     return portfolioData;
@@ -635,54 +566,109 @@ export const savePortfolio = async (
   updatedSection?: string
 ): Promise<boolean> => {
   try {
-    // If no specific section is provided, save everything (backward compatibility)
+    const { document } = await getUserDocument(userId);
+
+    // If no specific section is provided, save everything
     if (!updatedSection) {
-      await Promise.all([
-        saveBio(portfolio.bio, userId),
-        saveSkills(portfolio.skills, userId),
-        saveWorkExperience(portfolio.workExperience, userId),
-        saveProjects(portfolio.projects, userId),
-        saveContact(portfolio.contact, userId),
-        saveTemplate(portfolio.selectedTemplate, userId),
-      ]);
+      await databases.updateDocument(
+        DATABASE_ID,
+        COLLECTIONS.USER,
+        document.$id,
+        {
+          bio: JSON.stringify(portfolio.bio),
+          skills: JSON.stringify(portfolio.skills),
+          workExperience: JSON.stringify(portfolio.workExperience),
+          projects: JSON.stringify(portfolio.projects),
+          contact: JSON.stringify(portfolio.contact),
+          selectedTemplate: JSON.stringify(portfolio.selectedTemplate),
+        }
+      );
       return true;
     }
 
     // Otherwise, only save the specified section
+    const updateData: Record<string, string> = {};
+
     switch (updatedSection) {
       case "bio":
-        await saveBio(portfolio.bio, userId);
+        updateData.bio = JSON.stringify(portfolio.bio);
         break;
       case "skills":
-        await saveSkills(portfolio.skills, userId);
+        updateData.skills = JSON.stringify(portfolio.skills);
         break;
       case "workExperience":
-        await saveWorkExperience(portfolio.workExperience, userId);
+        updateData.workExperience = JSON.stringify(portfolio.workExperience);
         break;
       case "projects":
-        await saveProjects(portfolio.projects, userId);
+        updateData.projects = JSON.stringify(portfolio.projects);
         break;
       case "contact":
-        await saveContact(portfolio.contact, userId);
+        updateData.contact = JSON.stringify(portfolio.contact);
         break;
       case "template":
-        await saveTemplate(portfolio.selectedTemplate, userId);
+        updateData.selectedTemplate = JSON.stringify(
+          portfolio.selectedTemplate
+        );
         break;
       default:
         console.warn(`Unknown section: ${updatedSection}, saving all sections`);
-        await Promise.all([
-          saveBio(portfolio.bio, userId),
-          saveSkills(portfolio.skills, userId),
-          saveWorkExperience(portfolio.workExperience, userId),
-          saveProjects(portfolio.projects, userId),
-          saveContact(portfolio.contact, userId),
-          saveTemplate(portfolio.selectedTemplate, userId),
-        ]);
+        return await savePortfolio(portfolio, userId);
     }
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      document.$id,
+      updateData
+    );
 
     return true;
   } catch (error) {
     console.error("Error saving portfolio:", error);
+    return false;
+  }
+};
+
+/**
+ * Ensures a user document exists, creating one if it doesn't
+ */
+export const ensureUserDocument = async (userId: string): Promise<boolean> => {
+  try {
+    console.log("Checking if user document exists for:", userId);
+
+    // Check if user document already exists
+    const existingDocs = await databases.listDocuments(
+      DATABASE_ID,
+      COLLECTIONS.USER,
+      [Query.equal("userId", userId)]
+    );
+
+    if (existingDocs.total > 0) {
+      console.log("User document already exists");
+      return true;
+    }
+
+    // Get user details from account
+    const user = await account.get();
+    console.log("Creating new user document for:", userId);
+
+    // Create new user document
+    await databases.createDocument(DATABASE_ID, COLLECTIONS.USER, ID.unique(), {
+      userId,
+      name: user.name || "",
+      email: user.email || "",
+      bio: "",
+      skills: "[]",
+      workExperience: "[]",
+      projects: "[]",
+      contact: "",
+      selectedTemplate: JSON.stringify("Minimalist"),
+    });
+
+    console.log("Created new user document for:", userId);
+    return true;
+  } catch (error) {
+    console.error("Error ensuring user document:", error);
     return false;
   }
 };

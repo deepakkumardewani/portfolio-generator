@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { account } from "../lib/appwrite";
 import { Models, OAuthProvider } from "appwrite";
+import { createUserDocument } from "../lib/appwriteService";
 
 interface UseAppwriteReturn {
   user: Models.User<Models.Preferences> | null;
@@ -34,6 +35,7 @@ export const useAppwrite = (): UseAppwriteReturn => {
         setError(null);
 
         const currentUser = await account.get();
+        console.log("currentUser", currentUser);
         setUser(currentUser);
       } catch (err) {
         // User is not logged in, don't show error
@@ -58,6 +60,9 @@ export const useAppwrite = (): UseAppwriteReturn => {
       // Get the logged-in user
       const currentUser = await account.get();
       setUser(currentUser);
+
+      // Redirect to create page after successful login
+      window.location.href = "/create";
     } catch (err: any) {
       setError(err.message || "Failed to log in");
       throw err;
@@ -78,9 +83,16 @@ export const useAppwrite = (): UseAppwriteReturn => {
 
       // Create a new account
       const newUser = await account.create("unique()", email, password, name);
+      console.log("Created new account:", newUser.$id);
+
+      // Create user document in the database
+      await createUserDocument(newUser.$id, name, email);
+      console.log("Created user document for:", newUser.$id);
 
       // Login after registration
       await login(email, password);
+
+      // No need to redirect - the login function will handle redirection
 
       return newUser;
     } catch (err: any) {
@@ -109,6 +121,7 @@ export const useAppwrite = (): UseAppwriteReturn => {
     }
   };
 
+  // Login with OAuth provider (Google, GitHub)
   const oauthLogin = async (provider: string) => {
     try {
       setLoading(true);
@@ -116,24 +129,21 @@ export const useAppwrite = (): UseAppwriteReturn => {
 
       const providerEnum =
         provider === "google" ? OAuthProvider.Google : OAuthProvider.Github;
-      const successUrl = `${window.location.origin}/create`;
+
+      // Redirect to OAuth callback page instead of directly to create page
+      const successUrl = `${window.location.origin}/auth/callback`;
       const failureUrl = `${window.location.origin}`;
-      // Create OAuth2 session for Google
+
+      // Create OAuth2 session for the provider
       account.createOAuth2Session(
         providerEnum,
-        successUrl, // Success URL
+        successUrl, // Callback page that will handle document creation
         failureUrl // Failure URL
       );
 
-      // The user will be redirected to Google's login page
-      // After successful login, they'll be redirected back to your app
-      // The session will be automatically created
-
-      // Get the logged-in user
-      const currentUser = await account.get();
-      setUser(currentUser);
+      // Note: Code after this point will NOT execute due to the redirect
     } catch (err: any) {
-      setError(err.message || "Failed to log in with Google");
+      setError(err.message || `Failed to log in with ${provider}`);
       throw err;
     } finally {
       setLoading(false);
