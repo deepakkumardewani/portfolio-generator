@@ -39,8 +39,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 export default function PreviewHeader() {
-  // const { user } = useAuth();
-  const isAuthenticated = sessionStorage.getItem("is_authenticated");
+  const { user } = useAuth();
   // const dispatch = useAppDispatch();
   // const { viewMode } = useAppSelector((state) => state.portfolio);
   const [deploymentStatus, setDeploymentStatus] =
@@ -265,7 +264,7 @@ export default function PreviewHeader() {
               </DropdownMenu>
             </div>
 
-            {isAuthenticated && <UserMenu />}
+            {user && <UserMenu />}
           </div>
         </div>
 

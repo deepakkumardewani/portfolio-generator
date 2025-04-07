@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React from "react";
 import { ThemeToggle } from "../ui/theme-toggle";
-import { ShimmerButton } from "../magicui/shimmer-button";
 import { useAuth } from "@/contexts/AuthContext";
 import UserMenu from "../shared/UserMenu";
 import { HoverBorderGradient } from "../ui/hover-border-gradient";
