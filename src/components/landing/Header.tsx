@@ -26,7 +26,7 @@ export default function Header() {
                 as="button"
                 className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 cursor-pointer"
               >
-                <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:text-stone-300 text-md">
+                <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-md">
                   Get Started
                 </span>
               </HoverBorderGradient>
