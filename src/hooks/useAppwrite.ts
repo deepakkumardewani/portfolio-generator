@@ -39,7 +39,6 @@ export const useAppwrite = (): UseAppwriteReturn => {
         setError(null);
 
         const currentUser = await account.get();
-        console.log("currentUser", currentUser);
         setUser(currentUser);
       } catch (err) {
         // User is not logged in, don't show error

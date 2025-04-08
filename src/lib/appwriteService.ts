@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query } from "node-appwrite";
+import { Client, Databases, ID, Query, Permission, Role } from "appwrite";
 import type {
   Bio,
   Skill,
@@ -15,8 +15,7 @@ const client = new Client()
   .setEndpoint(
     process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1"
   )
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "")
-  .setKey(process.env.NEXT_PUBLIC_APPWRITE_API_KEY || "");
+  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "");
 
 // Initialize Appwrite services
 const databases = new Databases(client);
@@ -61,7 +60,13 @@ export const createUserDocument = async (
         projects: "",
         contact: "",
         selectedTemplate: "",
-      }
+        deploymentDetails: "",
+      },
+      [
+        Permission.read(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
     return newUser;
   } catch (error) {
@@ -547,7 +552,12 @@ export const savePortfolio = async (
           projects: JSON.stringify(portfolio.projects),
           contact: JSON.stringify(portfolio.contact),
           selectedTemplate: JSON.stringify(portfolio.selectedTemplate),
-        }
+        },
+        [
+          Permission.read(Role.user(userId)),
+          Permission.update(Role.user(userId)),
+          Permission.delete(Role.user(userId)),
+        ]
       );
       return true;
     }
@@ -585,7 +595,12 @@ export const savePortfolio = async (
       DATABASE_ID,
       USER_COLLECTION_ID,
       document.$id,
-      updateData
+      updateData,
+      [
+        Permission.read(Role.user(userId)),
+        Permission.update(Role.user(userId)),
+        Permission.delete(Role.user(userId)),
+      ]
     );
 
     return true;
