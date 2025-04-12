@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Project } from "@/types";
 import { Icons } from "@/components/ui/icons";
 

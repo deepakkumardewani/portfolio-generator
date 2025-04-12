@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "@/store";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 
 import { WorkExperience } from "@/types";
 import { formatDate } from "@/lib/utils";

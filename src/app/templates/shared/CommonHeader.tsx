@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { useDarkMode } from "@/contexts/DarkModeContext";
 
 // Map section IDs to nav item labels
 const sectionToNavItem = {
@@ -22,7 +21,6 @@ export default function Header({ templateId }: HeaderProps) {
   const [isAnimated, setIsAnimated] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { darkMode, toggleDarkMode } = useDarkMode();
   const { viewMode, templateSections } = useAppSelector(
     (state) => state.portfolio
   );
