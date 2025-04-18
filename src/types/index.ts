@@ -3,6 +3,7 @@ export interface Bio {
   tagline: string;
   about: string;
   profileImg?: string;
+  resumeUrl?: string;
 }
 
 export interface Project {
@@ -62,6 +63,8 @@ export interface PortfolioState {
   selectedTemplate: TemplateType;
   viewMode: "desktop" | "mobile";
   templateSections: TemplateSectionConfig;
+  remainingRequests: number;
+  allowedRequestsPerDay: number;
   _sync?: {
     lastSyncedAt: number;
     isDirty: boolean;
@@ -76,6 +79,7 @@ export interface BioFormValues {
   tagline: string;
   about: string;
   profileImg?: string;
+  resumeUrl?: string;
 }
 
 export interface WorkExperienceFormValues {

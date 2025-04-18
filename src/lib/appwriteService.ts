@@ -61,6 +61,8 @@ export const createUserDocument = async (
         contact: "",
         selectedTemplate: "",
         deploymentDetails: "",
+        remainingRequests: 10,
+        allowedRequestsPerDay: 10,
       },
       [
         Permission.read(Role.user(userId)),
@@ -489,6 +491,7 @@ export const loadPortfolio = async (
       [Query.equal("userId", userId)]
     );
 
+    console.log("response", response);
     if (response.total === 0) {
       return {};
     }
@@ -519,6 +522,19 @@ export const loadPortfolio = async (
 
     if (userDoc.selectedTemplate) {
       portfolioData.selectedTemplate = JSON.parse(userDoc.selectedTemplate);
+    }
+
+    // Add request count fields
+    if (typeof userDoc.remainingRequests === "number") {
+      portfolioData.remainingRequests = userDoc.remainingRequests;
+    } else {
+      portfolioData.remainingRequests = 10; // Default value
+    }
+
+    if (typeof userDoc.allowedRequestsPerDay === "number") {
+      portfolioData.allowedRequestsPerDay = userDoc.allowedRequestsPerDay;
+    } else {
+      portfolioData.allowedRequestsPerDay = 10; // Default value
     }
 
     return portfolioData;
@@ -552,6 +568,7 @@ export const savePortfolio = async (
           projects: JSON.stringify(portfolio.projects),
           contact: JSON.stringify(portfolio.contact),
           selectedTemplate: JSON.stringify(portfolio.selectedTemplate),
+          // Don't update request counts here as they're managed separately
         },
         [
           Permission.read(Role.user(userId)),
@@ -563,7 +580,7 @@ export const savePortfolio = async (
     }
 
     // Otherwise, only save the specified section
-    const updateData: Record<string, string> = {};
+    const updateData: Record<string, string | number> = {};
 
     switch (updatedSection) {
       case "bio":
@@ -585,6 +602,10 @@ export const savePortfolio = async (
         updateData.selectedTemplate = JSON.stringify(
           portfolio.selectedTemplate
         );
+        break;
+      case "requestCounts":
+        updateData.remainingRequests = portfolio.remainingRequests;
+        updateData.allowedRequestsPerDay = portfolio.allowedRequestsPerDay;
         break;
       default:
         console.warn(`Unknown section: ${updatedSection}, saving all sections`);
@@ -684,5 +705,99 @@ export const initializeAppwrite = async (
     }
   } catch (error) {
     console.error("Error initializing Appwrite:", error);
+  }
+};
+
+/**
+ * Get the remaining requests count for a user
+ */
+export const getRemainingRequests = async (
+  userId: string
+): Promise<{
+  remainingRequests: number;
+  allowedRequestsPerDay: number;
+}> => {
+  console.log("Getting remaining requests for user:", userId);
+  try {
+    const { document } = await getUserDocument(userId);
+    console.log("document", document);
+    return {
+      remainingRequests: document.remainingRequests || 0,
+      allowedRequestsPerDay: document.allowedRequestsPerDay || 10,
+    };
+  } catch (error) {
+    console.error("Error getting remaining requests:", error);
+    return {
+      remainingRequests: 0,
+      allowedRequestsPerDay: 10,
+    };
+  }
+};
+
+/**
+ * Update the remaining requests count for a user
+ */
+export const updateRemainingRequests = async (
+  userId: string,
+  count: number
+): Promise<boolean> => {
+  try {
+    const { document } = await getUserDocument(userId);
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      document.$id,
+      { remainingRequests: count }
+    );
+
+    return true;
+  } catch (error) {
+    console.error("Error updating remaining requests:", error);
+    return false;
+  }
+};
+
+/**
+ * Reset the remaining requests for a user to their allowed daily limit
+ */
+export const resetRemainingRequests = async (
+  userId: string
+): Promise<boolean> => {
+  try {
+    const { document } = await getUserDocument(userId);
+    const allowedRequests = document.allowedRequestsPerDay || 10;
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      document.$id,
+      { remainingRequests: allowedRequests }
+    );
+
+    return true;
+  } catch (error) {
+    console.error("Error resetting remaining requests:", error);
+    return false;
+  }
+};
+
+export const createPortfolioDocument = async (
+  portfolioId: string,
+  userId: string
+) => {
+  try {
+    await databases.createDocument(
+      DATABASE_ID,
+      "portfolio_analytics",
+      ID.unique(),
+      {
+        userId,
+        portfolioId,
+      }
+    );
+  } catch (error) {
+    console.error("Error creating portfolio document:", error);
+    return false;
   }
 };

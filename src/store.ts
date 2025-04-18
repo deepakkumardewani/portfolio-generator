@@ -197,6 +197,8 @@ const devData: PortfolioState = {
       { id: "footer", title: "Footer", visible: true, isFixed: true },
     ],
   },
+  remainingRequests: 10,
+  allowedRequestsPerDay: 10,
 };
 
 // Production data with empty fields
@@ -232,8 +234,11 @@ const prodData: PortfolioState = {
       { id: "footer", title: "Footer", visible: true, isFixed: true },
     ],
   },
+  remainingRequests: 10,
+  allowedRequestsPerDay: 10,
 };
 
+// const initialState = process.env.NODE_ENV === "development" ? devData : prodData;
 // Select initial state based on environment
 const initialState = prodData;
 
@@ -454,6 +459,15 @@ const portfolioSlice = createSlice({
         };
       }
 
+      // Add handlers for request limit fields
+      if (typeof action.payload.remainingRequests === "number") {
+        result.remainingRequests = action.payload.remainingRequests;
+      }
+
+      if (typeof action.payload.allowedRequestsPerDay === "number") {
+        result.allowedRequestsPerDay = action.payload.allowedRequestsPerDay;
+      }
+
       return result;
     },
     markAsSynced: (state) => {
@@ -464,6 +478,12 @@ const portfolioSlice = createSlice({
     },
     markAsDirty: (state) => {
       state._sync.isDirty = true;
+    },
+    setRemainingRequests: (state, action: PayloadAction<number>) => {
+      state.remainingRequests = action.payload;
+    },
+    setAllowedRequestsPerDay: (state, action: PayloadAction<number>) => {
+      state.allowedRequestsPerDay = action.payload;
     },
   },
 });
@@ -526,6 +546,8 @@ export const {
   setPortfolioData,
   markAsSynced,
   markAsDirty,
+  setRemainingRequests,
+  setAllowedRequestsPerDay,
 } = portfolioSlice.actions;
 
 /**
