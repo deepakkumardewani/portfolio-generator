@@ -26,6 +26,8 @@ import { WorkExperienceFormValues, Skill } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { darkModeClasses } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
+import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
 
 interface FormStep3Props {
   onNext: () => void;
@@ -39,9 +41,11 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   );
   const [expandedIndex, setExpandedIndex] = useState(0);
   const [isStudent, setIsStudent] = useState(false);
-  const [descriptionLengths, setDescriptionLengths] = useState<{
-    [key: number]: number;
-  }>({});
+  const [descriptionLengths, setDescriptionLengths] = useState<number[]>([]);
+  const [currentEditingIndex, setCurrentEditingIndex] = useState<number | null>(
+    null
+  );
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
 
   const form = useForm<WorkExperienceFormValues>({
     defaultValues: {
@@ -69,7 +73,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
       });
 
       // Initialize description lengths
-      const lengths: { [key: number]: number } = {};
+      const lengths: number[] = [];
       savedWorkExperience.forEach((exp, index) => {
         lengths[index] = exp.description?.length || 0;
       });
@@ -119,9 +123,19 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   };
 
   const handleDescriptionChange = (index: number, value: string) => {
-    const newLengths = { ...descriptionLengths };
+    const newLengths = [...descriptionLengths];
     newLengths[index] = value.length;
     setDescriptionLengths(newLengths);
+  };
+
+  const handleAIGeneration = (description: string) => {
+    if (currentEditingIndex !== null) {
+      form.setValue(
+        `workExperience.${currentEditingIndex}.description`,
+        description
+      );
+      handleDescriptionChange(currentEditingIndex, description);
+    }
   };
 
   return (
@@ -200,7 +214,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                   </div>
 
                   <div
-                    className={`space-y-4 mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                    className={`space-y-4 mt-4 px-2 overflow-hidden transition-all duration-300 ease-in-out ${
                       expandedIndex === index
                         ? "max-h-[2000px] opacity-100"
                         : "max-h-0 opacity-0"
@@ -323,21 +337,38 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                         },
                       }}
                       render={({ field }) => (
-                        <FormItem>
+                        <FormItem className="relative">
                           <FormLabel className={darkModeClasses.formLabel}>
                             Description
                           </FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Describe your responsibilities and achievements"
-                              className={`min-h-24 ${darkModeClasses.textarea}`}
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                handleDescriptionChange(index, e.target.value);
+                          <div className="relative">
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              className="absolute right-2 bottom-2 z-10"
+                              onClick={() => {
+                                setCurrentEditingIndex(index);
+                                setIsAIDialogOpen(true);
                               }}
-                            />
-                          </FormControl>
+                            >
+                              <Sparkles className="h-4 w-4" />
+                            </Button>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Describe your responsibilities and achievements"
+                                className={`min-h-24 ${darkModeClasses.textarea}`}
+                                {...field}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                  handleDescriptionChange(
+                                    index,
+                                    e.target.value
+                                  );
+                                }}
+                              />
+                            </FormControl>
+                          </div>
                           <div className="flex justify-end">
                             <p
                               className={`text-xs ${
@@ -411,6 +442,13 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
           </div>
         )}
       </CardContent>
+
+      <AIDescriptionDialog
+        open={isAIDialogOpen}
+        onOpenChange={setIsAIDialogOpen}
+        onDescriptionGenerated={handleAIGeneration}
+        fieldLabel="Experience Description"
+      />
     </Card>
   );
 }

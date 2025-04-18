@@ -55,6 +55,8 @@ import {
   ChartBar,
   User,
   LogOut,
+  File,
+  FileUp,
 } from "lucide-react";
 // export type Icon = typeof LucideIcon;
 
@@ -115,4 +117,6 @@ export const Icons = {
   pencil: Pencil,
   user: User,
   logout: LogOut,
+  file: File,
+  fileUpload: FileUp,
 };

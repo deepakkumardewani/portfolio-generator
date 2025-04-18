@@ -26,6 +26,8 @@ import { ProjectsFormValues, Skill } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
 import ImageUpload from "@/components/shared/ImageUpload";
 import { darkModeClasses } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
+import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
 
 interface FormStep4Props {
   onNext: () => void;
@@ -36,9 +38,11 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
   const dispatch = useAppDispatch();
   const savedProjects = useAppSelector((state) => state.portfolio.projects);
   const [expandedIndex, setExpandedIndex] = useState(0);
-  const [descriptionLengths, setDescriptionLengths] = useState<{
-    [key: number]: number;
-  }>({});
+  const [descriptionLengths, setDescriptionLengths] = useState<number[]>([]);
+  const [currentEditingIndex, setCurrentEditingIndex] = useState<number | null>(
+    null
+  );
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
 
   const form = useForm<ProjectsFormValues>({
     defaultValues: {
@@ -65,7 +69,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
       });
 
       // Initialize description lengths
-      const lengths: { [key: number]: number } = {};
+      const lengths: number[] = [];
       savedProjects.forEach((project, index) => {
         lengths[index] = project.description?.length || 0;
       });
@@ -124,9 +128,16 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
   };
 
   const handleDescriptionChange = (index: number, value: string) => {
-    const newLengths = { ...descriptionLengths };
+    const newLengths = [...descriptionLengths];
     newLengths[index] = value.length;
     setDescriptionLengths(newLengths);
+  };
+
+  const handleAIGeneration = (description: string) => {
+    if (currentEditingIndex !== null) {
+      form.setValue(`projects.${currentEditingIndex}.description`, description);
+      handleDescriptionChange(currentEditingIndex, description);
+    }
   };
 
   return (
@@ -224,21 +235,35 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                       },
                     }}
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="relative">
                         <FormLabel className={darkModeClasses.formLabel}>
                           Description
                         </FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="A brief description of your project"
-                            className={`min-h-24 ${darkModeClasses.textarea}`}
-                            {...field}
-                            onChange={(e) => {
-                              field.onChange(e);
-                              handleDescriptionChange(index, e.target.value);
+                        <div className="relative">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            className="absolute right-2 bottom-2 z-10"
+                            onClick={() => {
+                              setCurrentEditingIndex(index);
+                              setIsAIDialogOpen(true);
                             }}
-                          />
-                        </FormControl>
+                          >
+                            <Sparkles className="h-4 w-4" />
+                          </Button>
+                          <FormControl>
+                            <Textarea
+                              placeholder="A brief description of your project"
+                              className={`min-h-24 ${darkModeClasses.textarea}`}
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                handleDescriptionChange(index, e.target.value);
+                              }}
+                            />
+                          </FormControl>
+                        </div>
                         <div className="flex justify-end">
                           <p
                             className={`text-xs ${
@@ -366,6 +391,13 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
           </form>
         </Form>
       </CardContent>
+
+      <AIDescriptionDialog
+        open={isAIDialogOpen}
+        onOpenChange={setIsAIDialogOpen}
+        onDescriptionGenerated={handleAIGeneration}
+        fieldLabel="Project Description"
+      />
     </Card>
   );
 }

@@ -24,7 +24,15 @@ import { useAppDispatch, useAppSelector, setBio } from "@/store";
 import { BioFormValues } from "@/types";
 import { useEffect, useState } from "react";
 import ProfileImageUpload from "@/components/shared/ProfileImageUpload";
+import ResumeUpload from "@/components/shared/ResumeUpload";
 import { darkModeClasses } from "@/lib/utils";
+import { Sparkles } from "lucide-react";
+import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FormStep1Props {
   onNext: () => void;
@@ -34,6 +42,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
   const dispatch = useAppDispatch();
   const bioData = useAppSelector((state) => state.portfolio.bio);
   const [aboutLength, setAboutLength] = useState(0);
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
 
   const form = useForm<BioFormValues>({
     defaultValues: {
@@ -41,6 +50,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
       tagline: bioData.tagline || "",
       about: bioData.about || "",
       profileImg: bioData.profileImg || "",
+      resumeUrl: bioData.resumeUrl || "",
     },
   });
 
@@ -50,13 +60,15 @@ export default function FormStep1({ onNext }: FormStep1Props) {
       bioData.name ||
       bioData.tagline ||
       bioData.about ||
-      bioData.profileImg
+      bioData.profileImg ||
+      bioData.resumeUrl
     ) {
       form.reset({
         name: bioData.name || "",
         tagline: bioData.tagline || "",
         about: bioData.about || "",
         profileImg: bioData.profileImg || "",
+        resumeUrl: bioData.resumeUrl || "",
       });
       setAboutLength(bioData.about?.length || 0);
     }
@@ -77,8 +89,17 @@ export default function FormStep1({ onNext }: FormStep1Props) {
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const handleAIGeneration = (description: string) => {
+    form.setValue("about", description);
+    setAboutLength(description.length);
+  };
+
   const handleProfileImageChange = (url: string) => {
     form.setValue("profileImg", url);
+  };
+
+  const handleResumeChange = (url: string) => {
+    form.setValue("resumeUrl", url);
   };
 
   return (
@@ -95,11 +116,24 @@ export default function FormStep1({ onNext }: FormStep1Props) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="flex justify-center mb-6">
-              <ProfileImageUpload
-                currentImageUrl={form.watch("profileImg")}
-                onImageUrlChange={handleProfileImageChange}
-              />
+            <div className="flex flex-col md:flex-row md:items-start md:justify-around md:space-x-8 space-y-6 md:space-y-0 mb-6">
+              <div className="flex flex-col items-center">
+                <h3 className="text-sm font-medium mb-2">Profile Image</h3>
+                <ProfileImageUpload
+                  currentImageUrl={form.watch("profileImg")}
+                  onImageUrlChange={handleProfileImageChange}
+                />
+              </div>
+
+              <div className="flex flex-col items-center">
+                <h3 className="text-sm font-medium mb-2">Resume</h3>
+                <div className="w-full max-w-[250px]">
+                  <ResumeUpload
+                    currentResumeUrl={form.watch("resumeUrl")}
+                    onResumeUrlChange={handleResumeChange}
+                  />
+                </div>
+              </div>
             </div>
 
             <FormField
@@ -154,7 +188,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
                     />
                   </FormControl>
                   <FormDescription className={darkModeClasses.formDescription}>
-                    A short phrase that describes what you do (optional).
+                    A short phrase that describes what you do.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -172,21 +206,39 @@ export default function FormStep1({ onNext }: FormStep1Props) {
                 },
               }}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="relative">
                   <FormLabel className={darkModeClasses.formLabel}>
                     About
                   </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="I'm a passionate developer with 5 years of experience..."
-                      className={`min-h-32 ${darkModeClasses.textarea}`}
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        setAboutLength(e.target.value.length);
-                      }}
-                    />
-                  </FormControl>
+                  <div className="relative">
+                    <Tooltip delayDuration={500}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          className="absolute right-2 bottom-2 z-10"
+                          onClick={() => setIsAIDialogOpen(true)}
+                        >
+                          <Sparkles className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Generate professional bio with AI
+                      </TooltipContent>
+                    </Tooltip>
+                    <FormControl>
+                      <Textarea
+                        placeholder="I'm a passionate developer with 5 years of experience..."
+                        className={`min-h-32 ${darkModeClasses.textarea}`}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setAboutLength(e.target.value.length);
+                        }}
+                      />
+                    </FormControl>
+                  </div>
                   <div className="flex justify-between">
                     <FormDescription
                       className={darkModeClasses.formDescription}
@@ -216,6 +268,14 @@ export default function FormStep1({ onNext }: FormStep1Props) {
           </form>
         </Form>
       </CardContent>
+
+      <AIDescriptionDialog
+        open={isAIDialogOpen}
+        onOpenChange={setIsAIDialogOpen}
+        initialDescription={bioData.about}
+        onDescriptionGenerated={handleAIGeneration}
+        fieldLabel="About"
+      />
     </Card>
   );
 }
