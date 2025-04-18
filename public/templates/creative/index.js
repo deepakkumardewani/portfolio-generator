@@ -198,7 +198,6 @@ const skillsSectionAnimations = () => {
     createIntersectionObserver(skillsHeading, (el) => fadeInUp(el));
 
   const skillItems = document.querySelectorAll(".creative-skill-card");
-  console.log(skillItems);
   skillItems.forEach((item, index) => {
     createIntersectionObserver(item, (el) => fadeInUp(el, index * 150, 48));
   });
@@ -339,6 +338,31 @@ const navLinks = () => {
   navLinks.forEach((link) => {
     link.style.opacity = "1";
   });
+
+  // Add animation to resume button
+  const resumeButton = document.getElementById("resume-button");
+  if (resumeButton) {
+    fadeInUp(resumeButton);
+
+    // Add hover effect to resume button
+    resumeButton.addEventListener("mouseenter", () => {
+      if (animate) {
+        resumeButton.animate(
+          { transform: "scale(1.05)" },
+          { duration: 200, easing: "ease-out", fill: "forwards" }
+        );
+      }
+    });
+
+    resumeButton.addEventListener("mouseleave", () => {
+      if (animate) {
+        resumeButton.animate(
+          { transform: "scale(1)" },
+          { duration: 200, easing: "ease-out", fill: "forwards" }
+        );
+      }
+    });
+  }
 };
 
 // Initialize animations
@@ -353,13 +377,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  themeToggle();
   heroSectionAnimations();
   aboutSectionAnimations();
   experienceSectionAnimations();
   projectsSectionAnimations();
   skillsSectionAnimations();
   contactSectionAnimations();
+  themeToggle();
   mobileMenu();
   navLinks();
 });

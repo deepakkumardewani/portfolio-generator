@@ -1,6 +1,6 @@
 const animate = window.Motion?.animate;
 
-document.addEventListener("DOMContentLoaded", () => {
+const themeToggle = () => {
   const root = document.documentElement;
   const toggleBtn = document.getElementById("theme-toggle");
 
@@ -20,7 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   lucide.createIcons();
+};
 
+const mobileMenu = () => {
   // Show mobile menu on button click
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
@@ -55,9 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Change to X icon
         menuIcon.innerHTML = `
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        `;
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      `;
       } else {
         // Animate menu disappearance
         mobileMenuButton.classList.toggle("rotate-90");
@@ -84,10 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Change back to menu icon
         menuIcon.innerHTML = `
-          <line x1="4" x2="20" y1="12" y2="12"></line>
-          <line x1="4" x2="20" y1="6" y2="6"></line>
-          <line x1="4" x2="20" y1="18" y2="18"></line>
-        `;
+        <line x1="4" x2="20" y1="12" y2="12"></line>
+        <line x1="4" x2="20" y1="6" y2="6"></line>
+        <line x1="4" x2="20" y1="18" y2="18"></line>
+      `;
       }
 
       const links = mobileMenu.querySelectorAll("a");
@@ -99,9 +101,43 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+};
+
+const navLinks = () => {
   // Show navigation links with staggered animation
-  const navLinks = document.querySelectorAll(".nav-link");
+  const navLinks = document.querySelectorAll("header .space-x-8 > a");
   navLinks.forEach((link) => {
     link.style.opacity = "1";
   });
+
+  // Add animation to resume button
+  const resumeButton = document.getElementById("resume-button");
+  if (resumeButton) {
+    fadeInUp(resumeButton);
+
+    // Add hover effect to resume button
+    resumeButton.addEventListener("mouseenter", () => {
+      if (animate) {
+        resumeButton.animate(
+          { transform: "scale(1.05)" },
+          { duration: 200, easing: "ease-out", fill: "forwards" }
+        );
+      }
+    });
+
+    resumeButton.addEventListener("mouseleave", () => {
+      if (animate) {
+        resumeButton.animate(
+          { transform: "scale(1)" },
+          { duration: 200, easing: "ease-out", fill: "forwards" }
+        );
+      }
+    });
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  themeToggle();
+  mobileMenu();
+  navLinks();
 });

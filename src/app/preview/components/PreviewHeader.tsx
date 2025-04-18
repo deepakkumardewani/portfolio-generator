@@ -160,7 +160,7 @@ export default function PreviewHeader() {
             <ToggleButtons />
           </div>
 
-          <div className="flex-1 flex justify-end items-center space-x-4">
+          <div className="flex-1 flex justify-end items-center space-x-2">
             <Link href="/templates">
               <TooltipProvider>
                 <Tooltip>
@@ -212,7 +212,7 @@ export default function PreviewHeader() {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <ThemeToggle size="md" />
+
             <div className="flex items-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -232,7 +232,7 @@ export default function PreviewHeader() {
                     className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 cursor-pointer"
                   >
                     <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
-                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:text-stone-300 text-md">
+                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-md">
                       Deploy
                     </span>
                   </HoverBorderGradient>
@@ -263,7 +263,7 @@ export default function PreviewHeader() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-
+            <ThemeToggle size="md" />
             {user && <UserMenu />}
           </div>
         </div>

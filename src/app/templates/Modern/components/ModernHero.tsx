@@ -39,12 +39,11 @@ export default function ModernHero() {
           >
             {bio.tagline || "Your professional tagline here"}
           </p>
-          <meta itemProp="author" content={bio.name || "Your Name"} />
 
           <div className="flex flex-wrap gap-4 justify-center">
             <a
               href="#projects"
-              className="px-6 py-3 rounded-md bg-zinc-500 dark:bg-zinc-800 hover:bg-zinc-700 text-white transition-colors"
+              className="px-6 py-3 rounded-md bg-zinc-500 dark:bg-zinc-800 hover:bg-zinc-700 text-white transition-colors duration-300 "
               aria-label="View my projects"
             >
               View Work

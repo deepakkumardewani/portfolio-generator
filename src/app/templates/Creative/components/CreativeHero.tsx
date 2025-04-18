@@ -3,9 +3,10 @@ import React from "react";
 import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function CreativeHero() {
-  const { bio } = useAppSelector((state) => state.portfolio);
+  const { bio, contact } = useAppSelector((state) => state.portfolio);
 
   return (
     <section
@@ -23,6 +24,21 @@ export default function CreativeHero() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
+          {bio.profileImg && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="mx-auto mb-8 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full"
+            >
+              <img
+                src={bio.profileImg}
+                alt={bio.name || "Profile"}
+                sizes="(max-width: 768px) 8rem, 10rem"
+                className="object-cover"
+              />
+            </motion.div>
+          )}
           <motion.h1
             id="creative-hero-title"
             initial={{ opacity: 0, y: 20 }}
@@ -52,7 +68,7 @@ export default function CreativeHero() {
             className="flex justify-center space-x-6"
           >
             <a
-              href="#"
+              href={contact.links[1].url}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="GitHub Profile"
               rel="noopener"
@@ -60,7 +76,7 @@ export default function CreativeHero() {
               <Icons.gitHub size={24} />
             </a>
             <a
-              href="#"
+              href={contact.links[0].url}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="LinkedIn Profile"
               rel="noopener"
@@ -68,7 +84,7 @@ export default function CreativeHero() {
               <Icons.linkedin size={24} />
             </a>
             <a
-              href="#"
+              href={`mailto:${contact.email}`}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="Email Contact"
               rel="noopener"

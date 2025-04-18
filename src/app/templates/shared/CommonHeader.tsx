@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { motion } from "framer-motion";
 
 // Map section IDs to nav item labels
 const sectionToNavItem = {
@@ -21,7 +22,7 @@ export default function Header({ templateId }: HeaderProps) {
   const [isAnimated, setIsAnimated] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { viewMode, templateSections } = useAppSelector(
+  const { viewMode, templateSections, bio } = useAppSelector(
     (state) => state.portfolio
   );
 
@@ -124,13 +125,26 @@ export default function Header({ templateId }: HeaderProps) {
               />
             )}
           </button>
-          {/* Dark Mode Toggle */}
 
-          {!isPreview && (
-            <div className="flex flex-1 items-center justify-end ml-4">
-              <ThemeToggle size="md" />
-            </div>
-          )}
+          {/* Resume Button and Dark Mode Toggle */}
+          <div className="flex items-center justify-end ml-auto space-x-4">
+            {bio.resumeUrl && (
+              <motion.div
+                id="resume-button"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className={`flex items-center space-x-2 text-sm font-medium px-4 py-2 rounded-md bg-white dark:bg-neutral-950 hover:bg-neutral-300 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 transition-colors duration-300`}
+                style={{ transitionDelay: "100ms" }}
+              >
+                <a href={bio.resumeUrl} target="_blank">
+                  Resume
+                </a>
+                <Icons.externalLink className="h-4 w-4" />
+              </motion.div>
+            )}
+            {!isPreview && <ThemeToggle size="md" />}
+          </div>
         </div>
         {/* Mobile Navigation */}
         <div
