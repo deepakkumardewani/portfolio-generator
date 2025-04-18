@@ -35,4 +35,5 @@ export const darkModeClasses = {
     "dark:border-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800",
   text: "dark:text-neutral-50",
   heading: "dark:text-neutral-50",
+  select: "dark:bg-neutral-900 dark:border-neutral-800 dark:text-neutral-50",
 };

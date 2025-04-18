@@ -199,7 +199,7 @@ export function generateHTMLDocument(
 
   <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
   <script src="index.js"></script>
-
+  <script async src="analytics.js"></script>
   <!-- Canonical URL -->
   <link rel="canonical" href="${websiteUrl}" />
 </head>
