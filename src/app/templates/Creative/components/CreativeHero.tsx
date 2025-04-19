@@ -68,7 +68,7 @@ export default function CreativeHero() {
             className="flex justify-center space-x-6"
           >
             <a
-              href={contact.links[1].url}
+              href={contact?.links[1]?.url}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="GitHub Profile"
               rel="noopener"
@@ -76,7 +76,7 @@ export default function CreativeHero() {
               <Icons.gitHub size={24} />
             </a>
             <a
-              href={contact.links[0].url}
+              href={contact?.links[0]?.url}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="LinkedIn Profile"
               rel="noopener"
@@ -84,7 +84,7 @@ export default function CreativeHero() {
               <Icons.linkedin size={24} />
             </a>
             <a
-              href={`mailto:${contact.email}`}
+              href={`mailto:${contact?.email}`}
               className="dark:text-gray-400 text-black hover:text-white transition-colors"
               aria-label="Email Contact"
               rel="noopener"

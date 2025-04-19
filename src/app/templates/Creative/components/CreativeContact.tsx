@@ -60,21 +60,21 @@ export default function CreativeContact() {
             className="flex justify-center space-x-8"
           >
             <a
-              href={`mailto:${contact.email}`}
+              href={`mailto:${contact?.email}`}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.mail size={24} />
               <span>Email</span>
             </a>
             <a
-              href={contact.links[0].url}
+              href={contact?.links[0]?.url}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.linkedin size={24} />
               <span>LinkedIn</span>
             </a>
             <a
-              href={contact.links[1].url}
+              href={contact?.links[1]?.url}
               className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
             >
               <Icons.gitHub size={24} />
