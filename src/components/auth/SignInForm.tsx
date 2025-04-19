@@ -124,7 +124,7 @@ export default function SignInForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email*</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="name@example.com"
@@ -142,7 +142,7 @@ export default function SignInForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Password*</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
