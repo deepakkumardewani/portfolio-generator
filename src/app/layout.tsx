@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   title: "CreateFolio - Create Your Professional Portfolio",
   description:
     "Build a stunning professional portfolio with our easy-to-use portfolio generator.",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
   keywords: [
     "portfolio",
     "generator",
