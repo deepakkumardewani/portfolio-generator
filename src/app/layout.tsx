@@ -64,6 +64,13 @@ export default function RootLayout({
       className={`scroll-smooth ${inter.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          src="https://beamanalytics.b-cdn.net/beam.min.js"
+          data-token="b4fe1d03-4e79-4485-a14f-eb4694e8604f"
+          async
+        ></script>
+      </head>
       <body className="antialiased dark:bg-gray-950">
         <ClientBody>
           <Providers>
