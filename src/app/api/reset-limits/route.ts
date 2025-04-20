@@ -43,15 +43,28 @@ export async function POST(req: NextRequest) {
     for (const user of users.documents) {
       try {
         const allowedRequestsPerDay = user.allowedRequestsPerDay || 10;
+        const lastResetAt = new Date(user.requestsLastResetAt || 0);
+        const now = new Date();
 
-        await databases.updateDocument(
-          DATABASE_ID,
-          USER_COLLECTION_ID,
-          user.$id,
-          { remainingRequests: allowedRequestsPerDay }
-        );
-
-        successCount++;
+        const hoursSinceLastReset =
+          (now.getTime() - lastResetAt.getTime()) / (1000 * 60 * 60);
+        if (
+          user.remainingRequests < allowedRequestsPerDay &&
+          hoursSinceLastReset >= 24
+        ) {
+          await databases.updateDocument(
+            DATABASE_ID,
+            USER_COLLECTION_ID,
+            user.$id,
+            {
+              remainingRequests: allowedRequestsPerDay,
+              requestsLastResetAt: now.toISOString(),
+            }
+          );
+          successCount++;
+        } else {
+          // No update needed
+        }
       } catch (error) {
         console.error(
           `[Server] Failed to reset limits for user ${user.$id}:`,
