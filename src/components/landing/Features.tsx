@@ -1,11 +1,13 @@
 "use client";
 
+import { motion } from "framer-motion";
 // import { AnimatedGradientBackground } from "@/components/ui/animated-gradient-background";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 // import { ShiningBorder } from "@/components/ui/shining-border";
 import { GlowingEffect } from "../ui/glowing-effect";
 import { Icons } from "@/components/ui/icons";
 import { Badge } from "../ui/badge";
+
 const features = [
   {
     title: "Responsive Design",
@@ -37,24 +39,67 @@ const features = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  viewport: { once: true },
+  hidden: {
+    opacity: 0,
+    y: 20,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+    },
+  },
+};
+
 export default function Features() {
   return (
     <section id="features" className="py-20 bg-neutral-50 dark:bg-neutral-950">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
           <div className="text-3xl md:text-4xl font-bold my-4">
             <TextShimmer className="my-3">Everything You Need</TextShimmer> to
             Create the Perfect Portfolio
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <div className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Our platform provides all the tools you need to create a
             professional portfolio that showcases your work effectively.
-          </p>
-        </div>
+          </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 p-6 gap-8 ">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-4 p-6 gap-8"
+        >
           {features.map((feature, index) => (
-            <div
+            <motion.div
+              variants={itemVariants}
               className="relative h-full rounded-xl border md:rounded-3xl md:p-3"
               key={index}
             >
@@ -77,9 +122,9 @@ export default function Features() {
                   </Badge>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

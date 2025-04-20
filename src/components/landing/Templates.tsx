@@ -1,10 +1,12 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { TextShimmer } from "@/components/ui/text-shimmer";
 import { ShiningBorder } from "@/components/ui/shining-border";
 import ModernHero from "@/app/templates/Modern/components/ModernHero";
 import CreativeHero from "@/app/templates/Creative/components/CreativeHero";
 import MinimalistHero from "@/app/templates/Minimalist/components/MinimalistHero";
+
 interface Template {
   name: string;
   description: string;
@@ -37,6 +39,35 @@ const templates: Template[] = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.4,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+    scale: 0.9,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 80,
+      damping: 20,
+    },
+  },
+};
+
 export default function Templates() {
   return (
     <section
@@ -44,20 +75,38 @@ export default function Templates() {
       className="py-20 bg-gradient-to-b from-background to-background/50"
     >
       <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <div className="text-3xl md:text-4xl font-bold mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="text-center mb-16"
+        >
+          <div className="text-3xl px-4 md:text-4xl font-bold mb-4">
             <div className="mb-2">Choose from</div>
             <TextShimmer>3 Handcrafted Beautiful Templates</TextShimmer>
           </div>
-          {/* <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            to get you started
-          </p> */}
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        </motion.div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
           {templates.map((template, index) => (
-            <TemplateCard key={index} template={template} />
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              whileHover={{
+                scale: 1.02,
+                transition: { duration: 0.2 },
+              }}
+            >
+              <TemplateCard template={template} />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -78,7 +127,7 @@ function TemplateCard({ template }: { template: Template }) {
   };
   return (
     // <ShiningBorder>
-    <div className="bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden mx-8 border border-black/5 dark:border-white/5">
+    <div className="bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden mx-8 border h-full border-black/5 dark:border-white/5">
       <div className="relative aspect-video w-full overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
         <div className="relative h-full w-full">

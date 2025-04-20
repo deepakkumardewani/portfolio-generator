@@ -6,6 +6,8 @@ import { GlowingEffect } from "../ui/glowing-effect";
 import { Icons } from "../ui/icons";
 import { TypewriterEffectSmooth } from "../ui/typewriter-effect";
 import { TypingAnimation } from "@/components/magicui/typing-animation";
+import { motion } from "framer-motion";
+
 const STEPS = [
   {
     icon: Icons.codeIcon,
@@ -27,30 +29,36 @@ const STEPS = [
   },
 ] as const;
 
-const words = [
-  {
-    text: "Create",
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+      delayChildren: 0.6, // Delay after the heading animation
+    },
   },
-  {
-    text: "your",
-  },
+};
 
-  {
-    text: "Portfolio",
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+    scale: 0.95,
   },
-  {
-    text: "in",
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15,
+      mass: 1,
+    },
   },
-  {
-    text: "3",
-  },
-  {
-    text: "Simple",
-  },
-  {
-    text: "Steps",
-  },
-];
+};
+
 export default function Steps() {
   return (
     <section
@@ -58,7 +66,13 @@ export default function Steps() {
       className="bg-neutral-50 dark:bg-neutral-950 py-24"
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <div className="flex justify-center mb-4">
             <div
               className={cn(
@@ -75,20 +89,32 @@ export default function Steps() {
             <TypingAnimation startOnView={true} duration={50}>
               Create Your Portfolio in 3 Simple Steps
             </TypingAnimation>
-            {/* <TypewriterEffectSmooth words={words} /> */}
           </div>
-          {/* <h2 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
-            Create Your Portfolio in 3 Simple Steps
-          </h2> */}
-          <p className="text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto">
+          <motion.p
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+            className="text-lg text-stone-600 dark:text-stone-400 max-w-2xl mx-auto"
+          >
             Our streamlined process makes it easy to build and deploy your
             professional portfolio
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-10"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {STEPS.map((step, index) => (
-            <div key={step.title} className={cn("relative h-full rounded-xl")}>
+            <motion.div
+              key={step.title}
+              className={cn("relative h-full rounded-xl")}
+              variants={itemVariants}
+            >
               <GlowingEffect
                 spread={40}
                 glow={true}
@@ -109,9 +135,9 @@ export default function Steps() {
                   </p>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
