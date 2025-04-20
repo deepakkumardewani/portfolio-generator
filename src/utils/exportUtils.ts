@@ -52,28 +52,21 @@ function generateSiteName(baseName: string, addRandomness = true): string {
  */
 export async function createPortfolioZip(data: PortfolioData): Promise<Blob> {
   try {
-    // Create a new JSZip instance
     const zip = new JSZip();
-
-    // Render the selected template to a string
     const componentString = renderTemplateToString(data);
-
-    // Generate the complete HTML document
     const htmlContent = generateHTMLDocument(componentString, data);
-
     const template = data.selectedTemplate;
 
-    // Fetch the index.js file
-    const indexJsResponse = await fetch(
-      `/templates/${template.toLowerCase()}/index.js`
-    );
-    const indexJsContent = await indexJsResponse.text();
-
+    // Fetch template content from API
+    const response = await fetch(`/api/templates/${template.toLowerCase()}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch template content");
+    }
+    const { content: indexJsContent } = await response.json();
     // Add files to the zip
     zip.file("output/index.html", htmlContent);
     zip.file("output/index.js", indexJsContent);
 
-    // Generate the zip file
     return await zip.generateAsync({ type: "blob" });
   } catch (error) {
     console.error("Error creating portfolio zip:", error);

@@ -1,27 +1,19 @@
 const animate = window.Motion?.animate;
 
-// Helper functions for animations
-const fadeInUp = (element, delay = 0, y = 20) => {
+// Fade in and slide up animation
+const fadeInUp = (element, delay = 0) => {
   if (!animate) {
     console.error("Motion.animate is not available");
-    element.style.opacity = "1";
-    element.style.transform = "translateY(0)";
     return null;
   }
 
   try {
-    return element.animate(
-      [
-        { opacity: 0, transform: `translateY(${y}px)` },
-        { opacity: 1, transform: "translateY(0)" },
-      ],
-      {
-        duration: 500,
-        delay,
-        fill: "forwards",
-        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-      }
-    );
+    return element.animate([{ opacity: 1, transform: "translateY(0)" }], {
+      duration: 600,
+      delay,
+      fill: "forwards",
+      easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+    });
   } catch (error) {
     console.error("Animation error:", error);
     // Fallback to direct style setting
@@ -29,67 +21,6 @@ const fadeInUp = (element, delay = 0, y = 20) => {
     element.style.transform = "translateY(0)";
     return null;
   }
-};
-
-const fadeInLeft = (element, delay = 0, x = -48) => {
-  if (!animate) {
-    console.error("Motion.animate is not available");
-    element.style.opacity = "1";
-    element.style.transform = "translateX(0)";
-    return null;
-  }
-
-  try {
-    return element.animate(
-      [
-        { opacity: 0, transform: `translateX(${x}px)` },
-        { opacity: 1, transform: "translateX(0)" },
-      ],
-      {
-        duration: 500,
-        delay,
-        fill: "forwards",
-        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-      }
-    );
-  } catch (error) {
-    console.error("Animation error:", error);
-    // Fallback to direct style setting
-    element.style.opacity = "1";
-    element.style.transform = "translateX(0)";
-    return null;
-  }
-};
-
-const scaleOnHover = (element) => {
-  if (!animate) {
-    console.error("Motion.animate is not available");
-    return;
-  }
-
-  element.addEventListener("mouseenter", () => {
-    try {
-      element.animate(
-        { transform: "scale(1.05)" },
-        { duration: 200, easing: "ease-out", fill: "forwards" }
-      );
-    } catch (error) {
-      console.error("Animation error:", error);
-      element.style.transform = "scale(1.05)";
-    }
-  });
-
-  element.addEventListener("mouseleave", () => {
-    try {
-      element.animate(
-        { transform: "scale(1)" },
-        { duration: 200, easing: "ease-out", fill: "forwards" }
-      );
-    } catch (error) {
-      console.error("Animation error:", error);
-      element.style.transform = "scale(1)";
-    }
-  });
 };
 
 // Infinite bounce animation for scroll indicator
@@ -118,6 +49,38 @@ const infiniteBounce = (element) => {
   }
 };
 
+// Scale on hover animation
+const scaleOnHover = (element) => {
+  if (!animate) {
+    console.error("Motion.animate is not available");
+    return;
+  }
+
+  element.addEventListener("mouseenter", () => {
+    try {
+      element.animate(
+        { transform: "scale(1.02)" },
+        { duration: 200, easing: "ease-out", fill: "forwards" }
+      );
+    } catch (error) {
+      console.error("Animation error:", error);
+      element.style.transform = "scale(1.02)";
+    }
+  });
+
+  element.addEventListener("mouseleave", () => {
+    try {
+      element.animate(
+        { transform: "scale(1)" },
+        { duration: 200, easing: "ease-out", fill: "forwards" }
+      );
+    } catch (error) {
+      console.error("Animation error:", error);
+      element.style.transform = "scale(1)";
+    }
+  });
+};
+
 // Viewport animation (triggers when element enters viewport)
 const createIntersectionObserver = (element, animation) => {
   const observer = new IntersectionObserver(
@@ -133,100 +96,6 @@ const createIntersectionObserver = (element, animation) => {
   );
   observer.observe(element);
   return observer;
-};
-
-const heroSectionAnimations = () => {
-  // Hero section animations
-  const heroContainer = document.querySelector("#creative-hero-container");
-  const heroTitle = document.querySelector("#creative-hero-title");
-  const heroTagline = document.querySelector("#creative-hero-tagline");
-  const heroSocial = document.querySelector("#creative-hero-social");
-
-  if (heroContainer) fadeInUp(heroContainer, 0, 20);
-  if (heroTitle) fadeInUp(heroTitle, 200, 20);
-  if (heroTagline) fadeInUp(heroTagline, 400, 20);
-  if (heroSocial) fadeInUp(heroSocial, 600, 20);
-
-  const scrollIndicator = document.querySelector("#scroll-indicator");
-  if (scrollIndicator) {
-    infiniteBounce(scrollIndicator);
-  }
-};
-
-const aboutSectionAnimations = () => {
-  // About section animations with intersection observer
-  const aboutContainer = document.querySelector("#about-container");
-  const aboutHeading = document.querySelector("#about-heading");
-  const aboutContent = document.querySelector("#about-content");
-
-  if (aboutContainer)
-    createIntersectionObserver(aboutContainer, (el) => fadeInUp(el, 0, 48));
-  if (aboutHeading)
-    createIntersectionObserver(aboutHeading, (el) => fadeInUp(el, 200));
-  if (aboutContent)
-    createIntersectionObserver(aboutContent, (el) => fadeInUp(el, 300, 20));
-};
-const experienceSectionAnimations = () => {
-  // Experience section animations
-  const experienceHeading = document.querySelector("#experience-heading");
-  if (experienceHeading)
-    createIntersectionObserver(experienceHeading, (el) => fadeInUp(el));
-
-  const experienceItems = document.querySelectorAll(
-    ".creative-experience-card"
-  );
-  experienceItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInLeft(el, index * 200));
-  });
-};
-const projectsSectionAnimations = () => {
-  // Projects section animations
-  const projectsHeading = document.querySelector("#projects-heading");
-  if (projectsHeading)
-    createIntersectionObserver(projectsHeading, (el) => fadeInUp(el));
-
-  const projectItems = document.querySelectorAll(".creative-project-card");
-  projectItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInUp(el, index * 200, 48));
-    scaleOnHover(item);
-  });
-};
-const skillsSectionAnimations = () => {
-  // Skills section animations
-  const skillsHeading = document.querySelector("#skills-heading");
-  if (skillsHeading)
-    createIntersectionObserver(skillsHeading, (el) => fadeInUp(el));
-
-  const skillItems = document.querySelectorAll(".creative-skill-card");
-  skillItems.forEach((item, index) => {
-    createIntersectionObserver(item, (el) => fadeInUp(el, index * 150, 48));
-  });
-};
-const contactSectionAnimations = () => {
-  // Contact section animations
-  const contactContainer = document.querySelector(
-    "#creative-contact-container"
-  );
-  const contactHeading = document.querySelector("#creative-contact-heading");
-  const contactText = document.querySelector("#creative-contact-text");
-  const contactLinks = document.querySelector("#creative-contact-links");
-
-  if (contactContainer)
-    createIntersectionObserver(contactContainer, (el) => fadeInUp(el, 0, 48));
-  if (contactHeading)
-    createIntersectionObserver(contactHeading, (el) => fadeInUp(el, 200));
-  if (contactText)
-    createIntersectionObserver(contactText, (el) => fadeInUp(el, 300));
-  if (contactLinks)
-    createIntersectionObserver(contactLinks, (el) => fadeInUp(el, 400, 20));
-
-  // Add hover animations to contact links
-  const contactLinkElements = document.querySelectorAll(
-    "#creative-contact-links a"
-  );
-  contactLinkElements.forEach((link) => {
-    scaleOnHover(link);
-  });
 };
 
 const themeToggle = () => {
@@ -365,17 +234,91 @@ const navLinks = () => {
   }
 };
 
+const heroSectionAnimations = () => {
+  const heroContent = document.querySelector("#hero-content");
+  if (heroContent) {
+    fadeInUp(heroContent);
+  }
+};
+
+const aboutSectionAnimations = () => {
+  const aboutTitle = document.querySelector("#about-heading");
+  if (aboutTitle) {
+    createIntersectionObserver(aboutTitle, (el) => fadeInUp(el));
+  }
+};
+
+const experienceSectionAnimations = () => {
+  const experienceTitle = document.querySelector("#experience-heading");
+  if (experienceTitle) {
+    createIntersectionObserver(experienceTitle, (el) => fadeInUp(el));
+  }
+
+  const experienceItems = document.querySelectorAll(".experience-item");
+  experienceItems.forEach((item, index) => {
+    createIntersectionObserver(item, (el) => fadeInUp(el, index * 100));
+    scaleOnHover(item);
+  });
+};
+
+const projectsSectionAnimations = () => {
+  const projectsTitle = document.querySelector("#projects-heading");
+  if (projectsTitle) {
+    createIntersectionObserver(projectsTitle, (el) => fadeInUp(el));
+  }
+
+  const projectCards = document.querySelectorAll(".project-item");
+  projectCards.forEach((card, index) => {
+    createIntersectionObserver(card, (el) => fadeInUp(el, index * 100));
+    scaleOnHover(card);
+  });
+};
+
+const skillsSectionAnimations = () => {
+  const skillsTitle = document.querySelector("#skills-heading");
+  if (skillsTitle) {
+    createIntersectionObserver(skillsTitle, (el) => fadeInUp(el));
+  }
+
+  const skillCards = document.querySelectorAll(".skill-item");
+  skillCards.forEach((card, index) => {
+    createIntersectionObserver(card, (el) => fadeInUp(el, index * 100));
+  });
+};
+
+const contactSectionAnimations = () => {
+  const contactTitle = document.querySelector("#contact-heading");
+  if (contactTitle) {
+    createIntersectionObserver(contactTitle, (el) => fadeInUp(el));
+  }
+
+  const contactInfo = document.querySelector("#contact-info");
+  if (contactInfo) {
+    createIntersectionObserver(contactInfo, (el) => fadeInUp(el, 100));
+  }
+
+  const socialLinks = document.querySelector("#contact-social-links");
+  if (socialLinks) {
+    createIntersectionObserver(socialLinks, (el) => fadeInUp(el, 200));
+  }
+};
+
 // Initialize animations
 document.addEventListener("DOMContentLoaded", () => {
   // Check if Motion library is loaded
   if (!window.Motion) {
-    console.warn("Motion library is not loaded. Using fallbacks.");
+    console.error("Motion library is not loaded. Animations will not work.");
     // Apply fallback styles to make content visible
     document.querySelectorAll('[style*="opacity: 0"]').forEach((el) => {
       el.style.opacity = "1";
       el.style.transform = "none";
     });
+    return;
   }
+
+  themeToggle();
+  mobileMenu();
+  navLinks();
 
   heroSectionAnimations();
   aboutSectionAnimations();
@@ -383,7 +326,9 @@ document.addEventListener("DOMContentLoaded", () => {
   projectsSectionAnimations();
   skillsSectionAnimations();
   contactSectionAnimations();
-  themeToggle();
-  mobileMenu();
-  navLinks();
+
+  const scrollIndicator = document.querySelector("#scroll-indicator");
+  if (scrollIndicator) {
+    infiniteBounce(scrollIndicator);
+  }
 });
