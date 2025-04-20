@@ -87,14 +87,9 @@ export function AIDescriptionDialog({
   // Initialize remainingRequests from store if available
   useEffect(() => {
     if (storeRemainingRequests !== undefined && remainingRequests === null) {
-      console.log(
-        "Initializing remaining requests from store:",
-        storeRemainingRequests
-      );
       setRemainingRequests(storeRemainingRequests);
     } else if (remainingRequests === null) {
       // Fallback to default if not in store
-      console.log("No remaining requests in store, using default");
       setRemainingRequests(10);
     }
   }, [storeRemainingRequests, remainingRequests]);
