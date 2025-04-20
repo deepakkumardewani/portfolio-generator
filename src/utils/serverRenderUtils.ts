@@ -61,7 +61,7 @@ export function renderComponentToString(
     theme: props.theme,
     selectedTemplate: props.selectedTemplate,
     contact: props.contact,
-    templateSections: {
+    templateSections: props.templateSections || {
       sections: [
         { id: "header", title: "Header", visible: true, isFixed: true },
         { id: "hero", title: "Hero", visible: true, isFixed: true },
@@ -232,6 +232,7 @@ export function renderTemplateToString(data: PortfolioData): string {
     theme: data.theme,
     selectedTemplate: data.selectedTemplate,
     contact: data.contact,
+    templateSections: data.templateSections,
   };
 
   switch (selectedTemplate) {
