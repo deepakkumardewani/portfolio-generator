@@ -4,8 +4,9 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Icons } from "@/components/ui/icons";
-import { darkModeClasses } from "@/lib/utils";
-import { client, storage } from "@/lib/appwrite";
+import { storage } from "@/lib/appwrite";
+import { Permission, Role, ID } from "appwrite";
+import { useAuth } from "@/contexts/AuthContext";
 interface ProfileImageUploadProps {
   currentImageUrl: string | undefined;
   onImageUrlChange: (url: string) => void;
@@ -15,6 +16,7 @@ export default function ProfileImageUpload({
   currentImageUrl,
   onImageUrlChange,
 }: ProfileImageUploadProps) {
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentImageUrl || null
@@ -78,19 +80,30 @@ export default function ProfileImageUpload({
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
 
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
       // Upload to Appwrite storage
       const result = await storage.createFile(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
-        "unique()", // Generate a unique ID
-        file
+        ID.unique(),
+        file,
+        [
+          Permission.read(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.delete(Role.user(user.$id)),
+        ]
       );
 
+      console.log("result", result);
       // Get the file view URL
       const fileUrl = storage.getFileView(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
         result.$id
       );
 
+      console.log("fileUrl", fileUrl);
       // Update with the permanent URL
       onImageUrlChange(fileUrl.toString());
     } catch (err) {
