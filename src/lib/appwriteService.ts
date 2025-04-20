@@ -1,4 +1,4 @@
-import { Client, Databases, ID, Query, Permission, Role } from "appwrite";
+import { ID, Query, Permission, Role } from "appwrite";
 import type {
   Bio,
   Skill,
@@ -9,18 +9,8 @@ import type {
 } from "../types";
 import { setPortfolioData, markAsSynced } from "@/store";
 import { account } from "@/lib/appwrite";
+import { databases } from "@/lib/appwrite";
 
-// Initialize Appwrite client
-const client = new Client()
-  .setEndpoint(
-    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1"
-  )
-  .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "");
-
-// Initialize Appwrite services
-const databases = new Databases(client);
-
-// Database and collections constants
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "";
 const USER_COLLECTION_ID =
   process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID || "";
