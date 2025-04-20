@@ -63,6 +63,7 @@ export const createUserDocument = async (
         deploymentDetails: "",
         remainingRequests: 10,
         allowedRequestsPerDay: 10,
+        requestsLastResetAt: new Date().toISOString(),
       },
       [
         Permission.read(Role.user(userId)),
