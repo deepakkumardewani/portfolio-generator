@@ -26,6 +26,7 @@ export default function CreativeHero() {
         >
           {bio.profileImg && (
             <motion.div
+              id="creative-hero-profile-img"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}

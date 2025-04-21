@@ -108,7 +108,7 @@ export default function ModernContact() {
             transition={{ duration: 0.5, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <p className="text-zinc-300 mb-8">
+            <p className="text-zinc-600 dark:text-zinc-300 mb-8">
               I'm always open to discussing new projects, creative ideas or
               opportunities to be part of your vision.
             </p>
@@ -120,10 +120,12 @@ export default function ModernContact() {
                     <Icons.mailIcon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-zinc-400 text-sm">Email</p>
+                    <p className="text-zinc-600 dark:text-zinc-300 text-sm">
+                      Email
+                    </p>
                     <a
                       href={`mailto:${contact.email}`}
-                      className="text-zinc-200 hover:text-purple-400 transition-colors"
+                      className="text-zinc-600 dark:text-zinc-300 hover:text-purple-400 transition-colors"
                     >
                       {contact.email}
                     </a>
@@ -137,10 +139,12 @@ export default function ModernContact() {
                     <Icons.phoneIcon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-zinc-400 text-sm">Phone</p>
+                    <p className="text-zinc-600 dark:text-zinc-300 text-sm">
+                      Phone
+                    </p>
                     <a
                       href={`tel:${contact.phone}`}
-                      className="text-zinc-200 hover:text-blue-400 transition-colors"
+                      className="text-zinc-600 dark:text-zinc-300 hover:text-blue-400 transition-colors"
                     >
                       {contact.phone}
                     </a>
@@ -156,9 +160,9 @@ export default function ModernContact() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
+            className="bg-zinc-200 dark:bg-zinc-900 border border-zinc-800 rounded-lg p-6 dark:border-zinc-800"
           >
-            <h3 className="text-xl font-bold text-zinc-100 mb-6">
+            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-6">
               Connect With Me
             </h3>
 
@@ -172,19 +176,19 @@ export default function ModernContact() {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center gap-3 p-3 bg-zinc-100 dark:bg-zinc-900/50 border border-zinc-700 dark:border-zinc-700 rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-900 transition-colors group"
                       >
-                        <div className="text-zinc-400 group-hover:text-zinc-100 transition-colors">
+                        <div className="text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-100 transition-colors">
                           {getSocialIcon(link.url)}
                         </div>
-                        <span className="text-zinc-300 group-hover:text-zinc-100 transition-colors truncate">
+                        <span className="text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-100 transition-colors truncate">
                           {link.label}
                         </span>
                       </a>
                     )
                 )
               ) : (
-                <div className="col-span-2 text-center py-8 text-zinc-500">
+                <div className="col-span-2 text-center py-8 text-zinc-600 dark:text-zinc-300">
                   No social links added
                 </div>
               )}

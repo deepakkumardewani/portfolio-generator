@@ -1,3 +1,4 @@
+const modernTemplate = `
 const animate = window.Motion?.animate;
 
 // Fade in and slide up animation
@@ -103,15 +104,15 @@ const themeToggle = () => {
   const toggleBtn = document.getElementById("theme-toggle");
 
   toggleBtn.classList.add("text-yellow-300");
-  toggleBtn.innerHTML = `<i data-lucide="sun"></i>`;
+  toggleBtn.innerHTML = '<i data-lucide="sun"></i>';
   root.classList.add("dark");
   toggleBtn.addEventListener("click", () => {
     root.classList.toggle("dark");
     const isDark = root.classList.contains("dark");
     toggleBtn.classList.toggle("text-yellow-300");
     toggleBtn.innerHTML = isDark
-      ? `<i data-lucide="sun"></i>`
-      : `<i data-lucide="moon"></i>`;
+      ? '<i data-lucide="sun"></i>'
+      : '<i data-lucide="moon"></i>';
 
     // Re-render the Lucide icon after injecting it
     lucide.createIcons();
@@ -154,10 +155,10 @@ const mobileMenu = () => {
         }
 
         // Change to X icon
-        menuIcon.innerHTML = `
+        menuIcon.innerHTML = \`
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
-      `;
+      \`;
       } else {
         // Animate menu disappearance
         mobileMenuButton.classList.toggle("rotate-90");
@@ -183,11 +184,11 @@ const mobileMenu = () => {
         }
 
         // Change back to menu icon
-        menuIcon.innerHTML = `
+        menuIcon.innerHTML = \`
         <line x1="4" x2="20" y1="12" y2="12"></line>
         <line x1="4" x2="20" y1="6" y2="6"></line>
         <line x1="4" x2="20" y1="18" y2="18"></line>
-      `;
+      \`;
       }
 
       const links = mobileMenu.querySelectorAll("a");
@@ -332,3 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     infiniteBounce(scrollIndicator);
   }
 });
+
+`;
+
+export default modernTemplate;

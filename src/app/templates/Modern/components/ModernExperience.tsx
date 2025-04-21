@@ -77,7 +77,7 @@ export default function ModernExperience() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="experience-item bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all"
+                className="experience-item bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 hover:border-zinc-700 transition-all"
                 itemScope
                 itemType="https://schema.org/OrganizationRole"
               >
@@ -85,19 +85,22 @@ export default function ModernExperience() {
                   className={`flex ${layoutClasses} items-center gap-4 mb-4`}
                 >
                   <h3
-                    className="text-xl font-bold text-zinc-100"
+                    className="text-xl font-bold text-zinc-900 dark:text-zinc-100"
                     itemProp="roleName"
                   >
                     {job.jobTitle}
                   </h3>
-                  <div className="hidden md:block h-1 w-1 rounded-full bg-zinc-700"></div>
-                  <h4 className="text-lg text-zinc-300" itemProp="memberOf">
+                  <div className="hidden md:block h-1 w-1 rounded-full bg-zinc-700 dark:bg-zinc-300"></div>
+                  <h4
+                    className="text-lg text-zinc-300 dark:text-zinc-700"
+                    itemProp="memberOf"
+                  >
                     {job.company}
                   </h4>
                 </div>
 
                 <div
-                  className="flex items-center gap-2 text-zinc-400 mb-4"
+                  className="flex items-center gap-2 text-zinc-400 dark:text-zinc-500 mb-4"
                   itemProp="dateRange"
                 >
                   <Icons.calendarIcon className="h-4 w-4" />
@@ -110,7 +113,10 @@ export default function ModernExperience() {
                   </span>
                 </div>
 
-                <p className="text-zinc-300 mb-6" itemProp="description">
+                <p
+                  className="text-zinc-600 dark:text-zinc-500 mb-6"
+                  itemProp="description"
+                >
                   {job.description}
                 </p>
 

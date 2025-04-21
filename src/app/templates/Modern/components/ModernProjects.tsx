@@ -71,7 +71,7 @@ export default function ModernProjects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="project-item group bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-all"
+                className="project-item group bg-zinc-50 dark:bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden hover:border-zinc-700 transition-all"
                 itemScope
                 itemType="https://schema.org/CreativeWork"
                 itemProp="itemListElement"
@@ -89,7 +89,7 @@ export default function ModernProjects() {
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-zinc-800">
                       <Icons.folderIcon
-                        className="h-16 w-16 text-zinc-600"
+                        className="h-16 w-16 text-zinc-600 dark:text-zinc-400"
                         aria-hidden="true"
                       />
                     </div>
@@ -99,13 +99,13 @@ export default function ModernProjects() {
 
                 <div className="p-6">
                   <h3
-                    className="text-xl font-bold text-zinc-100 mb-2"
+                    className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-2"
                     itemProp="name"
                   >
                     {project.title}
                   </h3>
                   <p
-                    className="text-zinc-400 mb-4 line-clamp-3"
+                    className="text-zinc-600 dark:text-zinc-500 mb-4 line-clamp-3"
                     itemProp="description"
                   >
                     {project.description}

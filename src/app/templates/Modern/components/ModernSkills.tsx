@@ -51,28 +51,36 @@ export default function ModernSkills() {
   // Category-specific styling
   const categoryStyles = {
     frontend: {
-      icon: <Icons.codeIcon className="h-6 w-6 text-blue-400" />,
-      bgColor: "bg-blue-900/20",
-      borderColor: "border-blue-800/30",
-      textColor: "text-blue-300",
+      icon: (
+        <Icons.codeIcon className="h-6 w-6 text-blue-400 dark:text-blue-500" />
+      ),
+      bgColor: "bg-blue-900/20 dark:bg-blue-500/20",
+      borderColor: "border-blue-800/30 dark:border-blue-500/30",
+      textColor: "text-blue-600 dark:text-blue-500",
     },
     backend: {
-      icon: <Icons.brainIcon className="h-6 w-6 text-purple-400" />,
-      bgColor: "bg-purple-900/20",
-      borderColor: "border-purple-800/30",
-      textColor: "text-purple-300",
+      icon: (
+        <Icons.brainIcon className="h-6 w-6 text-purple-400 dark:text-purple-500" />
+      ),
+      bgColor: "bg-purple-900/20 dark:bg-purple-500/20",
+      borderColor: "border-purple-800/30 dark:border-purple-500/30",
+      textColor: "text-purple-600 dark:text-purple-500",
     },
     tool: {
-      icon: <Icons.wrenchIcon className="h-6 w-6 text-green-400" />,
-      bgColor: "bg-green-900/20",
-      borderColor: "border-green-800/30",
-      textColor: "text-green-300",
+      icon: (
+        <Icons.wrenchIcon className="h-6 w-6 text-green-400 dark:text-green-500" />
+      ),
+      bgColor: "bg-green-900/20 dark:bg-green-500/20",
+      borderColor: "border-green-800/30 dark:border-green-500/30",
+      textColor: "text-green-600 dark:text-green-500",
     },
     other: {
-      icon: <Icons.codeIcon className="h-6 w-6 text-green-400" />,
-      bgColor: "bg-green-900/20",
-      borderColor: "border-green-800/30",
-      textColor: "text-green-300",
+      icon: (
+        <Icons.codeIcon className="h-6 w-6 text-green-400 dark:text-green-500" />
+      ),
+      bgColor: "bg-green-900/20 dark:bg-green-500/20",
+      borderColor: "border-green-800/30 dark:border-green-500/30",
+      textColor: "text-green-600 dark:text-green-500",
     },
   };
 
@@ -106,12 +114,12 @@ export default function ModernSkills() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="skill-item bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
+              className="skill-item bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-800 rounded-lg p-6"
             >
               <div className="flex items-center gap-3 mb-4">
                 {categoryStyles[category as keyof typeof categoryStyles]
                   ?.icon || categoryStyles.other.icon}
-                <h3 className="text-xl font-bold text-zinc-100">
+                <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </h3>
               </div>

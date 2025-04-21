@@ -1,3 +1,5 @@
+const creativeTemplate = `
+
 const animate = window.Motion?.animate;
 
 // Helper functions for animations
@@ -12,7 +14,7 @@ const fadeInUp = (element, delay = 0, y = 20) => {
   try {
     return element.animate(
       [
-        { opacity: 0, transform: `translateY(${y}px)` },
+        { opacity: 0, transform: \`translateY(\${y}px)\` },
         { opacity: 1, transform: "translateY(0)" },
       ],
       {
@@ -42,7 +44,7 @@ const fadeInLeft = (element, delay = 0, x = -48) => {
   try {
     return element.animate(
       [
-        { opacity: 0, transform: `translateX(${x}px)` },
+        { opacity: 0, transform: \`translateX(\${x}px)\` },
         { opacity: 1, transform: "translateX(0)" },
       ],
       {
@@ -141,12 +143,16 @@ const heroSectionAnimations = () => {
   const heroTitle = document.querySelector("#creative-hero-title");
   const heroTagline = document.querySelector("#creative-hero-tagline");
   const heroSocial = document.querySelector("#creative-hero-social");
+  const heroProfileImg = document.querySelector(
+    "#creative-hero-profile-img"
+  );
 
   if (heroContainer) fadeInUp(heroContainer, 0, 20);
   if (heroTitle) fadeInUp(heroTitle, 200, 20);
   if (heroTagline) fadeInUp(heroTagline, 400, 20);
   if (heroSocial) fadeInUp(heroSocial, 600, 20);
-
+  if (heroProfileImg) fadeInUp(heroProfileImg, 800, 20);
+  
   const scrollIndicator = document.querySelector("#scroll-indicator");
   if (scrollIndicator) {
     infiniteBounce(scrollIndicator);
@@ -234,15 +240,15 @@ const themeToggle = () => {
   const toggleBtn = document.getElementById("theme-toggle");
 
   toggleBtn.classList.add("text-yellow-300");
-  toggleBtn.innerHTML = `<i data-lucide="sun"></i>`;
+  toggleBtn.innerHTML = '<i data-lucide="sun"></i>';
   root.classList.add("dark");
   toggleBtn.addEventListener("click", () => {
     root.classList.toggle("dark");
     const isDark = root.classList.contains("dark");
     toggleBtn.classList.toggle("text-yellow-300");
     toggleBtn.innerHTML = isDark
-      ? `<i data-lucide="sun"></i>`
-      : `<i data-lucide="moon"></i>`;
+      ? '<i data-lucide="sun"></i>'
+      : '<i data-lucide="moon"></i>';
 
     // Re-render the Lucide icon after injecting it
     lucide.createIcons();
@@ -285,10 +291,10 @@ const mobileMenu = () => {
         }
 
         // Change to X icon
-        menuIcon.innerHTML = `
+        menuIcon.innerHTML = \`
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
-      `;
+      \`;
       } else {
         // Animate menu disappearance
         mobileMenuButton.classList.toggle("rotate-90");
@@ -314,11 +320,11 @@ const mobileMenu = () => {
         }
 
         // Change back to menu icon
-        menuIcon.innerHTML = `
+        menuIcon.innerHTML = \`
         <line x1="4" x2="20" y1="12" y2="12"></line>
         <line x1="4" x2="20" y1="6" y2="6"></line>
         <line x1="4" x2="20" y1="18" y2="18"></line>
-      `;
+      \`;
       }
 
       const links = mobileMenu.querySelectorAll("a");
@@ -387,3 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
   mobileMenu();
   navLinks();
 });
+
+`;
+
+export default creativeTemplate;
