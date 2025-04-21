@@ -40,7 +40,7 @@ export default function Header() {
                 </span>
               </HoverBorderGradient>
             </Link>
-            {user && <UserMenu />}
+            <UserMenu />
           </div>
         </div>
       </div>

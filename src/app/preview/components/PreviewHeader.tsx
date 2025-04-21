@@ -264,7 +264,7 @@ export default function PreviewHeader() {
               </DropdownMenu>
             </div>
             <ThemeToggle size="md" />
-            {user && <UserMenu />}
+            <UserMenu />
           </div>
         </div>
 

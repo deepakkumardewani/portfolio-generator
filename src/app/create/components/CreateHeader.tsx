@@ -20,7 +20,7 @@ export default function CreateHeader() {
           <div className="flex-1 flex justify-end items-center space-x-4">
             <ThemeToggle size="md" />
           </div>
-          {user && <UserMenu />}
+          <UserMenu />
         </div>
       </div>
     </div>

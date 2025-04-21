@@ -59,7 +59,7 @@ export default function CreateHeader() {
             </Link>
             <ThemeToggle size="md" />
           </div>
-          {user && <UserMenu />}
+          <UserMenu />
         </div>
       </div>
     </div>
