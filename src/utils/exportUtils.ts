@@ -58,8 +58,8 @@ export async function createPortfolioZip(data: PortfolioData): Promise<Blob> {
     const template = data.selectedTemplate;
 
     try {
-      const module = await import(`@/app/templates/${template}/index`);
-      const indexJsContent = module.default;
+      const templateData = await import(`@/app/templates/${template}/index`);
+      const indexJsContent = templateData.default;
       zip.file("output/index.html", htmlContent);
       zip.file("output/index.js", indexJsContent);
     } catch (error) {
