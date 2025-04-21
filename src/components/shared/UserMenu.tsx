@@ -5,15 +5,18 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { DropdownMenuSeparator } from "../ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { Icons } from "@/components/ui/icons";
 import { useRouter } from "next/navigation";
+import { Skeleton } from "../ui/skeleton";
+import { useAppSelector } from "@/store";
 
 export default function UserMenu() {
   const { user, logout } = useAuth();
+  const { bio } = useAppSelector((state) => state.portfolio);
   const router = useRouter();
 
   // Function to get user's initials
@@ -56,11 +59,16 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer ml-2">
-          <AvatarFallback className={`bg-purple-600 text-white`}>
-            {getUserInitials()}
-          </AvatarFallback>
-        </Avatar>
+        {user ? (
+          <Avatar className="cursor-pointer">
+            <AvatarFallback className={`bg-purple-600 text-white`}>
+              {getUserInitials()}
+            </AvatarFallback>
+            <AvatarImage src={bio.profileImg} />
+          </Avatar>
+        ) : (
+          <Skeleton className="h-8 w-8 rounded-full" />
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}

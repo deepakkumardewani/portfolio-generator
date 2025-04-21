@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
@@ -19,6 +19,8 @@ import Link from "next/link";
 import { darkModeClasses } from "@/lib/utils";
 import ProfileHeader from "./components/ProfileHeader";
 import LoadingScreen from "@/components/LoadingScreen";
+import { useAppSelector } from "@/store";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Use the same key constant as defined in exportUtils.ts
 const NETLIFY_SITE_ID_KEY = "netlify_portfolio_site_id";
@@ -33,6 +35,7 @@ interface DeploymentInfo {
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { bio } = useAppSelector((state) => state.portfolio);
   const [deploymentInfo, setDeploymentInfo] = useState<DeploymentInfo | null>(
     null
   );
@@ -78,11 +81,16 @@ export default function ProfilePage() {
             {/* User Information Card */}
             <Card className="mb-8 bg-neutral-50 dark:bg-neutral-950">
               <CardHeader className="flex flex-row items-center gap-4">
-                <Avatar className="h-16 w-16">
-                  <AvatarFallback className="bg-purple-600 text-white text-xl">
-                    {getUserInitials()}
-                  </AvatarFallback>
-                </Avatar>
+                {user ? (
+                  <Avatar className="h-16 w-16">
+                    <AvatarFallback className="bg-purple-600 text-white text-xl">
+                      {getUserInitials()}
+                    </AvatarFallback>
+                    <AvatarImage src={bio.profileImg} />
+                  </Avatar>
+                ) : (
+                  <Skeleton className="h-16 w-16 rounded-full" />
+                )}
                 <div>
                   <CardTitle className="text-2xl">{user?.name}</CardTitle>
                   <CardDescription className="text-base">
@@ -103,7 +111,7 @@ export default function ProfilePage() {
                           Account ID
                         </p>
                         <p className="font-mono text-sm truncate">
-                          {user?.$id}
+                          {user ? user?.$id : <Skeleton className="h-4 w-20" />}
                         </p>
                       </div>
                       <div>
@@ -111,9 +119,13 @@ export default function ProfilePage() {
                           Created On
                         </p>
                         <p>
-                          {new Date(
-                            user?.$createdAt || ""
-                          ).toLocaleDateString()}
+                          {user ? (
+                            new Date(
+                              user?.$createdAt || ""
+                            ).toLocaleDateString()
+                          ) : (
+                            <Skeleton className="h-4 w-20" />
+                          )}
                         </p>
                       </div>
                     </div>
