@@ -57,15 +57,14 @@ export async function createPortfolioZip(data: PortfolioData): Promise<Blob> {
     const htmlContent = generateHTMLDocument(componentString, data);
     const template = data.selectedTemplate;
 
-    // Fetch template content from API
-    const response = await fetch(`/api/templates/${template.toLowerCase()}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch template content");
+    try {
+      const module = await import(`@/app/templates/${template}/index`);
+      const indexJsContent = module.default;
+      zip.file("output/index.html", htmlContent);
+      zip.file("output/index.js", indexJsContent);
+    } catch (error) {
+      console.error("Error importing template:", error);
     }
-    const { content: indexJsContent } = await response.json();
-    // Add files to the zip
-    zip.file("output/index.html", htmlContent);
-    zip.file("output/index.js", indexJsContent);
 
     return await zip.generateAsync({ type: "blob" });
   } catch (error) {
@@ -83,7 +82,7 @@ export async function exportToStatic(
 
     if (saveFile) {
       // Save the zip file
-      saveAs(content, "portfolio-static.zip");
+      saveAs(content, "portfolio.zip");
       return null;
     }
 

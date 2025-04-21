@@ -191,15 +191,14 @@ export function generateHTMLDocument(
   </script>
 
   <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="icon" href="https://www.createfolio.app/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://www.createfolio.app/favicon.ico" type="image/x-icon">
   
   <!-- Stylesheets and scripts -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
   <script src="index.js"></script>
-  <script async src="analytics.js"></script>
   <!-- Canonical URL -->
   <link rel="canonical" href="${websiteUrl}" />
 </head>

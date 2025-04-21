@@ -11,6 +11,12 @@ import { TemplateSection } from "@/types";
 import { Icons } from "@/components/ui/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TemplateSectionEditorProps {
   onClose: () => void;
@@ -31,11 +37,13 @@ const DraggableSection = ({
   index,
   moveSection,
   toggleSectionVisibility,
+  templateSections,
 }: {
   section: TemplateSection;
   index: number;
   moveSection: (dragIndex: number, hoverIndex: number) => void;
   toggleSectionVisibility: (id: string) => void;
+  templateSections: { sections: TemplateSection[] } | null;
 }) => {
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.SECTION,
@@ -55,6 +63,9 @@ const DraggableSection = ({
       const hoverIndex = index;
 
       if (dragIndex === hoverIndex) return;
+
+      const sections = templateSections?.sections || [];
+      if (sections[dragIndex]?.isFixed || sections[hoverIndex]?.isFixed) return;
 
       moveSection(dragIndex, hoverIndex);
       item.index = hoverIndex;
@@ -76,22 +87,61 @@ const DraggableSection = ({
       style={{ cursor: section.isFixed ? "default" : "move" }}
     >
       <div className="flex items-center space-x-3 flex-1">
-        <Checkbox
-          checked={section.visible}
-          disabled={section.isFixed}
-          onCheckedChange={() => toggleSectionVisibility(section.id)}
-        />
-        <span className="flex-1">{section.title}</span>
-        {section.visible ? (
-          <Icons.eye className="h-4 w-4 text-gray-500" />
-        ) : (
-          <Icons.eyeOff className="h-4 w-4 text-gray-500" />
-        )}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Checkbox
+                  checked={section.visible}
+                  disabled={section.isFixed}
+                  onCheckedChange={() => toggleSectionVisibility(section.id)}
+                  aria-label={`Toggle visibility of ${section.title} section`}
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              {section.isFixed
+                ? "Cannot hide fixed section"
+                : "Toggle section visibility"}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <span className="flex-1">
+          {section.title}
+          {section.isFixed && (
+            <span className="ml-2 text-xs bg-gray-200 dark:bg-neutral-700 px-2 py-0.5 rounded">
+              Fixed
+            </span>
+          )}
+        </span>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span>
+                {section.visible ? (
+                  <Icons.eye className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <Icons.eyeOff className="h-4 w-4 text-gray-500" />
+                )}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              {section.visible ? "Section is visible" : "Section is hidden"}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       {!section.isFixed && (
-        <div className="p-1 hover:bg-gray-100 rounded">
-          <Icons.gripVertical className="h-5 w-5 text-gray-500" />
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="p-1 hover:bg-gray-100 rounded">
+                <Icons.gripVertical className="h-5 w-5 text-gray-500" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Drag to reorder section</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </div>
   );
@@ -144,7 +194,11 @@ export default function TemplateSectionEditor({
     <DndProvider backend={HTML5Backend}>
       <div className="w-full">
         <div className="p-4 border-b rounded-t-lg bg-neutral-50 dark:bg-neutral-950">
-          <h3 className="text-lg font-medium">Edit Template Sections</h3>
+          <div className="text-lg font-medium">Edit Template Sections</div>
+          <div className="text-sm mt-2 text-muted-foreground">
+            Drag and drop to reorder sections. Hide sections to remove them from
+            the template.
+          </div>
         </div>
 
         <div className="p-4 space-y-2 max-h-[400px] overflow-y-auto bg-neutral-50 dark:bg-neutral-950">
@@ -155,19 +209,29 @@ export default function TemplateSectionEditor({
               index={index}
               moveSection={moveSection}
               toggleSectionVisibility={toggleSectionVisibility}
+              templateSections={templateSections}
             />
           ))}
         </div>
 
         <div className="p-4 border-t rounded-b-lg bg-neutral-50 dark:bg-neutral-950">
-          <Button
-            onClick={saveChanges}
-            disabled={!hasChanges}
-            className="w-full flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white"
-          >
-            <Icons.save className="mr-2 h-4 w-4" />
-            Save Changes
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              className="flex-1 flex items-center justify-center"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={saveChanges}
+              disabled={!hasChanges}
+              className="flex-1 flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              <Icons.save className="h-4 w-4" />
+              Save Changes
+            </Button>
+          </div>
         </div>
       </div>
     </DndProvider>
