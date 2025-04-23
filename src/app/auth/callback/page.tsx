@@ -42,6 +42,7 @@ export default function OAuthCallbackPage() {
           console.log(
             "OAuth callback already handled for this session, redirecting to create page"
           );
+          localStorage.setItem("is_authenticated", "true");
           router.push("/create");
           return;
         }

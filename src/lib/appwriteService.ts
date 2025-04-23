@@ -10,6 +10,7 @@ import type {
 import { setPortfolioData, markAsSynced } from "@/store";
 import { account } from "@/lib/appwrite";
 import { databases } from "@/lib/appwrite";
+import logger from "@/lib/logger";
 
 const DATABASE_ID = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID || "";
 const USER_COLLECTION_ID =
@@ -86,7 +87,7 @@ export const createUserDocument = async (
  */
 const getUserDocument = async (userId: string) => {
   try {
-    console.log(
+    logger.info(
       `[${new Date().toISOString()}] getUserDocument called for user: ${userId}`
     );
 
@@ -99,7 +100,7 @@ const getUserDocument = async (userId: string) => {
 
     if (existingDocs.total > 0) {
       // Return existing document
-      console.log(
+      logger.info(
         `[${new Date().toISOString()}] getUserDocument found existing document: ${
           existingDocs.documents[0].$id
         }`
@@ -111,7 +112,7 @@ const getUserDocument = async (userId: string) => {
     } else {
       // Use createUserDocument to create a new document
       // This ensures we use a single path for document creation
-      console.log(
+      logger.info(
         `[${new Date().toISOString()}] No document found, calling createUserDocument...`
       );
 
@@ -126,7 +127,7 @@ const getUserDocument = async (userId: string) => {
           userInfo.email
         );
 
-        console.log(
+        logger.info(
           `[${new Date().toISOString()}] Document created via createUserDocument: ${
             newDoc.$id
           }`
@@ -137,7 +138,7 @@ const getUserDocument = async (userId: string) => {
           document: newDoc,
         };
       } catch (error) {
-        console.error(
+        logger.error(
           `[${new Date().toISOString()}] Error in getUserDocument while creating:`,
           error
         );
@@ -150,7 +151,7 @@ const getUserDocument = async (userId: string) => {
         );
 
         if (finalCheckDocs.total > 0) {
-          console.log(
+          logger.info(
             `[${new Date().toISOString()}] Found document in final check: ${
               finalCheckDocs.documents[0].$id
             }`
@@ -165,7 +166,7 @@ const getUserDocument = async (userId: string) => {
       }
     }
   } catch (error) {
-    console.error(
+    logger.error(
       `[${new Date().toISOString()}] Error in getUserDocument:`,
       error
     );
@@ -178,7 +179,7 @@ const getUserDocument = async (userId: string) => {
  */
 export const saveBio = async (bio: Bio, userId: string) => {
   try {
-    console.log("Saving bio to Appwrite");
+    logger.info("Saving bio to Appwrite");
     const { document } = await getUserDocument(userId);
 
     return await databases.updateDocument(
@@ -190,7 +191,7 @@ export const saveBio = async (bio: Bio, userId: string) => {
       }
     );
   } catch (error) {
-    console.error("Error saving bio:", error);
+    logger.error("Error saving bio:", error);
     throw error;
   }
 };
@@ -200,7 +201,7 @@ export const saveBio = async (bio: Bio, userId: string) => {
  */
 export const saveSkills = async (skills: Skill[], userId: string) => {
   try {
-    console.log("Saving skills to Appwrite");
+    logger.info("Saving skills to Appwrite");
     const { document } = await getUserDocument(userId);
 
     await databases.updateDocument(
@@ -214,7 +215,7 @@ export const saveSkills = async (skills: Skill[], userId: string) => {
 
     return true;
   } catch (error) {
-    console.error("Error saving skills:", error);
+    logger.error("Error saving skills:", error);
     throw error;
   }
 };
@@ -227,7 +228,7 @@ export const saveWorkExperience = async (
   userId: string
 ) => {
   try {
-    console.log("Saving work experience to Appwrite");
+    logger.info("Saving work experience to Appwrite");
     const { document } = await getUserDocument(userId);
 
     await databases.updateDocument(
@@ -241,7 +242,7 @@ export const saveWorkExperience = async (
 
     return true;
   } catch (error) {
-    console.error("Error saving work experience:", error);
+    logger.error("Error saving work experience:", error);
     throw error;
   }
 };
@@ -251,7 +252,7 @@ export const saveWorkExperience = async (
  */
 export const saveProjects = async (projects: Project[], userId: string) => {
   try {
-    console.log("Saving projects to Appwrite");
+    logger.info("Saving projects to Appwrite");
     const { document } = await getUserDocument(userId);
 
     await databases.updateDocument(
@@ -265,7 +266,7 @@ export const saveProjects = async (projects: Project[], userId: string) => {
 
     return true;
   } catch (error) {
-    console.error("Error saving projects:", error);
+    logger.error("Error saving projects:", error);
     throw error;
   }
 };
@@ -275,7 +276,7 @@ export const saveProjects = async (projects: Project[], userId: string) => {
  */
 export const saveContact = async (contact: Contact, userId: string) => {
   try {
-    console.log("Saving contact to Appwrite");
+    logger.info("Saving contact to Appwrite");
     const { document } = await getUserDocument(userId);
 
     await databases.updateDocument(
@@ -289,7 +290,7 @@ export const saveContact = async (contact: Contact, userId: string) => {
 
     return true;
   } catch (error) {
-    console.error("Error saving contact:", error);
+    logger.error("Error saving contact:", error);
     throw error;
   }
 };
@@ -302,7 +303,7 @@ export const saveTemplate = async (
   userId: string
 ) => {
   try {
-    console.log("Saving template to Appwrite");
+    logger.info("Saving template to Appwrite");
     const { document } = await getUserDocument(userId);
 
     await databases.updateDocument(
@@ -316,7 +317,7 @@ export const saveTemplate = async (
 
     return true;
   } catch (error) {
-    console.error("Error saving template:", error);
+    logger.error("Error saving template:", error);
     throw error;
   }
 };
@@ -344,7 +345,7 @@ export const loadBio = async (userId: string): Promise<Bio | null> => {
 
     return JSON.parse(userDoc.bio);
   } catch (error) {
-    console.error("Error loading bio:", error);
+    logger.error("Error loading bio:", error);
     return null;
   }
 };
@@ -366,7 +367,7 @@ export const loadSkills = async (userId: string): Promise<Skill[]> => {
 
     return JSON.parse(response.documents[0].skills);
   } catch (error) {
-    console.error("Error loading skills:", error);
+    logger.error("Error loading skills:", error);
     return [];
   }
 };
@@ -390,7 +391,7 @@ export const loadWorkExperience = async (
 
     return JSON.parse(response.documents[0].workExperience);
   } catch (error) {
-    console.error("Error loading work experience:", error);
+    logger.error("Error loading work experience:", error);
     return [];
   }
 };
@@ -412,7 +413,7 @@ export const loadProjects = async (userId: string): Promise<Project[]> => {
 
     return JSON.parse(response.documents[0].projects);
   } catch (error) {
-    console.error("Error loading projects:", error);
+    logger.error("Error loading projects:", error);
     return [];
   }
 };
@@ -434,7 +435,7 @@ export const loadContact = async (userId: string): Promise<Contact | null> => {
 
     return JSON.parse(response.documents[0].contact);
   } catch (error) {
-    console.error("Error loading contact:", error);
+    logger.error("Error loading contact:", error);
     return null;
   }
 };
@@ -463,7 +464,7 @@ export const loadTemplate = async (
       selectedTemplate: template,
     };
   } catch (error) {
-    console.error("Error loading template:", error);
+    logger.error("Error loading template:", error);
     return null;
   }
 };
@@ -474,7 +475,7 @@ export const loadTemplate = async (
 export const loadPortfolio = async (
   userId: string
 ): Promise<Partial<PortfolioState>> => {
-  console.log("Loading portfolio for user:", userId);
+  logger.info("Loading portfolio for user:", userId);
   try {
     const response = await databases.listDocuments(
       DATABASE_ID,
@@ -482,7 +483,7 @@ export const loadPortfolio = async (
       [Query.equal("userId", userId)]
     );
 
-    console.log("response", response);
+    logger.info("response", response);
     if (response.total === 0) {
       return {};
     }
@@ -530,7 +531,7 @@ export const loadPortfolio = async (
 
     return portfolioData;
   } catch (error) {
-    console.error("Error loading portfolio:", error);
+    logger.error("Error loading portfolio:", error);
     return {};
   }
 };
@@ -599,7 +600,7 @@ export const savePortfolio = async (
         updateData.allowedRequestsPerDay = portfolio.allowedRequestsPerDay;
         break;
       default:
-        console.warn(`Unknown section: ${updatedSection}, saving all sections`);
+        logger.warn(`Unknown section: ${updatedSection}, saving all sections`);
         return await savePortfolio(portfolio, userId);
     }
 
@@ -617,7 +618,7 @@ export const savePortfolio = async (
 
     return true;
   } catch (error) {
-    console.error("Error saving portfolio:", error);
+    logger.error("Error saving portfolio:", error);
     return false;
   }
 };
@@ -628,7 +629,7 @@ export const savePortfolio = async (
  */
 export const clearPersistedState = (): void => {
   localStorage.removeItem("persist:portfolio");
-  console.log("Cleared persisted portfolio state from localStorage");
+  logger.info("Cleared persisted portfolio state from localStorage");
 };
 
 /**
@@ -645,15 +646,15 @@ export const initializeAppwrite = async (
     const portfolio = state.portfolio;
 
     // Always load fresh data from Appwrite first
-    console.log("Loading fresh data from Appwrite");
+    logger.info("Loading fresh data from Appwrite");
     const portfolioData = await loadPortfolio(userId);
 
-    console.log("portfolioData", portfolioData);
+    logger.info("portfolioData", portfolioData);
     // Check if Appwrite has any data
     const hasAppwriteData = Object.keys(portfolioData).length > 0;
 
     if (hasAppwriteData) {
-      console.log("Found data in Appwrite, updating Redux store");
+      logger.info("Found data in Appwrite, updating Redux store");
       store.dispatch(setPortfolioData(portfolioData));
       store.dispatch(markAsSynced());
       return;
@@ -682,7 +683,7 @@ export const initializeAppwrite = async (
     });
 
     if (hasLocalData) {
-      console.log(
+      logger.info(
         "No data in Appwrite but found local data, syncing to server"
       );
       const portfolioToSave = { ...portfolio };
@@ -692,10 +693,10 @@ export const initializeAppwrite = async (
       await savePortfolio(portfolioToSave, userId);
       store.dispatch(markAsSynced());
     } else {
-      console.log("No data found in Appwrite or locally");
+      logger.info("No data found in Appwrite or locally");
     }
   } catch (error) {
-    console.error("Error initializing Appwrite:", error);
+    logger.error("Error initializing Appwrite:", error);
   }
 };
 
@@ -708,16 +709,16 @@ export const getRemainingRequests = async (
   remainingRequests: number;
   allowedRequestsPerDay: number;
 }> => {
-  console.log("Getting remaining requests for user:", userId);
+  logger.info("Getting remaining requests for user:", userId);
   try {
     const { document } = await getUserDocument(userId);
-    console.log("document", document);
+    logger.info("document", document);
     return {
       remainingRequests: document.remainingRequests || 0,
       allowedRequestsPerDay: document.allowedRequestsPerDay || 10,
     };
   } catch (error) {
-    console.error("Error getting remaining requests:", error);
+    logger.error("Error getting remaining requests:", error);
     return {
       remainingRequests: 0,
       allowedRequestsPerDay: 10,
@@ -744,7 +745,7 @@ export const updateRemainingRequests = async (
 
     return true;
   } catch (error) {
-    console.error("Error updating remaining requests:", error);
+    logger.error("Error updating remaining requests:", error);
     return false;
   }
 };
@@ -768,7 +769,7 @@ export const resetRemainingRequests = async (
 
     return true;
   } catch (error) {
-    console.error("Error resetting remaining requests:", error);
+    logger.error("Error resetting remaining requests:", error);
     return false;
   }
 };
@@ -788,7 +789,7 @@ export const createPortfolioDocument = async (
       }
     );
   } catch (error) {
-    console.error("Error creating portfolio document:", error);
+    logger.error("Error creating portfolio document:", error);
     return false;
   }
 };

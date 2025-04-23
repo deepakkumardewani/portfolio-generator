@@ -141,13 +141,11 @@ export const useAppwrite = (): UseAppwriteReturn => {
   // Logout user
   const logout = async () => {
     try {
-      setLoading(true);
-      setError(null);
+      reset();
 
       // Delete current session
       await account.deleteSession("current");
 
-      setUser(null);
       router.push("/");
     } catch (err: any) {
       setError(err.message || "Failed to log out");
@@ -155,6 +153,14 @@ export const useAppwrite = (): UseAppwriteReturn => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const reset = () => {
+    localStorage.removeItem("is_authenticated");
+    localStorage.removeItem("persist:portfolio");
+    setUser(null);
+    setLoading(true);
+    setError(null);
   };
   return {
     user,
