@@ -19,7 +19,7 @@ export default function UserMenu() {
   const { bio } = useAppSelector((state) => state.portfolio);
   const router = useRouter();
 
-  // Function to get user's initials
+  const isAuthenticated = localStorage.getItem("is_authenticated") === "true";
   const getUserInitials = () => {
     if (!user || !user.name) return "";
     const names = user.name.split(" ");
@@ -59,15 +59,13 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {user ? (
+        {isAuthenticated && (
           <Avatar className="cursor-pointer">
             <AvatarFallback className={`bg-purple-600 text-white`}>
               {getUserInitials()}
             </AvatarFallback>
             <AvatarImage src={bio.profileImg} />
           </Avatar>
-        ) : (
-          <Skeleton className="h-8 w-8 rounded-full" />
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

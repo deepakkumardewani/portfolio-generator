@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { darkModeClasses } from "@/lib/utils";
@@ -19,6 +19,7 @@ export default function ResumeUpload({
   const [fileName, setFileName] = useState<string | null>(
     currentResumeUrl ? extractFileName(currentResumeUrl) : null
   );
+
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
@@ -27,6 +28,10 @@ export default function ResumeUpload({
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ];
+
+  useEffect(() => {
+    setFileName(currentResumeUrl ? extractFileName(currentResumeUrl) : null);
+  }, [currentResumeUrl]);
 
   function extractFileName(url: string): string {
     // Extract file name from the URL

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Icons } from "@/components/ui/icons";
@@ -21,10 +21,15 @@ export default function ProfileImageUpload({
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentImageUrl || null
   );
+  // console.log("currentImageUrl", currentImageUrl);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+
+  useEffect(() => {
+    setPreviewUrl(currentImageUrl || null);
+  }, [currentImageUrl]);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
