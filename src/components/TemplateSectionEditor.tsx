@@ -87,25 +87,14 @@ const DraggableSection = ({
       style={{ cursor: section.isFixed ? "default" : "move" }}
     >
       <div className="flex items-center space-x-3 flex-1">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Checkbox
-                  checked={section.visible}
-                  disabled={section.isFixed}
-                  onCheckedChange={() => toggleSectionVisibility(section.id)}
-                  aria-label={`Toggle visibility of ${section.title} section`}
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              {section.isFixed
-                ? "Cannot hide fixed section"
-                : "Toggle section visibility"}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div>
+          <Checkbox
+            checked={section.visible}
+            disabled={section.isFixed}
+            onCheckedChange={() => toggleSectionVisibility(section.id)}
+            aria-label={`Toggle visibility of ${section.title} section`}
+          />
+        </div>
         <span className="flex-1">
           {section.title}
           {section.isFixed && (
@@ -114,22 +103,13 @@ const DraggableSection = ({
             </span>
           )}
         </span>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span>
-                {section.visible ? (
-                  <Icons.eye className="h-4 w-4 text-gray-500" />
-                ) : (
-                  <Icons.eyeOff className="h-4 w-4 text-gray-500" />
-                )}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              {section.visible ? "Section is visible" : "Section is hidden"}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span>
+          {section.visible ? (
+            <Icons.eye className="h-4 w-4 text-gray-500" />
+          ) : (
+            <Icons.eyeOff className="h-4 w-4 text-gray-500" />
+          )}
+        </span>
       </div>
       {!section.isFixed && (
         <TooltipProvider>
@@ -197,7 +177,7 @@ export default function TemplateSectionEditor({
           <div className="text-lg font-medium">Edit Template Sections</div>
           <div className="text-sm mt-2 text-muted-foreground">
             Drag and drop to reorder sections. Hide sections to remove them from
-            the template.
+            the template. Fixed sections cannot be hidden or reordered.
           </div>
         </div>
 

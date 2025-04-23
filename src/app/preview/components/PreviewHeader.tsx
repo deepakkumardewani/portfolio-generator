@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -38,6 +38,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
 import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
+import Logo from "@/components/shared/Logo";
+import Deploy from "./Deploy";
 export default function PreviewHeader() {
   const { user } = useAuth();
   // const dispatch = useAppDispatch();
@@ -51,6 +53,9 @@ export default function PreviewHeader() {
   );
   const [showDeployDialog, setShowDeployDialog] = useState(false);
   const [netlifySiteId, setNetlifySiteId] = useState<string | null>(null);
+  const [sectionsPopoverOpen, setSectionsPopoverOpen] = useState(false);
+  const [sectionsPopoverOpenMobile, setSectionsPopoverOpenMobile] =
+    useState(false);
 
   const portfolioData = useAppSelector((state) => state.portfolio);
 
@@ -129,31 +134,29 @@ export default function PreviewHeader() {
     setShowDeployDialog(false);
   };
 
-  const handleCopyDeploymentUrl = () => {
-    if (deploymentUrl) {
-      navigator.clipboard.writeText(deploymentUrl);
-    }
+  // const handleCopyDeploymentUrl = () => {
+  //   if (deploymentUrl) {
+  //     navigator.clipboard.writeText(deploymentUrl);
+  //   }
+  // };
+
+  const handleSectionsPopoverClose = () => {
+    setSectionsPopoverOpen(false);
+  };
+
+  const handleSectionsPopoverCloseMobile = () => {
+    setSectionsPopoverOpenMobile(false);
   };
 
   const { theme } = useTheme();
 
   return (
     <div className="bg-neutral-50 dark:bg-neutral-950 shadow-sm fixed top-0 left-0 right-0 z-10 border-b">
-      <div className="mx-auto py-3 px-4">
+      <div className="mx-auto py-3 px-6">
         {/* Desktop layout (hidden on small screens) */}
         <div className="hidden md:flex justify-between items-center">
           <div className="flex-1 flex items-center gap-4">
-            <Link href="/create">
-              <Button variant="outline">
-                <Icons.arrowLeftIcon className="h-4 w-4" />
-                Edit
-              </Button>
-            </Link>
-            <Link href="/" className="transition-transform hover:scale-105">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-stone-900 to-stone-600 dark:from-stone-100 dark:to-stone-300 bg-clip-text text-transparent">
-                PortfolioGen
-              </h1>
-            </Link>
+            <Logo />
           </div>
 
           <div className="flex-1 flex justify-center">
@@ -161,32 +164,21 @@ export default function PreviewHeader() {
           </div>
 
           <div className="flex-1 flex justify-end items-center space-x-2">
-            <Link href="/templates">
+            <Popover
+              open={sectionsPopoverOpen}
+              onOpenChange={setSectionsPopoverOpen}
+            >
               <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="outline">
-                      <Icons.pencil className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Change template</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </Link>
-            <Popover>
-              <TooltipProvider>
-                <Tooltip>
+                <Tooltip delayDuration={500}>
                   <PopoverTrigger asChild>
                     <TooltipTrigger asChild>
                       <Button variant="outline">
-                        <Icons.settings className="h-4 w-4" />
+                        <Icons.arrowDownUp className="h-4 w-4" />
                       </Button>
                     </TooltipTrigger>
                   </PopoverTrigger>
                   <TooltipContent>
-                    <p>Edit template</p>
+                    <p>Re-order sections</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -194,11 +186,36 @@ export default function PreviewHeader() {
                 className="w-[300px] p-0 dark:bg-stone-800 dark:border-stone-700"
                 align="end"
               >
-                <TemplateSectionEditor onClose={() => {}} />
+                <TemplateSectionEditor onClose={handleSectionsPopoverClose} />
               </PopoverContent>
             </Popover>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <Icons.menu className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="bg-neutral-50 dark:bg-neutral-950"
+                align="end"
+              >
+                <DropdownMenuItem>
+                  <Link href="/templates" className="flex items-center w-full">
+                    <Icons.pencil className="h-4 w-4 mr-2" />
+                    Change template
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/create" className="flex items-center w-full">
+                    <Icons.squarePen className="h-4 w-4 mr-2" />
+                    Edit details
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <TooltipProvider>
-              <Tooltip>
+              <Tooltip delayDuration={500}>
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
@@ -214,54 +231,11 @@ export default function PreviewHeader() {
             </TooltipProvider>
 
             <div className="flex items-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  {/* <ShimmerButton
-                    className={`shadow-2xl`}
-                    shimmerColor="#9E7AFF"
-                    background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
-                  >
-                    <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
-                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-black dark:text-white text-md">
-                      Deploy
-                    </span>
-                  </ShimmerButton> */}
-                  <HoverBorderGradient
-                    containerClassName="rounded-full"
-                    as="button"
-                    className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2 cursor-pointer"
-                  >
-                    <Icons.rocketIcon className="h-4 w-4 mr-2 text-black dark:text-white" />
-                    <span className="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-md">
-                      Deploy
-                    </span>
-                  </HoverBorderGradient>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className="bg-neutral-50 dark:bg-neutral-950"
-                  align="end"
-                >
-                  <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={() => handleExport("netlify")}
-                  >
-                    <Icons.rocketIcon className="h-4 w-4" />
-                    Publish
-                  </DropdownMenuItem>
-                  {netlifySiteId && (
-                    <DropdownMenuItem className="cursor-pointer">
-                      <Link
-                        className="flex items-center justify-between"
-                        href={deploymentUrl}
-                        target="_blank"
-                      >
-                        <Icons.externalLinkIcon className="mr-2 h-4 w-4" />
-                        View
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Deploy
+                netlifySiteId={netlifySiteId}
+                deploymentUrl={deploymentUrl}
+                handleExport={handleExport}
+              />
             </div>
             <ThemeToggle size="md" />
             <UserMenu />
@@ -272,61 +246,18 @@ export default function PreviewHeader() {
         <div className="flex flex-col md:hidden gap-3">
           {/* First row: Heading, Toggle Buttons, Export */}
           <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-xl font-bold dark:text-stone-100">
-                Portfolio AI
-              </h1>
-            </div>
+            <Logo />
 
             {/* Device Toggle Buttons */}
             <ToggleButtons />
 
             <div className="flex gap-2 items-center">
               <div className="flex items-center">
-                <ShimmerButton
-                  className={`shadow-2xl ${
-                    netlifySiteId ? "rounded-r-none border-r-0" : ""
-                  }`}
-                  shimmerColor="#9E7AFF"
-                  background={`${theme === "dark" ? "#000000" : "#ffffff"}`}
-                  onClick={() => handleExport("netlify")}
-                >
-                  <Icons.rocketIcon className="h-4 w-4 text-black dark:text-white" />
-                </ShimmerButton>
-
-                {netlifySiteId && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 rounded-l-none border-l-0 px-1"
-                      >
-                        <Icons.chevronDown className="h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem className="flex items-center justify-between">
-                        <a
-                          href={deploymentUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 truncate mr-2 text-xs"
-                        >
-                          {deploymentUrl}
-                        </a>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={handleCopyDeploymentUrl}
-                          className="h-5 w-5 p-0"
-                        >
-                          <Icons.copy className="h-3 w-3" />
-                        </Button>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
+                <Deploy
+                  netlifySiteId={netlifySiteId}
+                  deploymentUrl={deploymentUrl}
+                  handleExport={handleExport}
+                />
               </div>
             </div>
           </div>
@@ -335,16 +266,7 @@ export default function PreviewHeader() {
 
           {/* Second row: Edit Info and Change Template buttons */}
           <div className="flex justify-between items-center">
-            <Link href="/create">
-              <Button
-                variant="outline"
-                size="sm"
-                className={darkModeClasses.buttonOutline}
-              >
-                <Icons.arrowLeftIcon className="mr-2 h-4 w-4" />
-                Edit Info
-              </Button>
-            </Link>
+            <div></div>
             <div className="flex space-x-2">
               <Button
                 variant="outline"
@@ -353,24 +275,50 @@ export default function PreviewHeader() {
               >
                 <Icons.download className="h-4 w-4" />
               </Button>
-              <Link href="/templates">
-                <Button variant="outline">
-                  <Icons.pencil className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Popover>
+
+              <Popover
+                open={sectionsPopoverOpenMobile}
+                onOpenChange={setSectionsPopoverOpenMobile}
+              >
                 <PopoverTrigger asChild>
                   <Button variant="outline">
-                    <Icons.settings className="h-4 w-4" />
+                    <Icons.arrowDownUp className="h-4 w-4" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
                   className="w-[400px] p-0 dark:bg-stone-800 dark:border-stone-700"
                   align="end"
                 >
-                  <TemplateSectionEditor onClose={() => {}} />
+                  <TemplateSectionEditor
+                    onClose={handleSectionsPopoverCloseMobile}
+                  />
                 </PopoverContent>
               </Popover>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <Icons.menu className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Link
+                      href="/templates"
+                      className="flex items-center w-full"
+                    >
+                      <Icons.pencil className="h-4 w-4 mr-2" />
+                      Change template
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/create" className="flex items-center w-full">
+                      <Icons.pencil className="h-4 w-4 mr-2" />
+                      Edit details
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>

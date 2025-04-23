@@ -3,7 +3,6 @@ import React from "react";
 import { Icons } from "@/components/ui/icons";
 import { useAppSelector } from "@/store";
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 export default function CreativeHero() {
   const { bio, contact } = useAppSelector((state) => state.portfolio);
@@ -24,22 +23,26 @@ export default function CreativeHero() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          {bio.profileImg && (
-            <motion.div
-              id="creative-hero-profile-img"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="mx-auto mb-8 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full"
-            >
+          <motion.div
+            id="creative-hero-profile-img"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="mx-auto mb-8 relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full"
+          >
+            {bio.profileImg ? (
               <img
                 src={bio.profileImg}
                 alt={bio.name || "Profile"}
                 sizes="(max-width: 768px) 8rem, 10rem"
                 className="object-cover"
               />
-            </motion.div>
-          )}
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white text-3xl font-bold">
+                <Icons.user className="w-12 h-12" />
+              </div>
+            )}
+          </motion.div>
           <motion.h1
             id="creative-hero-title"
             initial={{ opacity: 0, y: 20 }}

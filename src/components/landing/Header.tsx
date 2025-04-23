@@ -4,27 +4,15 @@ import { ThemeToggle } from "../ui/theme-toggle";
 import { useAuth } from "@/contexts/AuthContext";
 import UserMenu from "../shared/UserMenu";
 import { HoverBorderGradient } from "../ui/hover-border-gradient";
-import Image from "next/image";
+import Logo from "../shared/Logo";
 export default function Header() {
   const { user } = useAuth();
 
   return (
     <header className="fixed top-0 w-full z-50 bg-neutral-50 dark:bg-neutral-950 backdrop-blur-md border-b border-border/40 shadow-sm">
       <div className="flex justify-between items-center px-6 py-3 w-full mx-auto">
-        <Link
-          href="/"
-          className="flex items-center gap-2 transition-transform hover:scale-105"
-        >
-          <Image
-            src="/assets/icon.png"
-            alt="PortfolioGen"
-            width={32}
-            height={32}
-          />
-          <h1 className="text-2xl font-bold text-black/90 dark:text-white bg-clip-text">
-            PortfolioGen
-          </h1>
-        </Link>
+        <Logo />
+
         <div className="flex items-center gap-4">
           <ThemeToggle />
 

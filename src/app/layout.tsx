@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CreateFolio - Create Your Professional Portfolio",
   description:
-    "Build a stunning professional portfolio with our easy-to-use portfolio generator.",
+    "Build a stunning professional portfolio with our easy-to-use Create .",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     "resume",
     "personal website",
   ],
-  authors: [{ name: "Portfolio Generator Team" }],
-  creator: "Portfolio Generator",
-  publisher: "Portfolio Generator",
+  authors: [{ name: "CreateFolio Team" }],
+  creator: "CreateFolio",
+  publisher: "CreateFolio",
   robots: "index, follow",
   openGraph: {
     type: "website",
