@@ -51,7 +51,6 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
   };
 
   const onSubmit = (data: SkillsFormValues) => {
-    console.log("data", data);
     dispatch(setSkills(data.skills));
     onNext();
   };

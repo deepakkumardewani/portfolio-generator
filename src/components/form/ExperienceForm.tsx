@@ -369,19 +369,6 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
-
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="secondary"
-                              className="absolute right-2 bottom-2 z-10"
-                              onClick={() => {
-                                setCurrentEditingIndex(index);
-                                setIsAIDialogOpen(true);
-                              }}
-                            >
-                              <Sparkles className="h-4 w-4" />
-                            </Button>
                             <FormControl>
                               <Textarea
                                 placeholder="Describe your responsibilities and achievements"

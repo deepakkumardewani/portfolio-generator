@@ -114,7 +114,6 @@ const navLinks = () => {
 
   // Add animation to resume button
   const resumeButton = document.getElementById("resume-button");
-  console.log(resumeButton);
   if (resumeButton) {
     resumeButton.animate(
       { opacity: 1, transform: "translateY(0)" },
