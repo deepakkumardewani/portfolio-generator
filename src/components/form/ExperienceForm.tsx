@@ -28,6 +28,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { darkModeClasses } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
 import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FormStep3Props {
   onNext: () => void;
@@ -342,6 +348,28 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                             Description
                           </FormLabel>
                           <div className="relative">
+                            <TooltipProvider>
+                              <Tooltip delayDuration={500}>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="secondary"
+                                    className="absolute right-2 bottom-2 z-10"
+                                    onClick={() => {
+                                      setCurrentEditingIndex(index);
+                                      setIsAIDialogOpen(true);
+                                    }}
+                                  >
+                                    <Sparkles className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  Generate experience description with AI
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+
                             <Button
                               type="button"
                               size="sm"
@@ -447,7 +475,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
         open={isAIDialogOpen}
         onOpenChange={setIsAIDialogOpen}
         onDescriptionGenerated={handleAIGeneration}
-        fieldLabel="Experience Description"
+        fieldLabel="experience_description"
       />
     </Card>
   );

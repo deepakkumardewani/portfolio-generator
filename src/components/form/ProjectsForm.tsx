@@ -28,6 +28,12 @@ import ImageUpload from "@/components/shared/ImageUpload";
 import { darkModeClasses } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
 import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface FormStep4Props {
   onNext: () => void;
@@ -240,18 +246,28 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                           Description
                         </FormLabel>
                         <div className="relative">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="secondary"
-                            className="absolute right-2 bottom-2 z-10"
-                            onClick={() => {
-                              setCurrentEditingIndex(index);
-                              setIsAIDialogOpen(true);
-                            }}
-                          >
-                            <Sparkles className="h-4 w-4" />
-                          </Button>
+                          <TooltipProvider>
+                            <Tooltip delayDuration={500}>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="secondary"
+                                  className="absolute right-2 bottom-2 z-10"
+                                  onClick={() => {
+                                    setCurrentEditingIndex(index);
+                                    setIsAIDialogOpen(true);
+                                  }}
+                                >
+                                  <Sparkles className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                Generate project description with AI
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+
                           <FormControl>
                             <Textarea
                               placeholder="A brief description of your project"
@@ -396,7 +412,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
         open={isAIDialogOpen}
         onOpenChange={setIsAIDialogOpen}
         onDescriptionGenerated={handleAIGeneration}
-        fieldLabel="Project Description"
+        fieldLabel="project_description"
       />
     </Card>
   );

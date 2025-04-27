@@ -270,7 +270,7 @@ export function AIDescriptionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
         <DialogHeader className="p-6 pb-2">
-          <DialogTitle>Write '{fieldLabel}' with AI</DialogTitle>
+          <DialogTitle>Write Description with AI</DialogTitle>
         </DialogHeader>
 
         <div
@@ -289,9 +289,13 @@ export function AIDescriptionDialog({
                     </span>
                   </TooltipTrigger>
                   <TooltipContent>
-                    Add skills, expertise or qualities that define you. The AI
-                    will craft a personalized {fieldLabel.toLowerCase()}{" "}
-                    highlighting these elements.
+                    {fieldLabel === "about"
+                      ? "Add skills, expertise, or qualities that define you. The AI will craft a personalized bio highlighting these elements."
+                      : fieldLabel === "project_description"
+                      ? "Add key technologies, features, or achievements of your project. The AI will craft a compelling project description highlighting these elements."
+                      : fieldLabel === "experience_description"
+                      ? "Add responsibilities, achievements, or skills used in this role. The AI will craft a professional experience description highlighting these elements."
+                      : "Add keywords separated by commas. The AI will craft a personalized description highlighting these elements."}
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -336,7 +340,7 @@ export function AIDescriptionDialog({
           {/* Always show the description container */}
           <div className="mt-4">
             <div className="flex items-center justify-between mb-1">
-              <Label className="text-sm font-medium">{fieldLabel}</Label>
+              <Label className="text-sm font-medium">Description</Label>
               {localCompletion && (
                 <Button
                   variant="ghost"

@@ -31,6 +31,7 @@ import { AIDescriptionDialog } from "@/components/AIDescriptionDialog";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
@@ -211,22 +212,24 @@ export default function FormStep1({ onNext }: FormStep1Props) {
                     About
                   </FormLabel>
                   <div className="relative">
-                    <Tooltip delayDuration={500}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="secondary"
-                          className="absolute right-2 bottom-2 z-10"
-                          onClick={() => setIsAIDialogOpen(true)}
-                        >
-                          <Sparkles className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        Generate professional bio with AI
-                      </TooltipContent>
-                    </Tooltip>
+                    <TooltipProvider>
+                      <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            className="absolute right-2 bottom-2 z-10"
+                            onClick={() => setIsAIDialogOpen(true)}
+                          >
+                            <Sparkles className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Generate professional bio with AI
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                     <FormControl>
                       <Textarea
                         placeholder="I'm a passionate developer with 5 years of experience..."
@@ -274,7 +277,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
         onOpenChange={setIsAIDialogOpen}
         initialDescription={bioData.about}
         onDescriptionGenerated={handleAIGeneration}
-        fieldLabel="About"
+        fieldLabel="about"
       />
     </Card>
   );
