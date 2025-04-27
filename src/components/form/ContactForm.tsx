@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector, setContact } from "@/store";
 import { ContactFormValues } from "@/types";
 import { darkModeClasses } from "@/lib/utils";
 import { useEffect } from "react";
+import logger from "@/lib/logger";
 
 interface FormStep5Props {
   onBack: () => void;
@@ -52,7 +53,7 @@ export default function FormStep5({ onBack }: FormStep5Props) {
       savedContact.phone ||
       savedContact.links?.length > 0
     ) {
-      console.log("savedContact", savedContact);
+      logger.info(`savedContact: ${savedContact}`);
       // Ensure all link types are present with proper labels
       const links = [...savedContact.links];
       const linkLabels = ["LinkedIn", "GitHub", "Dribbble", "Twitter"];
@@ -65,7 +66,7 @@ export default function FormStep5({ onBack }: FormStep5Props) {
         return existingLink || { label, url: "" };
       });
 
-      console.log("completeLinks", completeLinks);
+      logger.info(`completeLinks: ${completeLinks}`);
       form.reset({
         phone: savedContact.phone || "",
         email: savedContact.email || "",

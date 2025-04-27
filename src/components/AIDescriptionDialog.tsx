@@ -40,7 +40,7 @@ import {
   setRemainingRequests as setStoreRemainingRequests,
 } from "@/store";
 import { useAuth } from "@/contexts/AuthContext";
-
+import logger from "@/lib/logger";
 interface AIDescriptionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -104,7 +104,7 @@ export function AIDescriptionDialog({
       userId: user?.$id, // Include user ID in the request
     },
     onResponse: (response) => {
-      // console.log("Response:", response.ok, response.status);
+      logger.info(`Response: ${response.ok}, ${response.status}`);
       setIsStreaming(true);
 
       // Check if there's a remaining count header
@@ -113,7 +113,7 @@ export function AIDescriptionDialog({
           response.headers.get("X-Remaining-Requests") || "0",
           10
         );
-        console.log("Remaining requests from server:", remaining);
+        logger.info(`Remaining requests from server: ${remaining}`);
         setRemainingRequests(remaining);
         dispatch(setStoreRemainingRequests(remaining));
       }
@@ -148,7 +148,7 @@ export function AIDescriptionDialog({
       }, 100);
     },
     onError: (err) => {
-      console.error("Error generating description:", err);
+      logger.error(`Error generating description: ${err}`);
       setError("An unexpected error occurred");
       setIsStreaming(false);
       setIsGenerating(false);
@@ -213,7 +213,7 @@ export function AIDescriptionDialog({
     setIsStreaming(false); // Reset streaming state before starting a new generation
 
     if (!feedback.trim()) {
-      console.log("New generation");
+      logger.info("New generation");
       // This is a new generation
       setLocalCompletion(""); // Clear local completion only
       setShowFeedbackForm(false);
@@ -242,7 +242,7 @@ export function AIDescriptionDialog({
         },
       });
     } catch (err) {
-      console.error("Error generating description:", err);
+      logger.error(`Error generating description: ${err}`);
       setError("An unexpected error occurred");
       setIsGenerating(false);
       setIsStreaming(false);

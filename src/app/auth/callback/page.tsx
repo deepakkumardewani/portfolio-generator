@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useAppwrite } from "@/hooks/useAppwrite";
 import { createUserDocument, clearPersistedState } from "@/lib/appwriteService";
+import logger from "@/lib/logger";
 
 export default function OAuthCallbackPage() {
   const { user } = useAppwrite();
@@ -18,16 +19,15 @@ export default function OAuthCallbackPage() {
       try {
         // Exit if no user yet
         if (!user) {
-          console.log("OAuth Callback: No user object yet, waiting...");
-
+          logger.info("OAuth Callback: No user object yet, waiting...");
           return;
         }
 
-        console.log(`OAuth Callback: User found: ${user.$id}`);
+        logger.info(`OAuth Callback: User found: ${user.$id}`);
 
         // Check if we've already attempted document creation in this session
         if (documentCreationAttempted.current) {
-          console.log(
+          logger.info(
             "Document creation already attempted in this component lifecycle"
           );
           router.push("/create");
@@ -39,7 +39,7 @@ export default function OAuthCallbackPage() {
           `oauth_handled_${user.$id}`
         );
         if (alreadyHandled) {
-          console.log(
+          logger.info(
             "OAuth callback already handled for this session, redirecting to create page"
           );
           localStorage.setItem("is_authenticated", "true");
@@ -50,29 +50,29 @@ export default function OAuthCallbackPage() {
         // Mark that we've attempted document creation
         documentCreationAttempted.current = true;
 
-        console.log("OAuth callback - Creating document for user:", user.$id);
+        logger.info(`OAuth callback - Creating document for user: ${user.$id}`);
 
         // Create user document if needed
         await createUserDocument(user.$id, user.name, user.email);
-        console.log(
+        logger.info(
           `OAuth Callback: Document creation successful for ${user.$id}`
         );
 
         // Store in local storage that we've handled this user
         localStorage.setItem(`oauth_handled_${user.$id}`, "true");
         localStorage.setItem("is_authenticated", "true");
-        console.log(`OAuth Callback: LocalStorage flags set for ${user.$id}`);
+        logger.info(`OAuth Callback: LocalStorage flags set for ${user.$id}`);
 
         // Clear persisted state to ensure fresh data load
         clearPersistedState();
-        console.log(`OAuth Callback: Persisted state cleared for ${user.$id}`);
+        logger.info(`OAuth Callback: Persisted state cleared for ${user.$id}`);
 
         // Redirect to create page
-        console.log(`OAuth Callback: Redirecting ${user.$id} to /create`);
+        logger.info(`OAuth Callback: Redirecting ${user.$id} to /create`);
 
         router.push("/create");
       } catch (err: any) {
-        console.error("Error in OAuth callback:", err);
+        logger.error("Error in OAuth callback:", err);
         setError(err.message || "An error occurred during authentication");
         setIsLoading(false);
       }
@@ -81,12 +81,12 @@ export default function OAuthCallbackPage() {
     if (user) {
       handleCallback();
     } else {
-      console.log("OAuth Callback: No user object yet, waiting...");
+      logger.info("OAuth Callback: No user object yet, waiting...");
     }
   }, [user, router]);
 
   if (error) {
-    console.error("OAuth Callback: Redirecting to / due to error:", error);
+    logger.error(`OAuth Callback: Redirecting to / due to error: ${error}`);
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">

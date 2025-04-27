@@ -5,7 +5,7 @@ import {
   getRemainingRequests,
   updateRemainingRequests,
 } from "@/lib/server/appwriteServer";
-
+import logger from "@/lib/logger";
 const SYSTEM = `You are a professional portfolio description writer. Your task is to create compelling,
         concise, and well-structured descriptions that highlight achievements and skills effectively.
         Follow these guidelines:
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     const { keywords, tone, feedback, originalDescription, userId } =
       await req.json();
 
-    console.log("[Server] Description API request:", {
+    logger.info("[Server] Description API request:", {
       userId,
       keywordsLength: keywords?.length,
       hasFeedback: !!feedback,
@@ -65,14 +65,11 @@ export async function POST(req: NextRequest) {
       const result = await getRemainingRequests(userId);
       remainingRequests = result.remainingRequests;
       allowedRequestsPerDay = result.allowedRequestsPerDay;
-      console.log(
-        "[Server] Remaining requests:",
-        remainingRequests,
-        "out of",
-        allowedRequestsPerDay
+      logger.info(
+        `[Server] Remaining requests: ${remainingRequests} out of ${allowedRequestsPerDay}`
       );
     } catch (error) {
-      console.error("[Server] Error getting remaining requests:", error);
+      logger.error(`[Server] Error getting remaining requests: ${error}`);
       // If we can't get the count, use conservative defaults
       remainingRequests = 0;
     }

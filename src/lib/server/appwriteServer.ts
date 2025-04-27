@@ -1,5 +1,5 @@
 import { Client, Databases, Query } from "node-appwrite";
-
+import logger from "@/lib/logger";
 // Initialize server-side Appwrite client
 const client = new Client()
   .setEndpoint(
@@ -29,14 +29,14 @@ const getUserDocument = async (userId: string) => {
     );
 
     if (response.total === 0) {
-      console.log(`[Server] No user document found for userId: ${userId}`);
+      logger.info(`[Server] No user document found for userId: ${userId}`);
       // Instead of throwing error, return null to handle gracefully
       return null;
     }
 
     return response.documents[0];
   } catch (error) {
-    console.error("[Server] Error getting user document:", error);
+    logger.error(`[Server] Error getting user document: ${error}`);
     // Return null instead of throwing so callers can handle gracefully
     return null;
   }
@@ -56,7 +56,7 @@ export const getRemainingRequests = async (
 
     // If no document exists, return default values
     if (!document) {
-      console.log(
+      logger.info(
         `[Server] Using default request limits for userId: ${userId}`
       );
       return {
@@ -70,7 +70,7 @@ export const getRemainingRequests = async (
       allowedRequestsPerDay: document.allowedRequestsPerDay ?? 10,
     };
   } catch (error) {
-    console.error("[Server] Error getting remaining requests:", error);
+    logger.error(`[Server] Error getting remaining requests: ${error}`);
     return {
       remainingRequests: 0, // Conservative default
       allowedRequestsPerDay: 10,
@@ -103,12 +103,12 @@ export const updateRemainingRequests = async (
       { remainingRequests: count }
     );
 
-    console.log(
+    logger.info(
       `[Server] Updated remaining requests for ${userId} to ${count}`
     );
     return true;
   } catch (error) {
-    console.error("[Server] Error updating remaining requests:", error);
+    logger.error(`[Server] Error updating remaining requests: ${error}`);
     return false;
   }
 };
@@ -139,12 +139,12 @@ export const resetRemainingRequests = async (
       { remainingRequests: allowedRequests }
     );
 
-    console.log(
+    logger.info(
       `[Server] Reset remaining requests for ${userId} to ${allowedRequests}`
     );
     return true;
   } catch (error) {
-    console.error("[Server] Error resetting remaining requests:", error);
+    logger.error(`[Server] Error resetting remaining requests: ${error}`);
     return false;
   }
 };

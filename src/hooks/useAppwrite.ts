@@ -6,7 +6,7 @@ import {
   clearPersistedState,
 } from "../lib/appwriteService";
 import { useRouter } from "next/navigation";
-
+import logger from "@/lib/logger";
 interface UseAppwriteReturn {
   user: Models.User<Models.Preferences> | null;
   loading: boolean;
@@ -89,11 +89,11 @@ export const useAppwrite = (): UseAppwriteReturn => {
 
       // Create a new account
       const newUser = await account.create("unique()", email, password, name);
-      console.log("Created new account:", newUser.$id);
+      logger.info(`Created new account: ${newUser.$id}`);
 
       // Create user document in the database
       await createUserDocument(newUser.$id, name, email);
-      console.log("Created user document for:", newUser.$id);
+      logger.info(`Created user document for: ${newUser.$id}`);
 
       // Login after registration
       await login(email, password);

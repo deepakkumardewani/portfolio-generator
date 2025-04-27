@@ -4,7 +4,7 @@ import { account } from "./appwrite";
 import { markAsDirty, markAsSynced } from "@/store";
 import isEqual from "lodash/isEqual";
 import debounce from "lodash/debounce";
-
+import logger from "@/lib/logger";
 // Define a type for the middleware without circular reference
 type AppwriteMiddlewareType = Middleware<{}, any>;
 
@@ -31,7 +31,7 @@ const debouncedSync = debounce(
         delete portfolioToSave._sync;
 
         await savePortfolio(portfolioToSave, userId, updatedSection);
-        console.log(
+        logger.info(
           `Successfully synced ${
             updatedSection || "all sections"
           } with Appwrite`
@@ -40,7 +40,7 @@ const debouncedSync = debounce(
         // Mark as synced
         store.dispatch(markAsSynced());
       } catch (error) {
-        console.error("Error syncing with Appwrite:", error);
+        logger.error(`Error syncing with Appwrite: ${error}`);
       }
     };
 
@@ -92,7 +92,7 @@ export const appwriteMiddleware: AppwriteMiddlewareType =
 
       // Check if data actually changed
       if (!isEqual(prevData, newData)) {
-        console.log(
+        logger.info(
           `Data changed in section: ${
             updatedSection || "unknown"
           }, scheduling sync with Appwrite`
@@ -110,17 +110,17 @@ export const appwriteMiddleware: AppwriteMiddlewareType =
               // Schedule debounced sync
               debouncedSync(store, newPortfolio, user.$id, updatedSection);
             } else {
-              console.log("User not authenticated, skipping sync to Appwrite");
+              logger.info("User not authenticated, skipping sync to Appwrite");
             }
           } catch (error) {
-            console.error("Error preparing sync with Appwrite:", error);
+            logger.error("Error preparing sync with Appwrite:", error);
           }
         };
 
         // Execute but don't wait for it to complete
         prepareSync();
       } else {
-        console.log("No actual data changes detected, skipping sync");
+        logger.info("No actual data changes detected, skipping sync");
       }
     }
 
