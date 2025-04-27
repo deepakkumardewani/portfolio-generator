@@ -206,7 +206,7 @@ export default function Footer() {
             © {new Date().getFullYear()} PortfolioGen. All rights reserved.
           </p>
           <div className="text-sm text-muted-foreground">
-            Designed with ❤️ exclusively for developers worldwide
+            Developed with ❤️ in India
             {/* <TextShimmer> exclusively for developers worldwide</TextShimmer> */}
           </div>
         </div>

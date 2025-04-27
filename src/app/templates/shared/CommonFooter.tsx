@@ -14,7 +14,7 @@ export default function MinimalistFooter() {
           © {currentYear} {bio.name}. All rights reserved.
         </div>
         <div className="text-sm text-center">
-          Designed and Coded with <span className="text-red-500">❤</span> by{" "}
+          Designed and Developed with <span className="text-red-500">❤</span> by{" "}
           {bio.name}
         </div>
       </div>
