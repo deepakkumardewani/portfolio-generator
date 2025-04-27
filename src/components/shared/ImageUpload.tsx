@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { darkModeClasses } from "@/lib/utils";
 import { client, storage } from "@/lib/appwrite";
+import { Role } from "node-appwrite";
+import { Permission } from "node-appwrite";
+import { ID } from "appwrite";
+import { useAuth } from "@/contexts/AuthContext";
 interface ImageUploadProps {
   currentImageUrl: string;
   onImageUrlChange: (url: string) => void;
@@ -14,6 +18,7 @@ export default function ImageUpload({
   currentImageUrl,
   onImageUrlChange,
 }: ImageUploadProps) {
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentImageUrl || null
@@ -77,11 +82,20 @@ export default function ImageUpload({
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
 
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
       // Upload to Appwrite storage
       const result = await storage.createFile(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
-        "unique()", // Generate a unique ID
-        file
+        ID.unique(),
+        file,
+        [
+          Permission.read(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.delete(Role.user(user.$id)),
+        ]
       );
 
       // Get the file view URL

@@ -21,7 +21,6 @@ export default function ProfileImageUpload({
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentImageUrl || null
   );
-  // console.log("currentImageUrl", currentImageUrl);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
@@ -101,14 +100,12 @@ export default function ProfileImageUpload({
         ]
       );
 
-      console.log("result", result);
       // Get the file view URL
       const fileUrl = storage.getFileView(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
         result.$id
       );
 
-      console.log("fileUrl", fileUrl);
       // Update with the permanent URL
       onImageUrlChange(fileUrl.toString());
     } catch (err) {
