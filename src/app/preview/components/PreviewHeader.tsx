@@ -148,7 +148,7 @@ export default function PreviewHeader() {
     setSectionsPopoverOpenMobile(false);
   };
 
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
 
   return (
     <div className="bg-neutral-50 dark:bg-neutral-950 shadow-sm fixed top-0 left-0 right-0 z-10 border-b">
@@ -193,7 +193,7 @@ export default function PreviewHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
-                  <Icons.menu className="h-4 w-4" />
+                  <Icons.chevronDownIcon className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -248,9 +248,6 @@ export default function PreviewHeader() {
           <div className="flex justify-between items-center">
             <Logo />
 
-            {/* Device Toggle Buttons */}
-            <ToggleButtons />
-
             <div className="flex gap-2 items-center">
               <div className="flex items-center">
                 <Deploy
@@ -265,8 +262,7 @@ export default function PreviewHeader() {
           <div className="h-px bg-stone-200 dark:bg-stone-900" />
 
           {/* Second row: Edit Info and Change Template buttons */}
-          <div className="flex justify-between items-center">
-            <div></div>
+          <div className="flex justify-center items-center">
             <div className="flex space-x-2">
               <Button
                 variant="outline"
@@ -298,7 +294,7 @@ export default function PreviewHeader() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline">
-                    <Icons.menu className="h-4 w-4" />
+                    <Icons.chevronDownIcon className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -313,7 +309,7 @@ export default function PreviewHeader() {
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href="/create" className="flex items-center w-full">
-                      <Icons.pencil className="h-4 w-4 mr-2" />
+                      <Icons.squarePen className="h-4 w-4 mr-2" />
                       Edit details
                     </Link>
                   </DropdownMenuItem>
