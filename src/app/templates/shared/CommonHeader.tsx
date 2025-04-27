@@ -137,10 +137,13 @@ export default function Header({ templateId }: HeaderProps) {
                 className={`flex items-center space-x-2 text-sm font-medium px-4 py-2 rounded-md bg-white dark:bg-neutral-950 hover:bg-neutral-300 dark:hover:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 transition-colors duration-300`}
                 style={{ transitionDelay: "100ms" }}
               >
-                <a href={bio.resumeUrl} target="_blank">
-                  Resume
+                <a
+                  href={bio.resumeUrl}
+                  target="_blank"
+                  className="flex items-center space-x-2"
+                >
+                  Resume <Icons.externalLink className="ml-2 h-4 w-4" />
                 </a>
-                <Icons.externalLink className="h-4 w-4" />
               </motion.div>
             )}
             {!isPreview && <ThemeToggle size="md" />}

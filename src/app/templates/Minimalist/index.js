@@ -1,4 +1,5 @@
 const minimalistTemplate = `
+
 const animate = window.Motion?.animate;
 
 const themeToggle = () => {
@@ -113,8 +114,12 @@ const navLinks = () => {
 
   // Add animation to resume button
   const resumeButton = document.getElementById("resume-button");
+  console.log(resumeButton);
   if (resumeButton) {
-    fadeInUp(resumeButton);
+    resumeButton.animate(
+      { opacity: 1, transform: "translateY(0)" },
+      { duration: 200, easing: "ease-out", fill: "forwards" }
+    );
 
     // Add hover effect to resume button
     resumeButton.addEventListener("mouseenter", () => {

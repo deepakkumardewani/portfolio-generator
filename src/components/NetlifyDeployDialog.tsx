@@ -53,12 +53,12 @@ export default function NetlifyDeployDialog({
   const getStatusMessage = () => {
     switch (deploymentStatus) {
       case "preparing":
-        return "Preparing your files for deployment...";
+        return "Preparing your portfolio for deployment...";
       case "uploading":
         if (progress > 30) {
           return "Creating site on Netlify... (ensuring unique site name)";
         }
-        return "Uploading files to Netlify...";
+        return "Uploading portfolio to Netlify...";
       case "processing":
         return "Processing deployment... This may take a minute.";
       case "success":
