@@ -4,7 +4,10 @@ import { FaLinkedin } from "react-icons/fa";
 import {
   Monitor,
   ListOrdered,
+  Globe2,
+  ChartLine,
   Pencil,
+  Globe,
   SquarePen,
   Smartphone,
   ArrowDownUp,
@@ -127,4 +130,7 @@ export const Icons = {
   listOrdered: ListOrdered,
   sliders: Sliders,
   arrowDownUp: ArrowDownUp,
+  globe: Globe,
+  chartLine: ChartLine,
+  globe2: Globe2,
 };

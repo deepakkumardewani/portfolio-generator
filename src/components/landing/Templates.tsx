@@ -107,6 +107,21 @@ export default function Templates() {
             </motion.div>
           ))}
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="text-center mt-16 space-y-2"
+        >
+          <div className="text-xl font-semibold bg-gradient-to-r from-primary/80 to-primary bg-clip-text text-transparent">
+            More Templates Coming Soon
+          </div>
+          {/* <p className="text-sm text-muted-foreground">
+            We're crafting new designs to help showcase your work
+          </p> */}
+        </motion.div>
       </div>
     </section>
   );
