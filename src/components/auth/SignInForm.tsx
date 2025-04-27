@@ -102,7 +102,7 @@ export default function SignInForm() {
               className="w-full"
             >
               <Icons.gitHub className="mr-2 h-4 w-4" />
-              Sign in with GitHub
+              GitHub
             </Button>
             <Button
               variant="outline"
@@ -112,7 +112,7 @@ export default function SignInForm() {
               className="w-full"
             >
               <Icons.google className="mr-2 h-4 w-4" />
-              Sign in with Google
+              Google
             </Button>
           </div>
 
@@ -124,7 +124,7 @@ export default function SignInForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email*</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="name@example.com"
@@ -142,7 +142,7 @@ export default function SignInForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password*</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
