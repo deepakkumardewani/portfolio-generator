@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "CreateFolio - Create Your Professional Portfolio",
   description:
-    "Build a stunning professional portfolio with our easy-to-use Create .",
+    "Build a stunning professional portfolio in just 3 simple steps.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     siteName: "CreateFolio",
     images: [
       {
-        url: "https://cloud.appwrite.io/v1/storage/buckets/portfolio-gen-bucket/files/67f407ee001d3b1b09ca/view?project=67ec2e4a000218d4bf94&mode=admin",
+        url: "https://createfolio.app/og-image.png",
         width: 512,
         height: 512,
         alt: "CreateFolio Preview",
