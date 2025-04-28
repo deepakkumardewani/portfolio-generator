@@ -200,7 +200,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                 </div>
 
                 <div
-                  className={`space-y-4 mt-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                  className={`space-y-4 mt-4 px-4 overflow-hidden transition-all duration-300 ease-in-out ${
                     expandedIndex === index
                       ? "max-h-[2000px] opacity-100"
                       : "max-h-0 opacity-0"
