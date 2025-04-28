@@ -45,7 +45,7 @@ export default function ModernContact() {
       return <FaLinkedin className="h-5 w-5" />;
     } else if (lowerCaseUrl?.includes("github")) {
       return <SiGithub className="h-5 w-5" />;
-    } else if (lowerCaseUrl?.includes("twitter")) {
+    } else if (lowerCaseUrl?.includes("x")) {
       return <SiX className="h-5 w-5" />;
     } else if (lowerCaseUrl?.includes("instagram")) {
       return <SiInstagram className="h-5 w-5" />;
