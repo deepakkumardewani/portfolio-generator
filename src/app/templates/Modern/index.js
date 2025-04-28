@@ -244,8 +244,12 @@ const heroSectionAnimations = () => {
 
 const aboutSectionAnimations = () => {
   const aboutTitle = document.querySelector("#about-heading");
+  const aboutContent = document.querySelector("#about-content");
   if (aboutTitle) {
     createIntersectionObserver(aboutTitle, (el) => fadeInUp(el));
+  }
+  if (aboutContent) {
+    createIntersectionObserver(aboutContent, (el) => fadeInUp(el));
   }
 };
 
