@@ -36,11 +36,11 @@ export default function TemplatesPage() {
 
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-12">
-        <div className="container mx-auto px-4">
+      <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 pt-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <TemplateHeader />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto my-8 sm:mt-32">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-8 sm:mt-16 lg:mt-24">
             {templates.map((template) => (
               <TemplateCard
                 key={template.name}
