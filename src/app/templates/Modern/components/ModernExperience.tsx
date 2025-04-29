@@ -92,7 +92,7 @@ export default function ModernExperience() {
                   </h3>
                   <div className="hidden md:block h-1 w-1 rounded-full bg-zinc-700 dark:bg-zinc-300"></div>
                   <h4
-                    className="text-lg text-zinc-300 dark:text-zinc-700"
+                    className="text-lg text-zinc-500 dark:text-zinc-700"
                     itemProp="memberOf"
                   >
                     {job.company}

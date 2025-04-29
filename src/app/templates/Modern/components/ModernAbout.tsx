@@ -51,12 +51,15 @@ export default function ModernAbout() {
           <div className="prose prose-lg prose-zinc dark:prose-invert max-w-none">
             {paragraphs.length > 0 ? (
               paragraphs.map((paragraph, index) => (
-                <p key={index} className="text-lg text-zinc-300 mb-4">
+                <p
+                  key={index}
+                  className="text-lg text-zinc-900 dark:text-zinc-100 mb-4"
+                >
                   {paragraph}
                 </p>
               ))
             ) : (
-              <p className="text-lg text-zinc-300">
+              <p className="text-lg text-zinc-500 dark:text-zinc-700">
                 {bio.about ||
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh porttitor. Ut in nulla enim. Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum feugiat nisl ut dapibus."}
               </p>
