@@ -3,9 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import { darkModeClasses } from "@/lib/utils";
 import { storage } from "@/lib/appwrite";
-
+import { Permission, Query, Role } from "appwrite";
+import { ID } from "appwrite";
+import { useAuth } from "@/contexts/AuthContext";
+import logger from "@/lib/logger";
 interface ResumeUploadProps {
   currentResumeUrl: string | undefined;
   onResumeUrlChange: (url: string) => void;
@@ -15,6 +17,7 @@ export default function ResumeUpload({
   currentResumeUrl,
   onResumeUrlChange,
 }: ResumeUploadProps) {
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const [fileName, setFileName] = useState<string | null>(
     currentResumeUrl ? extractFileName(currentResumeUrl) : null
@@ -83,6 +86,31 @@ export default function ResumeUpload({
     validateAndUploadFile(file);
   };
 
+  const checkExistingFile = async (file: File): Promise<string | null> => {
+    try {
+      // Search for files with matching name and size
+      const response = await storage.listFiles(
+        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
+        [Query.equal("sizeOriginal", file.size), Query.equal("name", file.name)]
+      );
+
+      if (response.files.length > 0) {
+        // Return the URL of the first matching file
+        return storage
+          .getFileView(
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
+            response.files[0].$id
+          )
+          .toString();
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error checking existing file:", error);
+      return null;
+    }
+  };
+
   const uploadResume = async (file: File) => {
     if (!file) return;
 
@@ -91,14 +119,31 @@ export default function ResumeUpload({
     setError(null);
 
     try {
-      // Set file name for display
+      if (!user) {
+        console.error("User not found");
+        return;
+      }
+      // Set file name for display immediately
       setFileName(file.name);
+
+      // Check if file already exists
+      const existingFileUrl = await checkExistingFile(file);
+      logger.info("existingFileUrl", existingFileUrl);
+      if (existingFileUrl) {
+        onResumeUrlChange(existingFileUrl);
+        return;
+      }
 
       // Upload to Appwrite storage
       const result = await storage.createFile(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
-        "unique()", // Generate a unique ID
-        file
+        ID.unique(), // Use ID.unique() instead of "unique()"
+        file,
+        [
+          Permission.read(Role.user(user.$id)),
+          Permission.update(Role.user(user.$id)),
+          Permission.delete(Role.user(user.$id)),
+        ]
       );
 
       // Get the file view URL
@@ -119,13 +164,18 @@ export default function ResumeUpload({
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event bubbling
     fileInputRef.current?.click();
   };
 
   const removeResume = () => {
     setFileName(null);
     onResumeUrlChange("");
+    // Reset the file input value to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (

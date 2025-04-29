@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Icons } from "@/components/ui/icons";
 import { storage } from "@/lib/appwrite";
-import { Permission, Role, ID } from "appwrite";
+import { Permission, Role, ID, Query } from "appwrite";
 import { useAuth } from "@/contexts/AuthContext";
+import logger from "@/lib/logger";
 interface ProfileImageUploadProps {
   currentImageUrl: string | undefined;
   onImageUrlChange: (url: string) => void;
@@ -51,7 +52,7 @@ export default function ProfileImageUpload({
 
     // Check file type
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setError("Only JPG and PNG images are allowed");
+      setError("Only JPG andPNG images are allowed");
       return;
     }
 
@@ -72,6 +73,31 @@ export default function ProfileImageUpload({
     validateAndUploadFile(file);
   };
 
+  const checkExistingFile = async (file: File): Promise<string | null> => {
+    try {
+      // Search for files with matching name and size
+      const response = await storage.listFiles(
+        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
+        [Query.equal("sizeOriginal", file.size), Query.equal("name", file.name)]
+      );
+
+      if (response.files.length > 0) {
+        // Return the URL of the first matching file
+        return storage
+          .getFileView(
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
+            response.files[0].$id
+          )
+          .toString();
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error checking existing file:", error);
+      return null;
+    }
+  };
+
   const uploadImage = async (file: File) => {
     if (!file) return;
 
@@ -80,14 +106,23 @@ export default function ProfileImageUpload({
     setError(null);
 
     try {
-      // Create a preview immediately
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewUrl(objectUrl);
-
       if (!user) {
         console.error("User not found");
         return;
       }
+
+      // Create a preview immediately
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+
+      // Check if file already exists
+      const existingFileUrl = await checkExistingFile(file);
+      logger.info("existingFileUrl", existingFileUrl);
+      if (existingFileUrl) {
+        onImageUrlChange(existingFileUrl);
+        return;
+      }
+
       // Upload to Appwrite storage
       const result = await storage.createFile(
         process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID || "",
@@ -118,13 +153,17 @@ export default function ProfileImageUpload({
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event bubbling
     fileInputRef.current?.click();
   };
 
   const removeImage = () => {
     setPreviewUrl(null);
     onImageUrlChange("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -144,7 +183,7 @@ export default function ProfileImageUpload({
             className="absolute -top-2 -right-2 h-8 w-8 rounded-full"
             onClick={removeImage}
           >
-            <Icons.x className="h-4 w-4" />
+            <Icons.trash className="h-4 w-4" />
           </Button>
         </div>
       ) : (
@@ -173,7 +212,7 @@ export default function ProfileImageUpload({
         ref={fileInputRef}
         type="file"
         className="sr-only"
-        accept="image/png, image/jpeg, image/jpg"
+        accept={ALLOWED_TYPES.join(", ")}
         onChange={handleFileChange}
         disabled={isUploading}
       />
