@@ -172,7 +172,7 @@ export default function TemplateSectionEditor({
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="w-full">
+      <div className="w-full flex flex-col max-h-[90vh]">
         <div className="p-4 border-b rounded-t-lg bg-neutral-50 dark:bg-neutral-950">
           <div className="text-lg font-medium">Edit Template Sections</div>
           <div className="text-sm mt-2 text-muted-foreground">
@@ -181,7 +181,7 @@ export default function TemplateSectionEditor({
           </div>
         </div>
 
-        <div className="p-4 space-y-2 max-h-[400px] overflow-y-auto bg-neutral-50 dark:bg-neutral-950">
+        <div className="p-4 space-y-2 overflow-y-auto flex-1 bg-neutral-50 dark:bg-neutral-950">
           {sections.map((section, index) => (
             <DraggableSection
               key={section.id}
@@ -194,7 +194,7 @@ export default function TemplateSectionEditor({
           ))}
         </div>
 
-        <div className="p-4 border-t rounded-b-lg bg-neutral-50 dark:bg-neutral-950">
+        <div className="p-4 border-t rounded-b-lg bg-neutral-50 dark:bg-neutral-950 sticky bottom-0">
           <div className="flex gap-2">
             <Button
               onClick={onClose}
