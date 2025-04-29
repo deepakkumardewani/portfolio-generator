@@ -3,7 +3,8 @@ import logger from "@/lib/logger";
 // Initialize server-side Appwrite client
 const client = new Client()
   .setEndpoint(
-    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT || "https://cloud.appwrite.io/v1"
+    process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT ||
+      "https://api.createfolio.app/v1"
   )
   .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID || "")
   .setKey(process.env.APPWRITE_API_KEY || "");
