@@ -150,7 +150,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={darkModeClasses.formLabel}>
-                    Name
+                    Name*
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -179,7 +179,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className={darkModeClasses.formLabel}>
-                    Tagline
+                    Tagline*
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -209,7 +209,7 @@ export default function FormStep1({ onNext }: FormStep1Props) {
               render={({ field }) => (
                 <FormItem className="relative">
                   <FormLabel className={darkModeClasses.formLabel}>
-                    About
+                    About*
                   </FormLabel>
                   <div className="relative">
                     <TooltipProvider>
