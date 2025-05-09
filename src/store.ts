@@ -199,6 +199,7 @@ const devData: PortfolioState = {
   },
   remainingRequests: 10,
   allowedRequestsPerDay: 10,
+  isStudent: false,
 };
 
 // Production data with empty fields
@@ -236,6 +237,7 @@ const prodData: PortfolioState = {
   },
   remainingRequests: 10,
   allowedRequestsPerDay: 10,
+  isStudent: false,
 };
 
 // const initialState = process.env.NODE_ENV === "development" ? devData : prodData;
@@ -339,6 +341,9 @@ const portfolioSlice = createSlice({
     },
     setWorkExperience: (state, action: PayloadAction<WorkExperience[]>) => {
       state.workExperience = action.payload;
+    },
+    setIsStudent: (state, action: PayloadAction<boolean>) => {
+      state.isStudent = action.payload;
     },
     addProject: (state, action: PayloadAction<Project[]>) => {
       state.projects = action.payload;
@@ -548,6 +553,7 @@ export const {
   markAsDirty,
   setRemainingRequests,
   setAllowedRequestsPerDay,
+  setIsStudent,
 } = portfolioSlice.actions;
 
 /**

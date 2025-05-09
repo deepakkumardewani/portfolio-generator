@@ -131,15 +131,21 @@ export default function TemplateSectionEditor({
   onClose,
 }: TemplateSectionEditorProps) {
   const dispatch = useAppDispatch();
-  const { templateSections } = useAppSelector((state) => state.portfolio);
+  const { templateSections, isStudent } = useAppSelector(
+    (state) => state.portfolio
+  );
   const [sections, setSections] = useState<TemplateSection[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     if (templateSections?.sections) {
-      setSections(JSON.parse(JSON.stringify(templateSections.sections)));
+      // Filter out the experience section if user is a student
+      const filteredSections = templateSections.sections.filter(
+        (section) => !(section.id === "experience" && isStudent)
+      );
+      setSections(JSON.parse(JSON.stringify(filteredSections)));
     }
-  }, [templateSections]);
+  }, [templateSections, isStudent]);
 
   const moveSection = useCallback((dragIndex: number, hoverIndex: number) => {
     setSections((prevSections) => {
@@ -165,7 +171,36 @@ export default function TemplateSectionEditor({
   };
 
   const saveChanges = () => {
-    dispatch(updateTemplateSections(sections));
+    // If user is a student, keep the experience section in the saved sections
+    // but make sure it stays with visible: false
+    if (isStudent) {
+      const experienceSection = templateSections.sections.find(
+        (section) => section.id === "experience"
+      );
+
+      if (experienceSection) {
+        // We need to add the experience section back, but ensure it's hidden
+        const updatedSections = [
+          ...sections,
+          { ...experienceSection, visible: false },
+        ].sort((a, b) => {
+          // Sort by the original order in templateSections.sections
+          const aIndex = templateSections.sections.findIndex(
+            (s) => s.id === a.id
+          );
+          const bIndex = templateSections.sections.findIndex(
+            (s) => s.id === b.id
+          );
+          return aIndex - bIndex;
+        });
+        dispatch(updateTemplateSections(updatedSections));
+      } else {
+        dispatch(updateTemplateSections(sections));
+      }
+    } else {
+      dispatch(updateTemplateSections(sections));
+    }
+
     setHasChanges(false);
     onClose();
   };

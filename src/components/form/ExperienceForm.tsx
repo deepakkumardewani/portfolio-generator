@@ -20,7 +20,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAppDispatch, useAppSelector, setWorkExperience } from "@/store";
+import {
+  useAppDispatch,
+  useAppSelector,
+  setWorkExperience,
+  setIsStudent,
+} from "@/store";
 import { Icons } from "@/components/ui/icons";
 import { WorkExperienceFormValues, Skill } from "@/types";
 import SkillSelector from "@/components/shared/SkillSelector";
@@ -45,8 +50,8 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   const savedWorkExperience = useAppSelector(
     (state) => state.portfolio.workExperience
   );
+  const isStudent = useAppSelector((state) => state.portfolio.isStudent);
   const [expandedIndex, setExpandedIndex] = useState(0);
-  const [isStudent, setIsStudent] = useState(false);
   const [descriptionLengths, setDescriptionLengths] = useState<number[]>([]);
   const [currentEditingIndex, setCurrentEditingIndex] = useState<number | null>(
     null
@@ -125,7 +130,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
   };
 
   const handleStudentCheckboxChange = (checked: boolean) => {
-    setIsStudent(checked);
+    dispatch(setIsStudent(checked));
   };
 
   const handleDescriptionChange = (index: number, value: string) => {
@@ -161,7 +166,6 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
               id="student"
               checked={isStudent}
               onCheckedChange={handleStudentCheckboxChange}
-              className="data-[state=checked]:bg-neutral-800 data-[state=checked]:dark:bg-neutral-600"
             />
             <label
               htmlFor="student"
