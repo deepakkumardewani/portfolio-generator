@@ -81,7 +81,7 @@ export const TECHNICAL_SKILLS = [
   {
     value: "C#",
     label: "C#",
-    image: `${iconBaseUrl}csharp`,
+    image: `${iconBaseUrl}cs`,
     category: "backend",
   },
   {
