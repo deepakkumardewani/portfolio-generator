@@ -12,8 +12,14 @@ import { Providers } from "@/app/providers";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
 import CommonFooter from "../shared/CommonFooter";
+import { useAppSelector } from "@/store";
 
 export default function Modern({ isServerSide = false }) {
+  // Get work experience and student status to check if section should be shown
+  const { workExperience, isStudent } = useAppSelector(
+    (state) => state.portfolio
+  );
+
   // Define the sections with their IDs
   const templateSections = [
     {
@@ -22,7 +28,10 @@ export default function Modern({ isServerSide = false }) {
     },
     { id: "hero", component: <ModernHero /> },
     { id: "about", component: <ModernAbout /> },
-    { id: "experience", component: <ModernExperience /> },
+    // Only include experience section if there's work experience and not a student
+    ...(!isStudent && workExperience.length > 0
+      ? [{ id: "experience", component: <ModernExperience /> }]
+      : []),
     { id: "projects", component: <ModernProjects /> },
     { id: "skills", component: <ModernSkills /> },
     { id: "contact", component: <ModernContact /> },

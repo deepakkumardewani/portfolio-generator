@@ -22,16 +22,24 @@ export default function Header({ templateId }: HeaderProps) {
   const [isAnimated, setIsAnimated] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { viewMode, templateSections, bio } = useAppSelector(
-    (state) => state.portfolio
-  );
+  const { viewMode, templateSections, bio, workExperience, isStudent } =
+    useAppSelector((state) => state.portfolio);
 
-  // Filter navigation items based on visible sections
+  // Filter navigation items based on visible sections and work experience
   const navItems = templateSections.sections
-    .filter(
-      (section) =>
+    .filter((section) => {
+      // Don't show experience nav item if there's no work experience or user is a student
+      if (
+        section.id === "experience" &&
+        (workExperience.length === 0 || isStudent)
+      ) {
+        return false;
+      }
+      // Otherwise, show visible sections except header and footer
+      return (
         section.visible && section.id !== "header" && section.id !== "footer"
-    )
+      );
+    })
     .map(
       (section) => sectionToNavItem[section.id as keyof typeof sectionToNavItem]
     )

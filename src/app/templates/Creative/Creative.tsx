@@ -11,8 +11,14 @@ import { Providers } from "@/app/providers";
 import { DarkModeProvider } from "@/contexts/DarkModeContext";
 import OrderedTemplateContainer from "@/components/OrderedTemplateContainer";
 import CommonFooter from "../shared/CommonFooter";
+import { useAppSelector } from "@/store";
 
 export default function Creative({ isServerSide = false }) {
+  // Get work experience and student status to check if section should be shown
+  const { workExperience, isStudent } = useAppSelector(
+    (state) => state.portfolio
+  );
+
   // Define the sections with their IDs
   const templateSections = [
     {
@@ -21,7 +27,10 @@ export default function Creative({ isServerSide = false }) {
     },
     { id: "hero", component: <CreativeHero /> },
     { id: "about", component: <CreativeAbout /> },
-    { id: "experience", component: <CreativeExperience /> },
+    // Only include experience section if there's work experience and not a student
+    ...(!isStudent && workExperience.length > 0
+      ? [{ id: "experience", component: <CreativeExperience /> }]
+      : []),
     { id: "projects", component: <CreativeProjects /> },
     { id: "skills", component: <CreativeSkills /> },
     { id: "contact", component: <CreativeContact /> },

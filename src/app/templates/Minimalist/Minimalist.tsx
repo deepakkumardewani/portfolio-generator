@@ -17,6 +17,11 @@ import { Helmet } from "react-helmet";
  * Minimalist template component with proper semantic HTML structure for better SEO
  */
 function Minimalist({ isServerSide = false }) {
+  // Get work experience and student status to check if section should be shown
+  const { workExperience, isStudent } = useAppSelector(
+    (state) => state.portfolio
+  );
+
   // Define the sections with their IDs
   const templateSections = [
     {
@@ -25,7 +30,10 @@ function Minimalist({ isServerSide = false }) {
     },
     { id: "hero", component: <MinimalistHero /> },
     { id: "about", component: <MinimalistAbout /> },
-    { id: "experience", component: <MinimalistExperience /> },
+    // Only include experience section if there's work experience and not a student
+    ...(!isStudent && workExperience.length > 0
+      ? [{ id: "experience", component: <MinimalistExperience /> }]
+      : []),
     { id: "projects", component: <MinimalistProjects /> },
     { id: "skills", component: <MinimalistSkills /> },
     { id: "contact", component: <MinimalistContact /> },
