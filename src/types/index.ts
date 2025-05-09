@@ -65,6 +65,7 @@ export interface PortfolioState {
   templateSections: TemplateSectionConfig;
   remainingRequests: number;
   allowedRequestsPerDay: number;
+  isStudent: boolean;
   _sync?: {
     lastSyncedAt: number;
     isDirty: boolean;
