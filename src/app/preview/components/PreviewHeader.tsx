@@ -26,8 +26,8 @@ import {
 } from "@/components/ui/popover";
 import { darkModeClasses } from "@/lib/utils";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { useTheme } from "next-themes";
+// import { ShimmerButton } from "@/components/magicui/shimmer-button";
+// import { useTheme } from "next-themes";
 import ToggleButtons from "./ToggleButtons";
 import UserMenu from "@/components/shared/UserMenu";
 import {
