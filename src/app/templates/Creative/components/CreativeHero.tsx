@@ -71,30 +71,48 @@ export default function CreativeHero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex justify-center space-x-6"
           >
-            <a
-              href={contact?.links[1]?.url}
-              className="dark:text-gray-400 text-black hover:text-white transition-colors"
-              aria-label="GitHub Profile"
-              rel="noopener"
-            >
-              <Icons.gitHub size={24} />
-            </a>
-            <a
-              href={contact?.links[0]?.url}
-              className="dark:text-gray-400 text-black hover:text-white transition-colors"
-              aria-label="LinkedIn Profile"
-              rel="noopener"
-            >
-              <Icons.linkedin size={24} />
-            </a>
-            <a
-              href={`mailto:${contact?.email}`}
-              className="dark:text-gray-400 text-black hover:text-white transition-colors"
-              aria-label="Email Contact"
-              rel="noopener"
-            >
-              <Icons.mail size={24} />
-            </a>
+            {contact?.links &&
+              contact.links.map((link, index) => {
+                if (!link?.url) return null;
+
+                if (link.url.toLowerCase().includes("github")) {
+                  return (
+                    <a
+                      key={index}
+                      href={link.url}
+                      className="dark:text-gray-400 text-black hover:text-white transition-colors"
+                      aria-label="GitHub Profile"
+                      rel="noopener"
+                    >
+                      <Icons.gitHub size={24} />
+                    </a>
+                  );
+                } else if (link.url.toLowerCase().includes("linkedin")) {
+                  return (
+                    <a
+                      key={index}
+                      href={link.url}
+                      className="dark:text-gray-400 text-black hover:text-white transition-colors"
+                      aria-label="LinkedIn Profile"
+                      rel="noopener"
+                    >
+                      <Icons.linkedin size={24} />
+                    </a>
+                  );
+                }
+                return null;
+              })}
+
+            {contact?.email && (
+              <a
+                href={`mailto:${contact.email}`}
+                className="dark:text-gray-400 text-black hover:text-white transition-colors"
+                aria-label="Email Contact"
+                rel="noopener"
+              >
+                <Icons.mail size={24} />
+              </a>
+            )}
           </motion.div>
           <motion.div
             id="scroll-indicator"

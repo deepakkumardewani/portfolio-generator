@@ -59,27 +59,48 @@ export default function CreativeContact() {
             viewport={{ once: true }}
             className="flex justify-center space-x-8"
           >
-            <a
-              href={`mailto:${contact?.email}`}
-              className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
-            >
-              <Icons.mail size={24} />
-              <span>Email</span>
-            </a>
-            <a
-              href={contact?.links[0]?.url}
-              className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
-            >
-              <Icons.linkedin size={24} />
-              <span>LinkedIn</span>
-            </a>
-            <a
-              href={contact?.links[1]?.url}
-              className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
-            >
-              <Icons.gitHub size={24} />
-              <span>GitHub</span>
-            </a>
+            {contact?.email && (
+              <a
+                href={`mailto:${contact.email}`}
+                className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
+              >
+                <Icons.mail size={24} />
+                <span>Email</span>
+              </a>
+            )}
+
+            {contact?.links &&
+              contact.links.map((link, index) => {
+                if (!link?.url) return null;
+
+                let icon;
+                if (link.url.toLowerCase().includes("linkedin")) {
+                  icon = <Icons.linkedin size={24} />;
+                  return (
+                    <a
+                      key={index}
+                      href={link.url}
+                      className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
+                    >
+                      {icon}
+                      <span>LinkedIn</span>
+                    </a>
+                  );
+                } else if (link.url.toLowerCase().includes("github")) {
+                  icon = <Icons.gitHub size={24} />;
+                  return (
+                    <a
+                      key={index}
+                      href={link.url}
+                      className="flex items-center space-x-2 text-black dark:text-white hover:text-white transition-colors hover:scale-110 duration-300"
+                    >
+                      {icon}
+                      <span>GitHub</span>
+                    </a>
+                  );
+                }
+                return null;
+              })}
           </motion.div>
         </motion.div>
       </div>
