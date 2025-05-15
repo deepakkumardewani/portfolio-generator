@@ -33,13 +33,17 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
     }
   }, [savedSkills, form]);
 
-  const { setValue, watch } = form;
+  const {
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
   const skills = watch("skills");
 
   const addSkill = (skill: Skill) => {
     if (skill && !skills.some((s) => s.value === skill.value)) {
       const updatedSkills = [...skills, skill];
-      setValue("skills", updatedSkills);
+      setValue("skills", updatedSkills, { shouldValidate: true });
     }
   };
 
@@ -47,10 +51,17 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
     const updatedSkills = skills.filter(
       (skill) => skill.value !== skillToRemove
     );
-    setValue("skills", updatedSkills);
+    setValue("skills", updatedSkills, { shouldValidate: true });
   };
 
   const onSubmit = (data: SkillsFormValues) => {
+    if (data.skills.length === 0) {
+      form.setError("skills", {
+        type: "manual",
+        message: "Please add at least one skill",
+      });
+      return;
+    }
     dispatch(setSkills(data.skills));
     onNext();
   };
@@ -65,11 +76,18 @@ export default function FormStep2({ onNext, onBack }: FormStep2Props) {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <SkillSelector
-              selectedSkills={skills.map((skill) => skill.value)}
-              onSkillAdd={addSkill}
-              onSkillRemove={removeSkill}
-            />
+            <div className="space-y-2">
+              <SkillSelector
+                selectedSkills={skills.map((skill) => skill.value)}
+                onSkillAdd={addSkill}
+                onSkillRemove={removeSkill}
+              />
+              {errors.skills && (
+                <p className="text-sm text-red-500 dark:text-red-400">
+                  {errors.skills.message}
+                </p>
+              )}
+            </div>
 
             <div className="flex gap-2 justify-end">
               <Button
