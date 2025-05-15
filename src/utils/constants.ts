@@ -135,7 +135,7 @@ export const TECHNICAL_SKILLS = [
   {
     value: "React Native",
     label: "React Native",
-    image: `${iconBaseUrl}reactnative`,
+    image: ``,
     category: "other",
   },
   {
@@ -189,7 +189,7 @@ export const TECHNICAL_SKILLS = [
   {
     value: "SQL",
     label: "SQL",
-    image: `${iconBaseUrl}sql`,
+    image: ``,
     category: "backend",
   },
   {
@@ -257,7 +257,7 @@ export const TECHNICAL_SKILLS = [
   {
     value: "CI/CD",
     label: "CI/CD",
-    image: `${iconBaseUrl}cicd`,
+    image: ``,
     category: "tool",
   },
   {
@@ -299,7 +299,32 @@ export const TECHNICAL_SKILLS = [
   {
     value: "Sketch",
     label: "Sketch",
-    image: `${iconBaseUrl}sketch`,
+    image: ``,
     category: "tool",
+  },
+  {
+    value: "Redis",
+    label: "Redis",
+    image: `${iconBaseUrl}redis`,
+    category: "backend",
+  },
+  {
+    value: "MySQL",
+    label: "MySQL",
+    image: `${iconBaseUrl}mysql`,
+    category: "backend",
+  },
+  {
+    value: "PostgreSQL",
+    label: "PostgreSQL",
+    image: `${iconBaseUrl}postgresql`,
+    category: "backend",
+  },
+
+  {
+    value: "Vuetify",
+    label: "Vuetify",
+    image: ``,
+    category: "frontend",
   },
 ];
