@@ -349,7 +349,7 @@ export default function FormStep3({ onNext, onBack }: FormStep3Props) {
                       render={({ field }) => (
                         <FormItem className="relative">
                           <FormLabel className={darkModeClasses.formLabel}>
-                            Description
+                            Description*
                           </FormLabel>
                           <div className="relative">
                             <TooltipProvider>

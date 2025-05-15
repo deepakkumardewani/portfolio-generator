@@ -215,7 +215,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className={darkModeClasses.formLabel}>
-                          Project Title
+                          Project Title*
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -243,7 +243,7 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     render={({ field }) => (
                       <FormItem className="relative">
                         <FormLabel className={darkModeClasses.formLabel}>
-                          Description
+                          Description*
                         </FormLabel>
                         <div className="relative">
                           <TooltipProvider>
@@ -310,6 +310,19 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                     />
                   </div>
 
+                  <div className={`space-y-4 ${darkModeClasses.formLabel}`}>
+                    <SkillSelector
+                      selectedSkills={
+                        form.watch(`projects.${index}.technologies`) || []
+                      }
+                      onSkillAdd={(skill) => addSkill(index, skill)}
+                      onSkillRemove={(skillValue) =>
+                        removeSkill(index, skillValue)
+                      }
+                      label="Technologies Used"
+                    />
+                  </div>
+
                   <FormField
                     control={form.control}
                     name={`projects.${index}.link`}
@@ -355,19 +368,6 @@ export default function FormStep4({ onNext, onBack }: FormStep4Props) {
                       </FormItem>
                     )}
                   />
-
-                  <div className={`space-y-4 ${darkModeClasses.formLabel}`}>
-                    <SkillSelector
-                      selectedSkills={
-                        form.watch(`projects.${index}.technologies`) || []
-                      }
-                      onSkillAdd={(skill) => addSkill(index, skill)}
-                      onSkillRemove={(skillValue) =>
-                        removeSkill(index, skillValue)
-                      }
-                      label="Technologies Used"
-                    />
-                  </div>
                 </div>
               </div>
             ))}
