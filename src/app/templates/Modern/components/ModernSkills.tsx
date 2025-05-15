@@ -84,6 +84,9 @@ export default function ModernSkills() {
     },
   };
 
+  const randomColor = () => {
+    return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  };
   return (
     <section
       id="skills"
@@ -138,12 +141,21 @@ export default function ModernSkills() {
                         ?.textColor || categoryStyles.other.textColor
                     } text-sm rounded-full border`}
                   >
-                    {skill.image && (
+                    {skill.image && skill.image !== "" ? (
                       <img
                         src={skill.image}
                         alt={skill.value}
                         className="w-4 h-4 object-contain"
                       />
+                    ) : (
+                      <div
+                        className="w-4 h-4 rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: randomColor() }}
+                      >
+                        <p className="text-white text-xs">
+                          {skill.value.charAt(0).toUpperCase()}
+                        </p>
+                      </div>
                     )}
                     {skill.value}
                   </span>

@@ -39,6 +39,9 @@ export default function CreativeSkills() {
       : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
     : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8";
 
+  const randomColor = () => {
+    return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  };
   return (
     <section id="skills" className="py-20 bg-white dark:bg-black">
       <div className="container px-6 max-w-4xl mx-auto">
@@ -75,11 +78,22 @@ export default function CreativeSkills() {
                     className="text-black/50 dark:text-white flex items-center space-x-2"
                   >
                     <div className="flex items-center gap-2">
-                      <img
-                        src={skill.image}
-                        alt={skill.value}
-                        className="w-5 h-5 object-contain"
-                      />
+                      {skill.image && skill.image !== "" ? (
+                        <img
+                          src={skill.image}
+                          alt={skill.value}
+                          className="w-5 h-5 object-contain"
+                        />
+                      ) : (
+                        <div
+                          className="w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{ backgroundColor: randomColor() }}
+                        >
+                          <p className="text-white text-xs">
+                            {skill.value.charAt(0).toUpperCase()}
+                          </p>
+                        </div>
+                      )}
                       <span>{skill.value}</span>
                     </div>
                   </li>
